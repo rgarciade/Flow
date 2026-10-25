@@ -63,6 +63,18 @@ For a small task, say so when you start (`/flow-work #42, work autonomously`), o
 
 Tests are still frozen (recorded in `.scratch/flow/42/approved-tests/`), commit commands (each ending with `&& git push`) come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
 
+## When a test turns out to be wrong
+
+Implementation sometimes shows that an approved test was wrong: a misread requirement, a library that behaves differently, a badly chosen seam. `flow-work` stops (also in autonomous mode) and shows you which test, why, the evidence and the change it proposes. It tells you if it thinks the test is actually right and the code is just hard.
+
+If you agree:
+
+1. The tests subagent changes only those tests.
+2. You run, or authorise, `test(#42): adjust <what> (<why>) && git push`. That commit becomes the new reference for "tests unchanged".
+3. You approve a line in the plan comment's "Changes to the plan", and in the description's `## Changes` if a requirement changed.
+
+The PR history then shows what was approved, what changed, when and why.
+
 ## When a task turns out to be too big
 
 After research, `flow-work` may report that the task does not fit one session as one vertical slice. It stops and offers:

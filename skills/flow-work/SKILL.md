@@ -17,7 +17,7 @@ These override anything more permissive elsewhere, including the user's general 
 - **Decisions belong to the user.** Anything the issue and the agreed plan don't settle (a design choice, a dependency, a trade-off, a scope question) goes to the user as a question with your recommendation. Never decide it for them.
 - **Never commit on your own.** At each commit point, give the user the exact command and wait. Run it only if the user explicitly tells you to.
 - **Never merge PRs.** The user reviews and merges every PR on GitHub.
-- **Never modify approved tests.** After the test gate, the test files are frozen. If a test looks wrong, stop and tell the user why.
+- **Never modify approved tests on your own.** After the test gate, the test files are frozen. If a test looks wrong, follow "Changing an approved test": stop, explain why, and change it only after the user's OK.
 - **One writer at a time.** Subagents that edit files run one after another. Read-only subagents (research, review) may run in parallel.
 - **No worktrees, no child branches beyond the ones in `docs/agents/workflow.md`.**
 - **Ask one question at a time.** After asking, stop and wait.
@@ -146,7 +146,7 @@ In autonomous mode, chain the phases without stopping for routine confirmations:
 - **Skip:** showing each phase's result and waiting, the research summary, the seams confirmation, the test gate and the progress lines. Take the plan's assumed answers when they are clearly safe.
 - **Still stop for** what really needs the programmer:
   - a decision the issue and the plan don't settle, where a wrong guess would cost real rework;
-  - a test that looks wrong, or a check you cannot make pass;
+  - a test that looks wrong (see "Changing an approved test"), or a check you cannot make pass;
   - a task that turns out bigger than it looked;
   - anything that leaves the machine or changes shared state: commits, pushes, status moves, issue edits, the PR.
 - **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<n>/approved-tests/` manifest right after writing them, and check them against it as usual.
@@ -154,6 +154,19 @@ In autonomous mode, chain the phases without stopping for routine confirmations:
 - **The final report is never skipped.** It also lists every assumption you made on the user's behalf, so they can check them.
 
 The user can leave autonomous mode at any moment ("stop", "back to pair mode"). Go back to stopping at every phase from there.
+
+## Changing an approved test
+
+Sometimes implementation shows that an approved test was wrong: the requirement was misread, a library behaves differently than assumed, or the seam was badly chosen. That is legitimate. Changing a test because it is inconvenient for the code is not. Approved tests change only through this procedure, in pair and autonomous mode alike:
+
+1. **Detect.** The subagent that hits the problem stops without touching the test, and returns: which test (`path:line`), why it believes the test is wrong, the evidence (the code, the library docs, or the requirement that contradicts it), and the change it proposes.
+2. **The user decides.** Show it in a few lines with your recommendation, and say which case it is: the test was wrong, or the requirement changed. If the honest answer is "the test is right and the code is hard", say so and recommend keeping the test.
+3. **Change.** After the user's OK, brief the tests subagent (strong tier) to change **only** those tests. Each must again fail for the expected reason, or pass if the implementation already covers it. Never loosen an assertion only to make it pass.
+4. **Record.**
+   - Give the commit command `git add <test files> && git commit -m "test(#n): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.scratch` record instead, refresh the manifest.
+   - Propose a line under "Changes to the plan" in the plan comment (an edit, so it needs the user's OK).
+   - If a requirement changed, also propose the `## Changes` line in the issue description.
+5. **Continue** implementing against the new tests.
 
 ## Phase 0: Preflight
 
@@ -247,13 +260,13 @@ This commit is the record of the approved tests. Once the user confirms it is do
 
 ## Phase 6: Implement (fast)
 
-Brief an implement subagent with the plan and tests keys. It writes the minimum code that makes the tests pass, following the plan's outline, and must not edit any test file. It runs the single test files and the typecheck regularly, and the full suite once at the end (commands in `docs/agents/workflow.md`). If a test seems wrong or impossible to satisfy, it stops and reports why instead of working around it. It saves under `flow/<repo>/<n>/implement`.
+Brief an implement subagent with the plan and tests keys. It writes the minimum code that makes the tests pass, following the plan's outline, and must not edit any test file. It runs the single test files and the typecheck regularly, and the full suite once at the end (commands in `docs/agents/workflow.md`). If a test seems wrong or impossible to satisfy, it stops and reports it as step 1 of "Changing an approved test", instead of working around it. It saves under `flow/<repo>/<n>/implement`.
 
 The work can be split into several implement subagents, one after another, when the plan has clearly separate steps. Between them, tell the user in one line which step is done and which comes next. If a subagent returns a question, bring it to the user before continuing.
 
 Then check it yourself:
 
-- `git diff <approved-tests-commit> -- <test globs>` is empty (or the files match the `.scratch` manifest). If not, stop and tell the user.
+- `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.scratch` manifest). If not, stop and tell the user.
 - The full suite and typecheck pass.
 
 If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan comment: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.

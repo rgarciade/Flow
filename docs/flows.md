@@ -29,7 +29,7 @@
 
 **You are in the loop.** Every phase ends by showing you its result and waiting for you before the next one. Anything the issue and the plan don't settle comes to you as a question with a recommendation; subagents return such questions instead of guessing.
 
-**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If a test looks wrong during implementation, the work stops and you decide.
+**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(#n): adjust …` commit that becomes the new reference, and the change is logged in the plan comment (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
 
 ## Branches
 
