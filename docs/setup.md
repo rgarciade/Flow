@@ -19,7 +19,7 @@ git clone <this-repo> flow && cd flow
 
 | Command | Installs into | How | Read by |
 |---|---|---|---|
-| `./install.sh --project <repo>` | `<repo>/.agents/skills/`, linked from `<repo>/.claude/skills/` | Copies, with a `.flow-version` file in each skill | Every harness, for anyone who clones the repo |
+| `./install.sh --project <repo>` | `<repo>/.agents/skills/`, with relative links from `<repo>/.claude/skills/` | Copies, with a `.flow-version` file in each skill | Every harness, for anyone who clones the repo |
 | `./install.sh --user` | `~/.agents/skills/` | Symlinks to this repo | OpenCode, Codex CLI, Cursor, Gemini CLI |
 | `./install.sh --claude <config-dir>` | `<config-dir>/skills/` | Symlinks to this repo | Claude Code (that profile) |
 | `./install.sh --dir <skills-dir>` | Any skills folder | Symlinks to this repo | Whatever reads that folder |

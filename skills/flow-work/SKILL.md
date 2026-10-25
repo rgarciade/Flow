@@ -123,13 +123,14 @@ Issue-driven work is visible while it happens, not only when the PR arrives. Any
 - **Linked branch.** Create task branches with `gh issue develop` (Phase 2). The branch then appears in the issue's "Development" panel from the first minute.
 - **Pushed commits.** Every commit command you give the user ends with `git push`, so each approved step shows up on the linked branch.
 - **The plan comment** tells the team how the task is being built (see "The issue is the source of truth").
+- **Assignment.** When the user confirms the task (Phase 1), propose assigning the issue to them (`gh issue edit <n> --add-assignee @me`) and do it after their OK. This does not depend on status tracking.
 - **Status moves.** If **Status tracking** in `docs/agents/workflow.md` is not `none`, propose moving the issue's status at these points, and move it only after the user's OK (one line, it can share a message with the phase's other question):
 
-  | When | Move to | Also |
-  |---|---|---|
-  | The user confirms the task (Phase 1) | in progress | assign the issue to the user: `gh issue edit <n> --add-assignee @me` |
-  | The PR is opened (Phase 8) | in review | |
-  | The PR is merged | done | usually automatic through `Closes #<n>`; only propose it if it did not happen |
+  | When | Move to |
+  |---|---|
+  | The user confirms the task (Phase 1) | in progress |
+  | The PR is opened (Phase 8) | in review |
+  | The PR is merged | done (usually automatic through `Closes #<n>`; only propose it if it did not happen) |
 
   How to move it, depending on **Status tracking**:
 
@@ -149,7 +150,7 @@ In autonomous mode, chain the phases without stopping for routine confirmations:
   - a task that turns out bigger than it looked;
   - anything that leaves the machine or changes shared state: commits, pushes, status moves, issue edits, the PR.
 - **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<n>/approved-tests/` manifest right after writing them, and check them against it as usual.
-- **Commits come at the end.** Instead of a commit command per phase, give the user the `test`, `feat` and `fix`/`refactor` commands together with the final report.
+- **Commits come at the end.** Instead of a commit command per phase, give the user the `test`, `feat` and `fix`/`refactor` commands (and `chore` for an Engram export) together with the final report, each ending with `&& git push`.
 - **The final report is never skipped.** It also lists every assumption you made on the user's behalf, so they can check them.
 
 The user can leave autonomous mode at any moment ("stop", "back to pair mode"). Go back to stopping at every phase from there.
@@ -171,7 +172,7 @@ Then check its position:
 - **Open blockers**: `gh api repos/{owner}/{repo}/issues/<n> --jq .issue_dependencies_summary`. If any blocker is still open, or its PR is not merged into the group branch, stop and tell the user which one.
 - **Children**: if the issue itself has open sub-issues, it is a group. Ask which child to start, and suggest the first one with no open blockers.
 
-Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. Start once they confirm. If status tracking is on, ask in the same message whether to move the issue to "in progress" and assign it to them (see "Team visibility").
+Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. Start once they confirm. In the same message, ask whether to assign the issue to them and, if status tracking is on, move it to "in progress" (see "Team visibility").
 
 ## Phase 2: Branch
 
@@ -186,7 +187,7 @@ Create branches with `gh issue develop`, so each one is linked to its issue and 
 
 **Sync Engram in.** If the Engram CLI is available and the repo has a `.engram/` folder, run `engram sync --status`. If it reports chunks that are not imported yet, run `engram sync --import`, then tell the user in one line what was imported. Skip this when **Engram sync** in `docs/agents/workflow.md` is `never`.
 
-Tell the user the branch name in one line.
+Tell the user, in one line, the branch name (now linked to the issue) and what was imported from Engram, if anything, then go on to research. The user already confirmed the branch in Phase 1, so there is nothing to wait for here.
 
 ## Phase 3: Research (fast)
 

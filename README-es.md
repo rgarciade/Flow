@@ -61,7 +61,7 @@ Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md]
 
 Funciona con cualquier entorno compatible con Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor y Gemini CLI. Se desarrolla y se prueba en Claude Code; [setup.md](docs/setup.md) explica las diferencias.
 
-**Dónde vive cada cosa.** Las skills se instalan una vez por usuario, o se copian en un repo cuando ese repo debe llevarlas consigo. Las reglas propias de cada repo (ramas, idiomas, modelos, comandos) viven en su `docs/agents/`, que escribe `flow-setup`. Tu archivo de instrucciones generales (`CLAUDE.md`, `AGENTS.md`…) sigue siendo tuyo: `flow` no necesita nada de él.
+**Dónde vive cada cosa.** Las skills se instalan una vez por usuario, o se copian en un repo cuando ese repo debe llevarlas consigo. Las reglas propias de cada repo (ramas, idiomas, modelos, comandos) viven en su `docs/agents/`, que escribe `flow-setup`. Tu archivo de instrucciones generales (`CLAUDE.md`, `AGENTS.md`…) sigue siendo tuyo: `flow-setup` solo añade un bloque corto `## Agent skills` que apunta a `docs/agents/`.
 
 ## Documentación
 
@@ -70,6 +70,7 @@ La documentación detallada está en inglés:
 - [Instalación](docs/setup.md): requisitos, instalación y configuración de un repo.
 - [Guía de uso](docs/usage.md): recetas para el día a día.
 - [Flujos](docs/flows.md): cómo encajan las fases, las ramas y los subagentes.
+
 ## Créditos
 
 - El método de trabajo se inspira en una charla que propone sustituir el desarrollo dirigido por especificaciones por backlog, historias de usuario, porciones verticales y programación en pareja con la IA.

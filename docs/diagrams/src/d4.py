@@ -18,7 +18,7 @@ for i,(n,m,w,wr) in enumerate(roles):
     d.text(xx+cw/2,326,"WRITES" if wr else "READ-ONLY",9,700,ACC if wr else MUT,mono=True)
 # arrows orchestrator<->container
 d.path([(430,140),(430,210)]);d.label(420,180,"BRIEF + NOTE KEYS","end")
-d.path([(500,210),(500,140)],LNK,mk="l");d.label(510,180,"<=15 LINES","start",LNK)
+d.path([(500,210),(500,140)],LNK,mk="l");d.label(510,180,"<=15 LINES + QUESTIONS","start",LNK)
 # engram
 d.box(28,430,844,70,"Notes: Engram, or .scratch/flow/ files",["flow/<repo>/<issue>/<phase>   e.g. flow/my-app/42/research","phases: research, plan, tests, implement, review-standards, review-spec"],tsize=13)
 d.path([(250,360),(250,430)]);d.label(260,400,"SAVE: FULL RESULT","start")

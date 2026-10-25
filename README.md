@@ -61,13 +61,14 @@ Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)
 
 Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor, Gemini CLI. It is developed and tested on Claude Code; [setup.md](docs/setup.md) covers the differences.
 
-**Where things live.** The skills are installed once per user, or copied into a repo when it should carry them. Each repo's own rules (branches, languages, models, commands) live in its `docs/agents/`, written by `flow-setup`. Your general instructions file (`CLAUDE.md`, `AGENTS.md`…) stays yours: `flow` does not need anything in it.
+**Where things live.** The skills are installed once per user, or copied into a repo when it should carry them. Each repo's own rules (branches, languages, models, commands) live in its `docs/agents/`, written by `flow-setup`. Your general instructions file (`CLAUDE.md`, `AGENTS.md`…) stays yours: `flow-setup` only adds a short `## Agent skills` block that points at `docs/agents/`.
 
 ## Documentation
 
 - [Setup](docs/setup.md): requirements, installation, configuring a repo.
 - [Usage guide](docs/usage.md): day-to-day recipes.
 - [Flows](docs/flows.md): how each phase, branch and subagent fits together.
+
 ## Credits
 
 - The working method is inspired by a talk on replacing spec-driven development with backlog + user stories + vertical slices + pair programming with AI.

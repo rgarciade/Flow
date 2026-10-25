@@ -33,7 +33,7 @@ What you will be asked to do, in order:
 2. **Read the research summary** (what exists, open questions, size) and add anything it missed.
 3. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
 4. **Confirm the seams**: the public interfaces that will be tested, each with what it catches and what it misses.
-   If the requirements changed, approve the update to the issue description. The plan is then posted as a comment on the issue.
+   The plan is then posted as a comment on the issue and, if the requirements changed, you approve the update to the issue description.
 5. **Approve the tests.** You get one line per scenario with a link to the test, and the command to run them. Reply `OK`, or ask for changes.
 6. **Run, or authorise, the `test(#42)` commit.** That commit is the record of the approved tests.
 7. **Run, or authorise, the `feat(#42)` commit** once the implementation passes.
@@ -61,7 +61,7 @@ For a small task, say so when you start (`/flow-work #42, work autonomously`), o
 - a task bigger than it looked;
 - anything that leaves your machine or changes shared state (commits, pushes, status moves, issue edits, the PR).
 
-Tests are still frozen (recorded in `.scratch/flow/42/approved-tests/`), commit commands come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
+Tests are still frozen (recorded in `.scratch/flow/42/approved-tests/`), commit commands (each ending with `&& git push`) come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
 
 ## When a task turns out to be too big
 
@@ -86,7 +86,7 @@ Run `/flow-work #42` again. If the task branch exists, it checks it out and work
 `flow-work` never commits or merges on its own. At each commit point it prints the exact command, for example:
 
 ```sh
-git add tests/profile.test.ts && git commit -m "test(#42): profile endpoint returns the current user"
+git add tests/profile.test.ts && git commit -m "test(#42): profile endpoint returns the current user" && git push
 ```
 
 Run it yourself, or tell it to run it. If you would rather not commit the tests, it keeps a copy under `.scratch/flow/<issue>/approved-tests/` with a checksum manifest instead.

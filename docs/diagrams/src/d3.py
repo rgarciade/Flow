@@ -1,6 +1,6 @@
 from lib import *
 d=D(900,560,"branching","flow branch model","Branch model: task branches merge by pull request into a group branch, the group branch merges into the base branch; standalone tasks go straight to the base branch.")
-d.header("BRANCHING","Every PR targets one level up")
+d.header("BRANCHING","Every PR targets one level up, every branch is linked to its issue")
 by,sy,gy,ay,bY=100,190,290,380,470
 def lane(y,x0,x1,col=INK,w=2.5): d.line([(x0,y),(x1,y)],col,w)
 def dot(x,y,merge=False):
@@ -30,4 +30,5 @@ d.label(792,bY-30,"PR to group","start",ACC)
 d.box(40,330,330,120,"Blocked children wait",["task n2 is blocked by n1:","it branches only after n1's PR","is merged into the group branch"],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
 d.box(40,468,330,48,"You review and merge every PR",[],tsize=12)
 d.legend(540,[("solid","branch from"),("blue","PR (you merge)")])
+d.text(330,545,"gh issue develop links each branch to its issue · pull --ff-only first · push every commit",10,400,MUT,"start")
 d.save()
