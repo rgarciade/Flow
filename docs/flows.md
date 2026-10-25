@@ -22,21 +22,24 @@
 | 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed) | |
 | 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
 | 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
-| 5. Tests | tests subagent | Failing tests, each for the expected reason | **Approve the tests**, `test(<ref>)` commit |
-| 6. Implement | implement subagent(s) | Code that passes the frozen tests | Answer any question not settled by the plan; `feat(<ref>)` commit |
+| 5. Tests | tests subagent | Failing tests, each for the expected reason | **Approve the tests**, `test(<commit-ref>)` commit |
+| 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `feat(<commit-ref>)` commit |
 | 7. Review | 2 review subagents, then fix | Standards and spec reports | Choose findings, `fix`/`refactor` commit |
-| 8. Report and PR | orchestrator | Report, PR and summary record | Review the code, OK the move to in review, merge the PR |
+| 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), PR and summary record | Review the code, OK the move to in review, merge the PR |
 
 **You are in the loop.** Every phase ends by showing you its result and waiting for you before the next one. Anything the issue and the plan don't settle comes to you as a question with a recommendation; subagents return such questions instead of guessing.
 
-**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(<ref>): adjust …` commit that becomes the new reference, and the change is logged in the plan record (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
+**Parts that can't be tested.** Configuration, visual styling, documentation-only changes or infrastructure scripts may have no reasonable seam for an automated test. The plan then proposes manual verification steps (what to do, what to observe); you approve them, they go into the plan record, and Phase 6 ends by running them: the agent runs what it can and gives you the rest as a checklist. Tests remain the default.
+
+**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(<commit-ref>): adjust …` commit that becomes the new reference, and the change is logged in the plan record (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
 
 ## Branches
 
 <p align="center"><img src="diagrams/branching.svg" alt="Base branch, group branches and task branches" width="900"></p>
 
-- **Standalone task**: `task/<n>-<slug>` from the base branch, PR to the base branch.
-- **Group of tasks** (a parent task with children): `feature/<parent>-<slug>` from the base branch. Each child gets `task/<n>-<slug>` from the group branch, with its PR to the group branch. When every child is merged, one PR takes the group branch to the base branch.
+- **Before branching**, the base or group branch is updated with `git pull --ff-only`; if it can't fast-forward, the work stops.
+- **Standalone task**: `task/<id>-<slug>` from the base branch, PR to the base branch.
+- **Group of tasks** (a parent task with children): `feature/<parent-id>-<slug>` from the base branch. Each child gets `task/<id>-<slug>` from the group branch, with its PR to the group branch. When every child is merged, one PR takes the group branch to the base branch.
 - A child starts only after the PRs of its blockers are merged into the group branch, so each child PR shows only its own diff.
 - You review and merge every PR.
 
@@ -55,6 +58,7 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 | implement | fast | Code, never tests |
 | review-standards, review-spec | fast (in parallel) | No |
 | fix | fast | Code, never tests |
+| group architecture review | strong | No (before a group PR) |
 
 - **Model tiers.** Each repo maps `strong` and `fast` to real models in `docs/agents/workflow.md` (in Claude Code, by default `opus` and `sonnet`). Where the harness cannot pick a model per subagent, subagents inherit the session model.
 - **Notes as the shared memory.** Each subagent saves its full result under `flow/<repo>/<issue>/<phase>` and returns at most 15 lines. The orchestrator passes note keys between phases, not content, so its context stays small. Notes go to Engram when its MCP server is available, or to `.scratch/flow/<issue>/<phase>.md` otherwise.
@@ -66,8 +70,8 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 
 Phase 7 follows Matt Pocock's two-axis review ([reference](../skills/flow-work/references/code-review.md)):
 
-- **Standards**: does the diff follow the repo's documented rules (`CLAUDE.md`, `AGENTS.md`, `.claude/rules/*`, `CONTRIBUTING.md`…), plus a baseline of code smells that the repo's own rules can override?
-- **Spec**: does it do what the issue and the plan asked for, without missing parts or scope creep?
+- **Standards**: does the diff follow the repo's documented rules (`CLAUDE.md`, `AGENTS.md`, `.claude/rules/*`, `CONTRIBUTING.md`…), plus a baseline of code smells that the repo's own rules can override? It also checks the code against the ADRs, the glossary and the parent's architecture notes.
+- **Spec**: does it do what the task and the plan asked for, without missing parts or scope creep? It also checks that the docs the plan listed match the code, and flags docs that only repeat it.
 
 The two reports are shown side by side and never merged, so one axis cannot hide the other.
 
@@ -100,7 +104,7 @@ Spec-driven teams only see a piece of work when its pull request arrives. Issue-
 
 | What the team sees | Where | How |
 |---|---|---|
-| Who is on it | Task assignee | Assigned to you when you confirm the task |
+| Who is on it | Task assignee | Assigned to you when you confirm the task; `flow-work` warns you if someone else already has it |
 | Which branch | The task's development or branch links | Branches are created with `create-branch` (on GitHub, `gh issue develop`), linked to the task |
 | Every approved step | Commits on the linked branch | Each commit command ends with `git push` |
 | How it is being built | The plan record on the task | Posted after planning, edited when the plan changes |
@@ -121,7 +125,7 @@ Small vertical slices are easy to review but can lose the big picture. `flow` ke
 | Planning a feature (`flow-plan`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
 | Phase 4, Plan | **ADR candidates**: decisions that are hard to reverse, span modules, or were chosen between alternatives. Conflicts with existing ADRs go to you as questions | Plan note and the plan record's "Architecture decisions" |
 | Phase 7, Review | The standards reviewer checks the code against the **ADRs, the glossary and the architecture notes**; a contradiction is a finding that cites the ADR | Review report |
-| Phase 8, before the PR | Each candidate that held becomes an **ADR** in `docs/adr/`, after your OK, in a `docs(<ref>)` commit | The repo, with the PR |
+| Phase 8, before the PR | Each candidate that held becomes an **ADR** in `docs/adr/`, after your OK, in a `docs(<commit-ref>)` commit | The repo, with the PR |
 | Group PR | A **group architecture review** of the whole feature: coherence, duplication between children, missing ADRs, glossary drift. Findings become new child issues or follow-ups | Report to you before the group PR |
 
 Most tasks produce no ADR at all: only decisions that would be expensive to undo get one. The template is in [`skills/flow-work/references/adr-template.md`](../skills/flow-work/references/adr-template.md).

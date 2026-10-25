@@ -13,7 +13,7 @@ How this repo's tasks are read, created and changed. `flow-plan` and `flow-work`
 | Task id | `<e.g. 42, PROJ-123, ENG-7>` |
 | Reference in text | `<e.g. #42, PROJ-123>` |
 | Id in branch names | `<e.g. 42, PROJ-123>` (as in `task/<id>-<slug>`) |
-| Reference in commits | `<e.g. #42, PROJ-123>` (as in `feat(<ref>): …`) |
+| Reference in commits | `<e.g. #42, PROJ-123>` (as in `feat(<commit-ref>): …`) |
 | Markup | `<Markdown | Jira wiki markup | plain text>` |
 | Note block | `<how to render the "these are implementation notes" box, e.g. "> [!NOTE]", "{info}…{info}", or a bold first line>` |
 | Record marker | `<how a flow record is tagged so it can be found again, e.g. "<!-- flow:plan -->", or a visible first line "[flow:plan]">` |

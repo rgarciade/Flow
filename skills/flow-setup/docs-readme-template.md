@@ -7,7 +7,7 @@
 |---|---|
 | How something is implemented | The code and its tests |
 | Why a decision was taken | [Architecture decisions](adr/) (ADRs) |
-| What was asked, and how it changed | The GitHub issues: description, `## Changes`, and the implementation notes comment |
+| What was asked, and how it changed | The task in the project's tracker: its description and `## Changes` log, and its plan and summary records |
 | How work is planned and developed here | [`agents/workflow.md`](agents/workflow.md) |
 
 If a document here only repeats what the code says, or describes how things used to be, it is a bug: fix it or remove it.

@@ -1,6 +1,6 @@
 # ADR template
 
-Architecture Decision Records live where `docs/agents/domain.md` says (by default `docs/adr/`), one file per decision, numbered in order: `NNNN-<short-title>.md`, for example `0007-store-recordings-in-sqlite.md`. Take the next free number.
+Architecture Decision Records live where `docs/agents/domain.md` says (by default `docs/adr/`), one file per decision, numbered in order: `NNNN-<short-title>.md`, for example `0007-use-postgres-for-orders.md`. Take the next free number.
 
 Write an ADR only for a decision that is **hard to reverse**, **affects more than one module**, or was **chosen between real alternatives**. Most tasks have none.
 
@@ -11,7 +11,7 @@ Keep it under a page. Write it in the language the repo's docs already use.
 
 - **Status**: accepted
 - **Date**: <YYYY-MM-DD>
-- **Issue**: #<n>
+- **Task**: <ref>
 
 ## Context
 

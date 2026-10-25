@@ -66,6 +66,7 @@ These harnesses follow the shared Agent Skills format, but `flow` is developed a
 
 Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): the file records both.
 
+### Run flow-setup
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
@@ -74,8 +75,9 @@ It explores the repo, asks one question at a time (base branch, branch names, la
 ```
 docs/agents/tracker.md         how every task operation is done in your tracker
 docs/agents/domain.md          where the glossary and ADRs live
-docs/agents/workflow.md        base branch, branch names, languages, models, commands, Engram sync, status tracking, docs
+docs/agents/workflow.md        base branch, branch names, languages, models, commands, Engram sync, docs
 AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the above
+<docs>/README.md               a reading guide for the project docs (only if the docs folder already exists)
 ```
 
 It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again.

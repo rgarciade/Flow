@@ -125,6 +125,7 @@ case "${1:-}" in
     ;;
   --claude)
     [[ -n "${2:-}" ]] || usage
+    [[ -d "$2" ]] || { echo "Claude Code config folder not found: $2" >&2; exit 1; }
     target="$(cd "$2" && pwd)"
     refuse_default_claude_profile "$target"
     link_into "$target/skills"

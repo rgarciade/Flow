@@ -8,8 +8,8 @@ d.path([(210,108),(330,108)],start=True);d.label(270,99,"GATES")
 # container
 d.front.append(f'<rect x="28" y="210" width="844" height="150" rx="8" fill="{BG}"/><rect x="28" y="210" width="844" height="150" rx="8" fill="none" stroke="{MUT}" stroke-width="1" stroke-dasharray="4,3"/>')
 d.text(40,228,"ROLE SUBAGENTS  (harness subagent mechanism)",9,600,MUT,"start",mono=True)
-roles=[("research","fast","reads code + task",0),("plan","strong","seams + scenarios",0),("tests","strong","test files only",1),("implement","fast","never tests",1),("review-standards","fast","with review-spec",0),("fix","fast","never tests",1)]
-cw,gap,x=126,12,40
+roles=[("research","fast","reads code + task",0),("plan","strong","seams + scenarios",0),("tests","strong","test files only",1),("implement","fast","never tests",1),("reviews","fast","standards + spec",0),("fix","fast","never tests",1),("arch review","strong","group, before PR",0)]
+cw,gap,x=108,8,40
 for i,(n,m,w,wr) in enumerate(roles):
     xx=x+i*(cw+gap)
     d.box(xx,240,cw,108,n,[],stroke=ACC if wr else INK,sw=1.6 if wr else 1.2,tsize=12 if len(n)<14 else 11)

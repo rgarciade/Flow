@@ -86,47 +86,7 @@ To link the description to the plan record, include `Implementation notes: <reco
 
 Write both records in the task language from `docs/agents/workflow.md`, in the tracker's markup, with its note block and record marker; translate the headings and the note text too. The templates below are in GitHub Markdown; adapt them to the tracker's format.
 
-Plan record template (10 to 15 lines below the header):
-
-```markdown
-<!-- flow:plan -->
-> [!NOTE]
-> **Implementation notes**: how this task is being built. The requirements are in the task description; flow-work updates these notes when the plan changes.
-> Last update: <YYYY-MM-DD> · branch `<task branch>`
-
-### Seams under test
-- `<public interface>`: what it catches
-
-### Scenarios
-1. <one line per scenario>
-
-### Steps
-1. <implementation outline, no file-level detail>
-
-### Docs
-- <document to create or update>: <what changes> (or "none")
-
-### Architecture decisions
-- <decision>: <one line on why> (ADR candidate; omit the section if there are none)
-
-### Changes to the plan
-- <YYYY-MM-DD>: <what changed and why> (omit the section until something changes)
-```
-
-Summary record template:
-
-```markdown
-<!-- flow:summary -->
-> [!NOTE]
-> **Implementation summary**: what was built for this task. PR: <PR link>
-
-- **Works now**: <one or two lines>
-- **Acceptance criteria**: <n>/<n> ✅ (list any ❌)
-- **Deviations from the plan**: <none, or one line each>
-- **Open review findings**: <none, or one line each>
-- **ADRs**: <ADR-NNNN title, or none>
-- **Docs**: <documents created or updated, or none>
-```
+Use the templates in `references/records.md` for both records.
 
 ## Team visibility
 
@@ -146,34 +106,11 @@ Task-driven work is visible while it happens, not only when the PR arrives. Anyo
 
 ## Autonomous mode
 
-For a task that is not complex, the user can ask you to work autonomously ("work on your own", "autonomous mode"). You may also suggest it after research, when the size verdict says the task is small. Never switch to it without the user's explicit yes.
-
-In autonomous mode, chain the phases without stopping for routine confirmations:
-
-- **Skip:** showing each phase's result and waiting, the research summary, the seams confirmation, the test gate and the progress lines. Take the plan's assumed answers when they are clearly safe.
-- **Still stop for** what really needs the programmer:
-  - a decision the issue and the plan don't settle, where a wrong guess would cost real rework;
-  - a test that looks wrong (see "Changing an approved test"), or a check you cannot make pass;
-  - a task that turns out bigger than it looked;
-  - anything that leaves the machine or changes shared state: commits, pushes, status moves, issue edits, the PR.
-- **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<id>/approved-tests/` manifest right after writing them, and check them against it as usual.
-- **Commits come at the end.** Instead of a commit command per phase, give the user the `test`, `feat` and `fix`/`refactor` commands (and `chore` for an Engram export) together with the final report, each ending with `&& git push`.
-- **The final report is never skipped.** It also lists every assumption you made on the user's behalf, so they can check them.
-
-The user can leave autonomous mode at any moment ("stop", "back to pair mode"). Go back to stopping at every phase from there.
+For a task that is not complex, the user can ask you to work on your own; you may also suggest it after research when the task is small. Never switch to it without the user's explicit yes. When they say yes, read `references/autonomous-mode.md` and follow it: it lists what you may skip and what you must still stop for. The user can go back to pair mode at any moment.
 
 ## Changing an approved test
 
-Sometimes implementation shows that an approved test was wrong: the requirement was misread, a library behaves differently than assumed, or the seam was badly chosen. That is legitimate. Changing a test because it is inconvenient for the code is not. Approved tests change only through this procedure, in pair and autonomous mode alike:
-
-1. **Detect.** The subagent that hits the problem stops without touching the test, and returns: which test (`path:line`), why it believes the test is wrong, the evidence (the code, the library docs, or the requirement that contradicts it), and the change it proposes.
-2. **The user decides.** Show it in a few lines with your recommendation, and say which case it is: the test was wrong, or the requirement changed. If the honest answer is "the test is right and the code is hard", say so and recommend keeping the test.
-3. **Change.** After the user's OK, brief the tests subagent (strong tier) to change **only** those tests. Each must again fail for the expected reason, or pass if the implementation already covers it. Never loosen an assertion only to make it pass.
-4. **Record.**
-   - Give the commit command `git add <test files> && git commit -m "test(<commit-ref>): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.scratch` record instead, refresh the manifest.
-   - Propose a line under "Changes to the plan" in the plan record (an edit, so it needs the user's OK).
-   - If a requirement changed, also propose the `## Changes` line in the issue description.
-5. **Continue** implementing against the new tests.
+Approved tests change only through the procedure in `references/approved-test-change.md`: the subagent stops without touching the test, the user decides, the tests subagent changes only those tests, and the change gets its own commit and a line in the plan record. Read it as soon as a test looks wrong. Never loosen an assertion only to make it pass.
 
 ## Phase 0: Preflight
 
@@ -183,7 +120,7 @@ Sometimes implementation shows that an approved test was wrong: the requirement 
 
 ## Phase 1: The task
 
-- **Task id given** (`#42`, `PROJ-123` or a URL): read it with `view-task`. State its title back to the user.
+- **Task id given** (`#42`, `PROJ-123` or a URL): read it with `view-task`. State its title back to the user. If it is assigned to someone else, or its status is already "in progress" or later, or a branch for it already exists on the remote with someone else's commits, tell the user and ask whether to continue before doing anything else: someone may already be on it.
 - **No id**: the task comes from the current conversation. Draft it with the template in `../flow-plan/SKILL.md`, show it, and create it with `create-task` once the user approves. Then continue with that id.
 
 Then check its position:
@@ -236,11 +173,12 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 - Refined acceptance criteria and an "out of scope" list.
 - The **seams** (public interfaces) to test, each with one line on what it catches and what it misses.
 - The test scenarios, one per acceptance criterion where possible.
+- **Untestable parts**: anything with no reasonable seam for an automated test (configuration, visual styling, documentation-only changes, infrastructure scripts, third-party dashboards). For each, a short **manual verification** step instead: what to do and what you should observe. Prefer a test whenever a reasonable one exists; this is the exception, not a shortcut.
 - An implementation outline: steps, not file-level detail.
 - **Docs to touch**: the project documents this task makes stale or genuinely needs (following "Just enough docs" below) (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
 - **ADR candidates**: the architectural decisions this plan makes (a new dependency, a pattern, a boundary between modules, a data model change), each with one line on why. Only decisions that are hard to reverse, affect more than one module, or were chosen between real alternatives (see `references/adr-template.md`). Most tasks have none. It also flags any conflict with an existing ADR or with the parent's "Architecture notes", which goes to the user as a question.
 
-Ask the user the questions one by one, assumed answer first. Then show the seams and scenarios and get the user's OK. No test is written at a seam the user has not confirmed. Save the agreed result back to the same note.
+Ask the user the questions one by one, assumed answer first. Then show the seams, the scenarios and any manual verification steps, and get the user's OK. No test is written at a seam the user has not confirmed, and a part is only verified manually if the user agreed it can't be tested. Save the agreed result back to the same note.
 
 Then update the task (see "The task is the source of truth"):
 
@@ -248,6 +186,8 @@ Then update the task (see "The task is the source of truth"):
 2. If the refined acceptance criteria or the out-of-scope list differ from the description, propose the description edit (requirements as they now stand, the `## Changes` line, and the link to the plan record) and apply it once the user approves.
 
 ## Phase 5: Tests (strong) and the test gate
+
+If the user agreed that the whole task has no testable seam, skip this phase: the agreed manual verification steps take the place of the tests, and Phase 6 ends by running them. If only some parts are untestable, write the tests for the rest as usual.
 
 Brief a tests subagent with the plan key. It writes only test files, matching the globs in `docs/agents/workflow.md`, at the confirmed seams and following `references/tests.md` and `references/mocking.md`. It runs them and confirms each fails **for the expected reason**: missing behaviour, not a syntax, import or setup error. It saves under `flow/<repo>/<id>/tests` and returns one line per scenario with its `path:line` link and its failure reason.
 
@@ -279,6 +219,7 @@ The work can be split into several implement subagents, one after another, when 
 
 Then check it yourself:
 
+- **Manual verification**, if the plan has any: run the steps you can run yourself (a command, a build, a config check) and report what you observed; give the user the rest as a short checklist and wait until they confirm each one. A failed step is handled like a failing test.
 - `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.scratch` manifest). If not, stop and tell the user.
 - The full suite and typecheck pass.
 
@@ -306,7 +247,7 @@ Write the report in this shape:
 1. **Detailed summary** at the top:
    - what now works, in concrete terms;
    - each acceptance criterion with ✅ or ❌;
-   - test results;
+   - test results, and the manual verification results if any;
    - review findings fixed and left open;
    - any deviation from the plan;
    - the documents created or updated;
@@ -341,12 +282,4 @@ When the user says the PR is merged:
 
 ### Group architecture review (strong)
 
-Before the group PR, brief a read-only subagent (strong tier) with the parent issue and its "Architecture notes", its children and their plan records, the ADRs and glossary, and the whole group diff (`git diff <base branch>...feature/<parent-id>-<slug>`). It saves under `flow/<repo>/<parent-id>/architecture-review` and returns, in at most 15 lines:
-
-- whether the feature holds together as a whole, against the parent's "Architecture notes";
-- duplication or inconsistencies between children (two helpers doing the same thing, different names for one concept, diverging patterns);
-- decisions that were made but have no ADR, and code that contradicts an ADR;
-- glossary drift;
-- whether the feature as a whole is documented: an overview that no single child writes (what the feature does, its main pieces, how to use it). If it is missing or stale, propose it as a document to write on the group branch, with the user's OK and a `docs(<parent commit-ref>)` commit.
-
-Show it to the user. For each finding they want addressed, propose either a new child issue under the parent (through `flow-plan`'s template, developed with `flow-work` before the group PR) or a follow-up issue for later. Missing ADRs can be written directly on the group branch, with the user's OK and a `docs(<parent commit-ref>)` commit. If the user changed the architecture along the way, propose updating the parent's "Architecture notes" (an edit, so it asks).
+Before the group PR, follow `references/group-review.md`: a read-only strong-tier subagent reviews the whole feature (coherence against the architecture notes, duplication between children, missing or contradicted ADRs, glossary drift, feature-level docs), and its findings become new child tasks, follow-ups or ADRs, always with the user's OK.
