@@ -27,6 +27,7 @@ What you will be asked to do, in order:
 
 1. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
 2. **Confirm the seams**: the public interfaces that will be tested, each with what it catches and what it misses.
+   If the requirements changed, approve the update to the issue description. The plan is then posted as a comment on the issue.
 3. **Approve the tests.** You get one line per scenario with a link to the test, and the command to run them. Reply `OK`, or ask for changes.
 4. **Run, or authorise, the `test(#42)` commit.** That commit is the record of the approved tests.
 5. **Run, or authorise, the `feat(#42)` commit** once the implementation passes.

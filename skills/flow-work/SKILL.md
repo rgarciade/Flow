@@ -47,6 +47,72 @@ Every subagent brief includes:
 - With the Engram MCP server available: save with `mem_save` (topic key = the note key), read with `mem_search` and `mem_get_observation`, update with `mem_update`.
 - Without it: write the note to `.scratch/flow/<issue>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored.
 
+Notes are working memory for this session's subagents. The durable record lives on the issue.
+
+## The issue is the source of truth
+
+Anyone must be able to understand the task from the GitHub issue alone, without the notes. Keep the issue lean: **at most two comments per task from this flow** (the plan comment and the closing comment). When something changes, **edit** what exists instead of posting something new.
+
+**Permissions:**
+
+- **Creating** the plan comment or the closing comment needs no confirmation.
+- **Editing** the description or a comment, and **deleting** anything, always need the user's OK: show the exact change first and wait.
+
+**The description holds the _what_**: what to build, acceptance criteria, out of scope. When the agreed requirements change, propose an edit of the description (never a new comment) with:
+
+- the requirements rewritten as they now stand, and
+- at the bottom, a `## Changes` section (heading in the issue language) with one dated line per change: what changed and why. Keep earlier lines.
+
+Apply it with `gh issue edit <n> --body-file <file>` once the user approves.
+
+**One plan comment holds the _how_**: a short implementation summary, created at the end of Phase 4. Never post a second plan comment: if the plan changes, propose an edit of this one. Find it by its hidden marker:
+
+```sh
+gh api repos/{owner}/{repo}/issues/<n>/comments --jq '.[] | select(.body | contains("<!-- flow:plan -->")) | .id'
+```
+
+Create it with `gh issue comment <n> --body-file <file>`. Edit it, after the user's OK, with `gh api --method PATCH repos/{owner}/{repo}/issues/comments/<id> -F body=@<file>`.
+
+**The closing comment** is posted once, when the PR is opened (Phase 8), with the marker `<!-- flow:summary -->`. If it already exists (for example, the PR was reopened), propose an edit instead.
+
+To link the description to the plan comment, include `Implementation notes: <comment URL>` in the next description edit the user approves. Don't edit the description only to add this link.
+
+Write both comments in the issue language from `docs/agents/workflow.md`; translate the headings and the note text too.
+
+Plan comment template (10 to 15 lines below the header):
+
+```markdown
+<!-- flow:plan -->
+> [!NOTE]
+> **Implementation notes**: how this task is being built. The requirements are in the issue description; flow-work updates this comment when the plan changes.
+> Last update: <YYYY-MM-DD> · branch `<task branch>`
+
+### Seams under test
+- `<public interface>`: what it catches
+
+### Scenarios
+1. <one line per scenario>
+
+### Steps
+1. <implementation outline, no file-level detail>
+
+### Changes to the plan
+- <YYYY-MM-DD>: <what changed and why> (omit the section until something changes)
+```
+
+Closing comment template:
+
+```markdown
+<!-- flow:summary -->
+> [!NOTE]
+> **Implementation summary**: what was built for this task. PR: #<pr>
+
+- **Works now**: <one or two lines>
+- **Acceptance criteria**: <n>/<n> ✅ (list any ❌)
+- **Deviations from the plan**: <none, or one line each>
+- **Open review findings**: <none, or one line each>
+```
+
 ## Phase 0: Preflight
 
 1. Read `docs/agents/workflow.md`. If it does not exist, tell the user and ask, in one line, whether to run `flow-setup` now. If yes, read `../flow-setup/SKILL.md`, follow it, then come back here. If no, stop. If a field this skill needs is missing, ask only for that field.
@@ -70,7 +136,7 @@ Use the patterns and base branch in `docs/agents/workflow.md`:
 
 - **Child task**: make sure the group branch `feature/<parent>-<slug>` exists. If it doesn't, create it from the up-to-date base branch and push it. Then create `task/<n>-<slug>` from the up-to-date group branch.
 - **Standalone task**: create `task/<n>-<slug>` from the up-to-date base branch.
-- If the task branch already exists, check it out and continue from where it was: look for this issue's notes and its commits to find the current phase.
+- If the task branch already exists, check it out and continue from where it was: look for this issue's plan comment, its notes and its commits to find the current phase.
 
 Tell the user the branch name in one line.
 
@@ -101,7 +167,10 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 
 Ask the user the questions one by one, assumed answer first. Then show the seams and scenarios and get the user's OK. No test is written at a seam the user has not confirmed. Save the agreed result back to the same note.
 
-If the refined acceptance criteria differ from the issue, offer to update the issue body.
+Then update the issue (see "The issue is the source of truth"):
+
+1. Post the plan comment with the agreed seams, scenarios and steps.
+2. If the refined acceptance criteria or the out-of-scope list differ from the description, propose the description edit (requirements as they now stand, the `## Changes` line, and the link to the plan comment) and apply it once the user approves.
 
 ## Phase 5: Tests (strong) and the test gate
 
@@ -134,6 +203,8 @@ Then check it yourself:
 - `git diff <approved-tests-commit> -- <test globs>` is empty (or the files match the `.scratch` manifest). If not, stop and tell the user.
 - The full suite and typecheck pass.
 
+If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan comment: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.
+
 Give the commit command (`feat(#n): …`) and wait, as in the hard rules.
 
 ## Phase 7: Review (2 × fast, parallel)
@@ -146,7 +217,7 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 Each saves under `flow/<repo>/<n>/review-standards` or `flow/<repo>/<n>/review-spec`. Show both reports side by side, without merging them, and ask the user which findings to fix.
 
-If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(#n): …` or `refactor(#n): …`).
+If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(#n): …` or `refactor(#n): …`). If a fix changes the plan, propose the plan comment edit as in Phase 6.
 
 ## Phase 8: Final report and PR
 
@@ -167,7 +238,7 @@ Then ask, in one line, whether to open the PR. If yes, create it with `gh pr cre
 - Title and body in the PR language from `docs/agents/workflow.md`.
 - `Closes #<n>` in the body, plus a link to the parent issue if there is one.
 
-The user reviews and merges it.
+Then post the closing comment on the issue, with the PR number. The user reviews and merges the PR.
 
 ## After the merge
 

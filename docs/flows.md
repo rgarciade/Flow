@@ -68,3 +68,17 @@ Phase 7 follows Matt Pocock's two-axis review ([reference](../skills/flow-work/r
 - **Spec**: does it do what the issue and the plan asked for, without missing parts or scope creep?
 
 The two reports are shown side by side and never merged, so one axis cannot hide the other.
+
+## The issue as the source of truth
+
+Anyone can understand a task from its GitHub issue alone, without the agent's notes:
+
+| Where | What | When it changes |
+|---|---|---|
+| Issue description | The _what_: what to build, acceptance criteria, out of scope, a link to the plan comment, and a `## Changes` log at the bottom (what changed and why) | Edited whenever the agreed requirements change, after you approve the edit |
+| Plan comment (`<!-- flow:plan -->`) | The _how_, in 10 to 15 lines: seams under test, scenarios, steps, and a "Changes to the plan" log | Created after planning; **edited in place**, after you approve, if implementation or review changes the plan |
+| Closing comment (`<!-- flow:summary -->`) | What was built, criteria met, deviations, open findings, link to the PR | Posted when the PR is opened |
+
+- **At most two comments per task** from `flow-work`. Changes edit what exists instead of adding more.
+- **Creating** these comments needs no confirmation; **editing** the description or a comment, and **deleting** anything, always asks you first.
+- Both comments start with a GitHub `[!NOTE]` box saying they are implementation notes, not requirements. A hidden marker lets `flow-work` find the same comment every time.
