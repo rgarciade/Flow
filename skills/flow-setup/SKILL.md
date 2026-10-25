@@ -49,7 +49,7 @@ Ask one question at a time. Lead with the value you detected as the recommended 
 7. Models for the two tiers: **strong** (plan, tests) and **fast** (research, implement, review, fix). Default in Claude Code: `opus` and `sonnet`. In another harness, propose its equivalents in the names it accepts, or `inherit`.
 8. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
 9. Status tracking: how `flow-work` moves issues to "in progress", "in review" and "done" (always asking first). `project` if the repo's issues live in a GitHub Project (find it with `gh project list --owner <owner>` and read its status field with `gh project field-list`), `labels` if the repo uses status labels, otherwise `none`. Record the exact names.
-10. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off.
+10. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off. If the docs folder already exists, propose adding its reading guide: a `README.md` from [docs-readme-template.md](docs-readme-template.md), or its note merged into an existing index, with the "Contents" list filled from the documents already there. If the folder does not exist yet, don't create it: `flow-work` does so with the first document.
 
 ## 4. Draft, confirm, write
 
@@ -57,6 +57,7 @@ Show the user a draft of every file you will write or edit, including the `## Ag
 
 - `docs/agents/issue-tracker.md` and `docs/agents/domain.md` (from Matt's templates)
 - `docs/agents/workflow.md` (from [workflow-template.md](workflow-template.md))
+- `<docs folder>/README.md` (from [docs-readme-template.md](docs-readme-template.md)), only if the docs folder already exists and the user agreed
 - The `## Agent skills` block, following the file-selection rules in Matt's setup (edit the existing `CLAUDE.md` or `AGENTS.md`; never create the other one; update an existing block in place). When neither exists, recommend `AGENTS.md`: OpenCode, Codex and Cursor read it, and Claude Code loads it when the project has no `CLAUDE.md`. Add this sub-block to it:
 
 ```markdown

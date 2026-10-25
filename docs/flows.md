@@ -145,4 +145,8 @@ Each kind of record has one job:
 | An ADR | Why a decision was taken | Never edited; superseded by a new ADR |
 | The docs | How things work now | Updated whenever the code changes |
 
+**Just enough docs.** Only what the code cannot easily tell: what a module or feature is for, how to use, run or configure it, flows across modules, external integrations, non-obvious constraints. No signatures, file-by-file walkthroughs or generated listings, and no history. A few lines in an existing document beat a new file, and the review flags docs that only repeat the code.
+
+**A reading guide in every docs folder.** The docs folder of each project gets a `README.md` ([template](../skills/flow-setup/docs-readme-template.md)) that tells readers the docs are deliberately short, and points them to the code for implementation, to the ADRs for decisions, and to the issues for what was asked. It also keeps a contents list, updated whenever a document is added or removed.
+
 The docs folder and the project's own rules are set in the **Docs** section of `docs/agents/workflow.md`.

@@ -238,7 +238,7 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 - The **seams** (public interfaces) to test, each with one line on what it catches and what it misses.
 - The test scenarios, one per acceptance criterion where possible.
 - An implementation outline: steps, not file-level detail.
-- **Docs to touch**: the project documents this task makes stale or needs (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
+- **Docs to touch**: the project documents this task makes stale or genuinely needs (following "Just enough docs" below) (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
 - **ADR candidates**: the architectural decisions this plan makes (a new dependency, a pattern, a boundary between modules, a data model change), each with one line on why. Only decisions that are hard to reverse, affect more than one module, or were chosen between real alternatives (see `references/adr-template.md`). Most tasks have none. It also flags any conflict with an existing ADR or with the parent's "Architecture notes", which goes to the user as a question.
 
 Ask the user the questions one by one, assumed answer first. Then show the seams and scenarios and get the user's OK. No test is written at a seam the user has not confirmed. Save the agreed result back to the same note.
@@ -274,7 +274,9 @@ Brief an implement subagent with the plan and tests keys. It writes the minimum 
 
 The work can be split into several implement subagents, one after another, when the plan has clearly separate steps. Between them, tell the user in one line which step is done and which comes next. If a subagent returns a question, bring it to the user before continuing.
 
-**Docs.** With the tests green, update or create the documents listed in the plan's "Docs to touch" (an implement subagent, fast tier, never touching tests). Describe how things work now, not the history of the change: that lives in the issue and the ADRs. Create the docs folder only when a first document needs it. If the plan said "none" but the change clearly makes a document stale, add it and tell the user.
+**Just enough docs.** Document only what the code cannot easily tell: what a module or feature is for, how to use, run or configure it, flows that cross several modules, external integrations, and non-obvious constraints or gotchas. Don't restate what reading the code gives quickly (signatures, file-by-file or line-by-line walkthroughs, generated API listings), and don't record history (that lives in the issue and the ADRs). Prefer a few lines in an existing document over a new file. When in doubt, leave it out.
+
+**Docs.** With the tests green, update or create the documents listed in the plan's "Docs to touch" (an implement subagent, fast tier, never touching tests). Describe how things work now, not the history of the change: that lives in the issue and the ADRs. Create the docs folder only when a first document needs it, and then also its `README.md` from `../flow-setup/docs-readme-template.md`, in the language the repo's docs use, with its links adjusted if the docs folder is not `docs/`: it tells readers that these docs are deliberately short and where everything else lives. Keep its "Contents" list current whenever a document is added, renamed or removed. If the folder exists but has no such guide, propose adding it (or its "These docs are deliberately short" note to an existing index) as part of this step. If the plan said "none" but the change clearly makes a document stale, add it and tell the user.
 
 Then check it yourself:
 
@@ -290,7 +292,7 @@ Give the commit command (`feat(#n): …`, ending with `&& git push`) and wait, a
 Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 - **Fixed point**: the merge-base of the task branch with its target (the group branch, or the base branch for a standalone task). Diff with `git diff <merge-base>...HEAD`, plus `git diff` for anything not committed.
-- **Spec source**: the issue and the plan key. The spec axis also checks that the documents in "Docs to touch" match what the code now does: a stale or missing document is a finding.
+- **Spec source**: the issue and the plan key. The spec axis also checks that the documents in "Docs to touch" match what the code now does: a stale or missing document is a finding, and so is a document that only repeats what the code already says ("Just enough docs").
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
 - **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 

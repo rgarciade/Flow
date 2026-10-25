@@ -39,6 +39,7 @@ Where the project's own documentation lives, and how `flow-work` keeps it curren
 
 - **Docs folder**: `<docs/, or none>`
 - **Project rules**: `<where the project says which docs to update, e.g. a matrix in AGENTS.md; or none>`. These rules take precedence over the plan's own judgement.
+- Just enough docs: only what the code cannot easily tell (purpose, usage and configuration, cross-module flows, integrations, non-obvious constraints). Nothing that reading the code gives quickly.
 
 ## Status tracking
 
