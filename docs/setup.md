@@ -70,7 +70,7 @@ Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): t
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
-It explores the repo, asks one question at a time (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
+It explores the repo, asks its questions in numbered batches with a proposed answer for each (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
 
 ```
 docs/agents/tracker.md         how every task operation is done in your tracker

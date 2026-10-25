@@ -20,7 +20,7 @@ These override anything more permissive elsewhere, including the user's general 
 - **Never modify approved tests on your own.** After the test gate, the test files are frozen. If a test looks wrong, follow "Changing an approved test": stop, explain why, and change it only after the user's OK.
 - **One writer at a time.** Subagents that edit files run one after another. Read-only subagents (research, review) may run in parallel.
 - **No worktrees, no child branches beyond the ones in `docs/agents/workflow.md`.**
-- **Ask one question at a time.** After asking, stop and wait.
+- **Batch independent questions.** Ask the questions that don't depend on each other together, as a numbered list with your proposed answer for each, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. After asking, stop and wait.
 
 ## Subagents
 
@@ -178,7 +178,7 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 - **Docs to touch**: the project documents this task makes stale or genuinely needs (following "Just enough docs" below) (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
 - **ADR candidates**: the architectural decisions this plan makes (a new dependency, a pattern, a boundary between modules, a data model change), each with one line on why. Only decisions that are hard to reverse, affect more than one module, or were chosen between real alternatives (see `references/adr-template.md`). Most tasks have none. It also flags any conflict with an existing ADR or with the parent's "Architecture notes", which goes to the user as a question.
 
-Ask the user the questions one by one, assumed answer first. Then show the seams, the scenarios and any manual verification steps, and get the user's OK. No test is written at a seam the user has not confirmed, and a part is only verified manually if the user agreed it can't be tested. Save the agreed result back to the same note.
+Ask the user the questions, assumed answer first (see "Batch independent questions"). Then show the seams, the scenarios and any manual verification steps, and get the user's OK. No test is written at a seam the user has not confirmed, and a part is only verified manually if the user agreed it can't be tested. Save the agreed result back to the same note.
 
 Then update the task (see "The task is the source of truth"):
 

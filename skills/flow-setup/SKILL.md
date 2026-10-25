@@ -37,7 +37,7 @@ This is the heart of the setup: `flow-plan` and `flow-work` never call a tracker
 
 1. **Ask which tracker the project uses**, recommending what exploration found (GitHub Issues when the code host is GitHub and nothing else shows up). Also ask where pull requests live, if it differs from the tracker (for example Jira tasks with GitHub PRs).
 2. **Start from a template.** For GitHub Issues, start from [tracker-github.md](tracker-github.md) and only confirm the details (status labels or project, labels). For anything else, fill [tracker-template.md](tracker-template.md).
-3. **Fill every operation.** For each row, find how it is done with the access available: its CLI (`glab`, `jira`, `az`…), an MCP server, or its REST API with a token from an environment variable (never write a token into the file). Check each read operation for real against an existing task when possible; never try a write operation during setup. Ask the user one question at a time when you can't tell.
+3. **Fill every operation.** For each row, find how it is done with the access available: its CLI (`glab`, `jira`, `az`…), an MCP server, or its REST API with a token from an environment variable (never write a token into the file). Check each read operation for real against an existing task when possible; never try a write operation during setup. Ask the user when you can't tell, batching the questions that don't depend on each other.
 4. **Offer alternatives for what is missing.** When the tracker can't do an operation (no comments, no editing, no parent links, no dependencies, no status, no branch links, no auto-close), propose the matching alternative from the template's "Alternatives" table, recommending one, and record the choice. The usual one is the **task folder in the repo**: `.flow/tasks/<id>/` with `plan.md` and `summary.md`, committed with the work and linked from the task once. If there is no automated access at all, propose **manual mode**: the agent writes the exact text and the user pastes it.
 5. **Format.** Record the task id format, how tasks are referenced in text, the markup the tracker uses, and how the note block and record marker are rendered there.
 6. **Where the file lives.** By default `docs/agents/tracker.md` in the repo. If several repos share one tracker (for example a company Jira), offer to keep the file in a shared place and write its path in `workflow.md` instead.
@@ -48,7 +48,7 @@ Read `../setup-matt-pocock-skills/SKILL.md` and apply only its **Section C** (do
 
 ## 4. Our questions
 
-Ask one question at a time. Lead with the value you detected as the recommended answer, so the user can accept it in one word. Skip any question that exploration already settled beyond doubt, and say what you assumed.
+Ask the questions that don't depend on each other together, as a numbered list. Lead each with the value you detected as the recommended answer, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. Skip any question that exploration already settled beyond doubt, and say what you assumed.
 
 1. Base branch: the branch every finished feature ends up in (for example `dev`).
 2. Branch naming for groups and tasks. Default: `feature/<id>-<slug>` for a group branch (a parent task) and `task/<id>-<slug>` for a task branch, with `<id>` as the tracker's "id in branch names".
