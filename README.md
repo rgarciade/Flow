@@ -28,6 +28,14 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 
 `flow-plan` and `flow-work` check for `docs/agents/workflow.md` first, and offer to run `flow-setup` if it is missing.
 
+## How a task flows
+
+<p align="center">
+  <a href="docs/flows.md"><img src="docs/diagrams/flow-work-phases.svg" alt="flow-work phases, with the points where you decide and the commit points" width="900"></a>
+</p>
+
+Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)**.
+
 ## Quick start
 
 ```sh

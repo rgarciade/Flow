@@ -28,6 +28,14 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 `flow-plan` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.
 
+## Cómo avanza una tarea
+
+<p align="center">
+  <a href="docs/flows.md"><img src="docs/diagrams/flow-work-phases.svg" alt="Fases de flow-work, con los puntos en los que decides tú y los commits" width="900"></a>
+</p>
+
+Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md](docs/flows.md)**.
+
 ## Inicio rápido
 
 ```sh
