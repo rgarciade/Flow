@@ -40,7 +40,7 @@ Summary record template:
 > **Implementation summary**: what was built for this task. PR: <PR link>
 
 - **Works now**: <one or two lines>
-- **Acceptance criteria**: <n>/<n> ✅ (list any ❌)
+- **Acceptance criteria**: <n>/<n> ✅, as listed in the task description (list any ❌)
 - **Manual verification**: <steps done and by whom, or none>
 - **Deviations from the plan**: <none, or one line each>
 - **Open review findings**: <none, or one line each>

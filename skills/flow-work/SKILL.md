@@ -206,7 +206,7 @@ Ask the user the questions, assumed answer first (see "Batch independent questio
 Then update the task (see "The task is the source of truth"):
 
 1. Create the plan record (`create-record`) with the agreed seams, scenarios and steps.
-2. If the refined acceptance criteria or the out-of-scope list differ from the description, propose the description edit (requirements as they now stand, the `## Changes` line, and the link to the plan record) and apply it once the user approves.
+2. The description must hold the acceptance criteria as a checklist (`- [ ]`), because the summary record and the final report grade the task against it. If the description has no acceptance criteria section (for example a bug report written from a template), or the refined criteria or the out-of-scope list differ from it, propose the description edit (criteria as they now stand, the `## Changes` line, and the link to the plan record) and apply it once the user approves. Never report "n/n criteria" for criteria that are not written in the description.
 
 ## Phase 5: Tests (strong) and the test gate
 
@@ -279,12 +279,13 @@ Write the report in this shape:
 
 1. **Detailed summary** at the top:
    - what now works, in concrete terms;
-   - each acceptance criterion with ✅ or ❌;
+   - each acceptance criterion from the description with ✅ or ❌ (the same text, not a rewording);
    - test results, and the manual verification results if any;
    - review findings fixed and left open;
    - any deviation from the plan;
    - the documents created or updated;
    - the ADR candidates, which become ADRs in the next step.
+   - propose ticking the met criteria in the description (`edit-description`, needs the user's OK).
 2. **Files to review, in vertical order**: tests → entry point → logic → data. One `path:line` link per file, with one line on what changed. The user reviews the code; do not ask them to skip it.
 3. **Short summary** at the end: three lines at most.
 
