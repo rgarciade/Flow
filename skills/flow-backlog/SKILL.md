@@ -27,7 +27,7 @@ Then decide which of these it is. If unsure, ask:
 - **Separate tasks**: one or several issues, unrelated or loosely related. Go to step 2.
 - **A breakdown**: one piece of work that needs several dependent tasks. Go to step 3.
 
-**Preliminary research (optional).** When the work touches something unknown (a new library, an external service, an unfamiliar part of the code), offer a short research pass before drafting. If the user agrees, brief a read-only subagent (or do it yourself if the harness has none) to answer, in at most 15 lines: which libraries, connectors or APIs fit, what the code already has to build on, and the main risks or open questions. It gives direction, not decisions. Its findings go into each issue's "Preliminary notes" section.
+**Preliminary research (optional).** When the work touches something unknown (a new library, an external service, an unfamiliar part of the code), offer a short research pass before drafting. If the user agrees, brief a read-only subagent (or do it yourself if the harness has none) to answer, in at most 15 lines: which libraries, connectors or APIs fit, what the code already has to build on, every part of the code where the behaviour being changed happens (found by searching for the operation itself, not only the obvious entry points), and the main risks or open questions. It gives direction, not decisions. Its findings go into each issue's "Preliminary notes" section.
 
 ## 2. Separate tasks
 

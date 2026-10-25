@@ -151,10 +151,14 @@ Tell the user, in one line, the branch name (now linked to the task) and what wa
 Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<id>/research` and returns:
 
 - What exists today that the task builds on (as `path:line` links).
+- An **impact map**: for each operation the task hooks into or changes (saving a record, assigning an item, sending an event, a function every caller must go through), every place in the code where that operation happens, found by searching the code for the operation itself, not taken from the issue's list. Each entry has its `path:line` and says whether the task covers it. A place the issue does not mention is an open question, never silently out of scope.
+- Every claim that narrows the scope ("X needs no change because…") with its evidence: the search it ran and what it found.
 - Open questions about the task itself.
 - A **size verdict**: does it fit one working session as one vertical slice? If not, a proposed split into smaller vertical slices.
 
-Show the user the research in three to five lines: what the task builds on, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message (see "Autonomous mode").
+Before showing the research, **verify every scope-narrowing claim yourself** with one direct search. A wrong "this needs no change" spreads: it goes into the out-of-scope list, the plan writes no test for it, and the spec review checks the code against that list and approves the gap.
+
+Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message (see "Autonomous mode").
 
 **If the task is too big**, stop and offer the user, as one question:
 
@@ -170,8 +174,8 @@ This is where the task gets its detail. The issue gives the big picture and some
 Brief a plan subagent with the issue and the research key. Point it to `references/tdd.md`, `references/tests.md` and `references/mocking.md` in this skill's folder. It saves under `flow/<repo>/<id>/plan` and returns:
 
 - Questions that remove ambiguity, each with the answer it would assume.
-- Refined acceptance criteria and an "out of scope" list.
-- The **seams** (public interfaces) to test, each with one line on what it catches and what it misses.
+- Refined acceptance criteria and an "out of scope" list. Each out-of-scope item that leaves out a place in the research's impact map gives its reason and evidence.
+- The **seams** (public interfaces) to test, each with one line on what it catches and what it misses. Every place in the impact map that the task covers is reached by at least one scenario.
 - The test scenarios, one per acceptance criterion where possible.
 - **Untestable parts**: anything with no reasonable seam for an automated test (configuration, visual styling, documentation-only changes, infrastructure scripts, third-party dashboards). For each, a short **manual verification** step instead: what to do and what you should observe. Prefer a test whenever a reasonable one exists; this is the exception, not a shortcut.
 - An implementation outline: steps, not file-level detail.
@@ -232,7 +236,7 @@ Give the commit command (`feat(<commit-ref>): …`, ending with `&& git push`) a
 Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 - **Fixed point**: the merge-base of the task branch with its target (the group branch, or the base branch for a standalone task). Diff with `git diff <merge-base>...HEAD`, plus `git diff` for anything not committed.
-- **Spec source**: the issue and the plan key. The spec axis also checks that the documents in "Docs to touch" match what the code now does: a stale or missing document is a finding, and so is a document that only repeats what the code already says ("Just enough docs").
+- **Spec source**: the issue and the plan key. The spec axis also checks that the documents in "Docs to touch" match what the code now does: a stale or missing document is a finding, and so is a document that only repeats what the code already says ("Just enough docs"). It also rebuilds the impact map on its own, searching for each operation the task hooks into, and reports any place that is neither handled nor left out with evidence. The issue's out-of-scope list is a claim to check, not proof.
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
 - **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 

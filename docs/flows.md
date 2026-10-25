@@ -20,7 +20,7 @@
 | 0. Preflight | orchestrator | Settings loaded, clean tree | Run `flow-setup` if asked |
 | 1. Task | orchestrator | The issue (read or created) and its position: parent, blockers, children | Approve the draft if it was created; confirm the task and branch; OK the move to in progress |
 | 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed) | |
-| 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
+| 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, impact map (every place the change must reach), open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
 | 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
 | 5. Tests | tests subagent | Failing tests, each for the expected reason | **Approve the tests**, `test(<commit-ref>)` commit |
 | 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `feat(<commit-ref>)` commit |

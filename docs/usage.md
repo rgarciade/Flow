@@ -30,7 +30,7 @@ It starts by updating the base or group branch (`git pull --ff-only`), creating 
 What you will be asked to do, in order:
 
 1. **Confirm the task** as the agent understood it, and the branch it will create. If the task is already assigned to someone else or in progress, it warns you first.
-2. **Read the research summary** (what exists, open questions, size) and add anything it missed.
+2. **Read the research summary** (what exists, the places in the code the change must reach that the issue did not mention, open questions, size) and add anything it missed.
 3. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
 4. **Confirm the plan**, including the docs it will touch, any **manual verification** steps for parts that can't reasonably be tested (configuration, styling, infrastructure…), and the **seams**: the public interfaces that will be tested, each with what it catches and what it misses.
    The plan is then recorded on the task and, if the requirements changed, you approve the update to the task description.
