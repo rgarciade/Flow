@@ -33,7 +33,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 - **El detalle, justo a tiempo.** Una especificación intenta definirlo todo de antemano, y buena parte está obsoleta cuando alguien la construye. Un issue da la visión general, los pocos resultados que definen "terminado" y las pistas de una primera investigación (librerías, conectores, riesgos). Los criterios detallados, el diseño y los tests se deciden en la fase de plan, sobre el código tal como está cuando empieza la tarea. Es como se trabajaba antes de las especificaciones: sin suponer demasiado pronto, pero sin tickets vacíos.
 - **La arquitectura se escribe mientras se construye.** Con tareas pequeñas se puede perder la visión global, así que `flow` la mantiene explícita: los issues padre llevan notas de arquitectura, cada plan señala sus decisiones de arquitectura, esas decisiones se convierten en ADR antes del PR, las revisiones contrastan el código con los ADR existentes y cada funcionalidad completa pasa una revisión de arquitectura antes de llegar a la rama base.
 - **La documentación es parte de "terminado".** Cada plan lista los documentos del proyecto que afecta la tarea, se actualizan junto con la implementación y la revisión señala los que se hayan quedado desactualizados. La justa y necesaria: solo lo que el código no cuenta fácilmente. El issue guarda qué se pidió, los ADR el porqué y la documentación cómo funciona ahora.
-- **Planificar poco, y cuando quieras.** Las tareas viven en tu gestor de tareas. Se crean en una sesión de planificación o justo antes de empezar una.
+- **Tareas pequeñas, cuando quieras.** Las tareas viven en tu gestor de tareas. Se crean en una sesión de backlog o justo antes de empezar una.
 - **Una tarea, una porción vertical.** Cada tarea funciona de principio a fin cuando se termina y cabe en una sesión de trabajo. ¿Es demasiado grande? Se divide en tareas hijas.
 - **Primero los tests, aprobados por ti.** La IA escribe los tests, tú los apruebas y a partir de ese momento quedan congelados: la implementación tiene que hacerlos pasar sin tocarlos. Si uno resulta estar mal, solo cambia con tu OK y en su propio commit.
 - **La IA escribe y tú decides.** Nunca hace commits ni merges por su cuenta. Te da el comando y tú lo ejecutas, o le dices que lo haga.
@@ -43,7 +43,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Una vez por repo_  
   Pregunta qué gestor de tareas usas y escribe `docs/agents/` (cómo se hace cada operación con las tareas, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo.
-- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Sesiones de planificación_  
+- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Sesiones de backlog_  
   Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Desarrollar una tarea_  
   Lleva una tarea de la rama al PR: investigar → planificar → tests (con tu OK) → implementar + documentar → revisar → ADR → PR.

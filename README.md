@@ -33,7 +33,7 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 - **Detail just in time.** A spec tries to define everything up front, and much of it is stale by the time someone builds it. An issue gives the big picture, the few outcomes that define "done" and the leads from a preliminary look (libraries, connectors, risks). The detailed criteria, design and tests are worked out in the plan phase, against the code as it is when the task starts. That is how teams worked before specs: no guessing too early, but no empty tickets either.
 - **Architecture written as you go.** Small tasks can lose the big picture, so `flow` keeps it explicit: parent issues carry architecture notes, each plan flags its architectural decisions, those become ADRs before the PR, reviews check the code against existing ADRs, and a whole feature gets an architecture review before it reaches the base branch.
 - **Docs are part of "done".** Each plan lists the project documents the task affects, they are updated with the implementation, and the review flags any that are stale. Just enough: only what the code cannot easily tell. The issue keeps what was asked, ADRs keep why, docs keep how things work now.
-- **Plan small, plan when you want.** Tasks live in your tracker. You create them in a planning session, or right before starting one.
+- **Small tasks, created when you want.** Tasks live in your tracker. You create them in a backlog session, or right before starting one.
 - **One task, one vertical slice.** Each task works end to end when it is done, and fits one working session. Too big? Split it into child tasks.
 - **Tests first, approved by you.** The AI writes the tests, you approve them, and from then on they are frozen: the implementation must make them pass without touching them. If one turns out to be wrong, it changes only with your OK, in its own commit.
 - **The AI writes, you decide.** It never commits or merges on its own. It gives you the command; you run it, or tell it to.
@@ -43,7 +43,7 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Once per repo_  
   Asks which task tracker you use and writes `docs/agents/` (how every task operation is done, domain docs, workflow settings) so the other skills know how this repo works.
-- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Planning sessions_  
+- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Backlog sessions_  
   Turns ideas into tasks in your tracker: standalone tasks, or a parent task with children and blocking links. No code.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Developing a task_  
   Takes one task from branch to PR: research → plan → tests (your OK) → implement + docs → review → ADRs → PR.

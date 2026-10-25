@@ -122,7 +122,7 @@ Small vertical slices are easy to review but can lose the big picture. `flow` ke
 
 | When | What | Where it lands |
 |---|---|---|
-| Planning a feature (`flow-backlog`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
+| Filling the backlog for a feature (`flow-backlog`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
 | Phase 4, Plan | **ADR candidates**: decisions that are hard to reverse, span modules, or were chosen between alternatives. Conflicts with existing ADRs go to you as questions | Plan note and the plan record's "Architecture decisions" |
 | Phase 7, Review | The standards reviewer checks the code against the **ADRs, the glossary and the architecture notes**; a contradiction is a finding that cites the ADR | Review report |
 | Phase 8, before the PR | Each candidate that held becomes an **ADR** in `docs/adr/`, after your OK, in a `docs(<commit-ref>)` commit | The repo, with the PR |

@@ -1,6 +1,6 @@
 ---
 name: flow-backlog
-description: Planning session that turns ideas into tasks in the project's tracker (GitHub Issues, GitLab, Jira, Linear, local files…) without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent task with child tasks and blocking links. Use when the user runs /flow-backlog or wants to plan, create, split or organise tasks for later.
+description: Backlog session that turns ideas into tasks in the project's tracker (GitHub Issues, GitLab, Jira, Linear, local files…) without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent task with child tasks and blocking links. Use when the user runs /flow-backlog or wants to plan, create, split or organise tasks for later.
 ---
 
 # flow-backlog
@@ -9,7 +9,7 @@ Paths starting with `../` are relative to this skill's folder: they point at sib
 
 Create well-formed tasks in the project's tracker. In this skill, "issue" and "task" mean the same thing: a task in the project's tracker. Every tracker operation written in backticks (`create-task`, `create-child`, `add-blocker`…) is looked up in the tracker file and done exactly as written there, including any alternative it records for what the tracker can't do. This skill never writes code, never creates branches and never commits. Developing a task is `flow-work`'s job, and it can happen much later.
 
-Planning is a conversation with the user: you propose, they decide. Nothing is published until they approve it. The tasks you create are meant to be developed **with the user** through `flow-work`, never picked up by an agent working alone. Where `to-tickets` talks about agent-ready or AFK tickets, read it as "ready to start with `flow-work`".
+Building the backlog is a conversation with the user: you propose, they decide. Nothing is published until they approve it. The tasks you create are meant to be developed **with the user** through `flow-work`, never picked up by an agent working alone. Where `to-tickets` talks about agent-ready or AFK tickets, read it as "ready to start with `flow-work`".
 
 **Detail comes just in time.** An issue gives the big picture and the important leads, not a full functional or technical specification: things change between planning a task and building it. Describe what is wanted and why, the few outcomes that define "done", and what a preliminary look has found (libraries, connectors, APIs, constraints, risks). Leave the detailed criteria, design and test scenarios to `flow-work`'s plan phase, which works them out against the code as it is at that moment. Don't invent detail to make an issue look complete.
 
