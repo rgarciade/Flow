@@ -2,7 +2,7 @@
 
 Example adapter for **GitHub Issues** with GitHub as the code host. `flow-setup` uses it as the starting point when a repo tracks its tasks on GitHub; for any other tracker it fills [tracker-template.md](tracker-template.md) instead.
 
-How this repo's tasks are read, created and changed. `flow-plan` and `flow-work` never call a tracker directly: they look up each operation here, so tasks and their records look the same every time. Edit this file to change how an operation is done.
+How this repo's tasks are read, created and changed. `flow-backlog` and `flow-work` never call a tracker directly: they look up each operation here, so tasks and their records look the same every time. Edit this file to change how an operation is done.
 
 - **Tracker**: GitHub Issues
 - **Access**: GitHub CLI (`gh`) 2.94+, authenticated with `gh auth login`. Run inside the clone; `{owner}/{repo}` is filled in by `gh api`.

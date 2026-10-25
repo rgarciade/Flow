@@ -57,7 +57,7 @@ These harnesses follow the shared Agent Skills format, but `flow` is developed a
 
 ### Task trackers
 
-`flow-plan` and `flow-work` never call a tracker directly. They use named operations (`view-task`, `create-task`, `create-child`, `add-blocker`, `create-record`, `edit-description`, `move-status`, `create-branch`, `open-pr`…) and look up how to do each one in the repo's `docs/agents/tracker.md`. `flow-setup` writes that file:
+`flow-backlog` and `flow-work` never call a tracker directly. They use named operations (`view-task`, `create-task`, `create-child`, `add-blocker`, `create-record`, `edit-description`, `move-status`, `create-branch`, `open-pr`…) and look up how to do each one in the repo's `docs/agents/tracker.md`. `flow-setup` writes that file:
 
 - **GitHub Issues**: from a ready example ([tracker-github.md](../skills/flow-setup/tracker-github.md)); it only confirms labels and status.
 - **Any other tracker** (GitLab, Jira, Linear, Azure Boards…): from [tracker-template.md](../skills/flow-setup/tracker-template.md), filling each operation with the tracker's CLI, MCP server or API.
@@ -82,4 +82,4 @@ AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the a
 
 It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again.
 
-You can skip this step: `flow-plan` and `flow-work` check for `docs/agents/workflow.md` and offer to run `flow-setup` when it is missing.
+You can skip this step: `flow-backlog` and `flow-work` check for `docs/agents/workflow.md` and offer to run `flow-setup` when it is missing.

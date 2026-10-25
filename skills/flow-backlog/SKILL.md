@@ -1,9 +1,9 @@
 ---
-name: flow-plan
-description: Planning session that turns ideas into tasks in the project's tracker (GitHub Issues, GitLab, Jira, Linear, local files…) without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent task with child tasks and blocking links. Use when the user runs /flow-plan or wants to plan, create, split or organise tasks for later.
+name: flow-backlog
+description: Planning session that turns ideas into tasks in the project's tracker (GitHub Issues, GitLab, Jira, Linear, local files…) without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent task with child tasks and blocking links. Use when the user runs /flow-backlog or wants to plan, create, split or organise tasks for later.
 ---
 
-# flow-plan
+# flow-backlog
 
 Paths starting with `../` are relative to this skill's folder: they point at sibling skills in the same skills directory.
 

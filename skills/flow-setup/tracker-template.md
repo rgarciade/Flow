@@ -1,6 +1,6 @@
 # Task tracker
 
-How this repo's tasks are read, created and changed. `flow-plan` and `flow-work` never call a tracker directly: they look up each operation here, so tasks and their records look the same every time. Edit this file to change how an operation is done.
+How this repo's tasks are read, created and changed. `flow-backlog` and `flow-work` never call a tracker directly: they look up each operation here, so tasks and their records look the same every time. Edit this file to change how an operation is done.
 
 - **Tracker**: `<GitHub Issues | GitLab | Jira | Linear | Azure Boards | local files | …>`
 - **Access**: `<CLI, MCP server or API used, and how it authenticates>`
@@ -20,7 +20,7 @@ How this repo's tasks are read, created and changed. `flow-plan` and `flow-work`
 
 ## Operations
 
-`flow-plan` and `flow-work` use these names. Each row says how to do it here, or which alternative from the next section is used. Operations marked **asks** always need the user's OK first.
+`flow-backlog` and `flow-work` use these names. Each row says how to do it here, or which alternative from the next section is used. Operations marked **asks** always need the user's OK first.
 
 | Operation | How | Notes |
 |---|---|---|

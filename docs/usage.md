@@ -5,7 +5,7 @@
 ## Plan tasks for later
 
 ```
-/flow-plan
+/flow-backlog
 ```
 
 Describe what you want. The skill asks independent questions together, always proposing an answer: as selectors with a free-text option when your agent supports them, otherwise as a numbered list you can answer with "OK" or corrections by number. It asks one alone when its answer changes the rest, and pushes towards the minimum.
@@ -15,7 +15,7 @@ Describe what you want. The skill asks independent questions together, always pr
 
 Every issue has: the big picture (what to build and why), the two to four outcomes that define "done", preliminary notes (candidate libraries, connectors, risks), out of scope, and its blockers. It is deliberately not a full specification: the detail is worked out in `flow-work`'s plan phase, when the task is picked up.
 
-If the work touches something unknown, `flow-plan` offers a short **preliminary research** pass first: a read-only look at libraries, connectors, existing code and risks, whose findings go into the issues' preliminary notes.
+If the work touches something unknown, `flow-backlog` offers a short **preliminary research** pass first: a read-only look at libraries, connectors, existing code and risks, whose findings go into the issues' preliminary notes.
 
 It ends by telling you which issues can start now, for example `/flow-work #42`.
 

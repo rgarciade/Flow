@@ -43,12 +43,12 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Once per repo_  
   Asks which task tracker you use and writes `docs/agents/` (how every task operation is done, domain docs, workflow settings) so the other skills know how this repo works.
-- **[`flow-plan`](skills/flow-plan/SKILL.md)** · _Planning sessions_  
+- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Planning sessions_  
   Turns ideas into tasks in your tracker: standalone tasks, or a parent task with children and blocking links. No code.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Developing a task_  
   Takes one task from branch to PR: research → plan → tests (your OK) → implement + docs → review → ADRs → PR.
 
-`flow-plan` and `flow-work` check for `docs/agents/workflow.md` first, and offer to run `flow-setup` if it is missing.
+`flow-backlog` and `flow-work` check for `docs/agents/workflow.md` first, and offer to run `flow-setup` if it is missing.
 
 ## How a task flows
 
@@ -68,7 +68,7 @@ Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)
 
 # 2. In the project, open your agent and run:
 /flow-setup          # once per repo
-/flow-plan           # create tasks
+/flow-backlog           # create tasks
 /flow-work #42       # develop one
 ```
 

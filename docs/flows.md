@@ -1,15 +1,15 @@
 # Flows
 
-`flow` is **Issue-Driven Development**: every piece of work starts from a task in your tracker (GitHub Issues, Jira, Linear… see [setup](setup.md#task-trackers)) and stays tied to it, from the branch name to the pull request. This page shows how the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-plan](../skills/flow-plan/SKILL.md), [flow-work](../skills/flow-work/SKILL.md).
+`flow` is **Issue-Driven Development**: every piece of work starts from a task in your tracker (GitHub Issues, Jira, Linear… see [setup](setup.md#task-trackers)) and stays tied to it, from the branch name to the pull request. This page shows how the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-backlog](../skills/flow-backlog/SKILL.md), [flow-work](../skills/flow-work/SKILL.md).
 
 ## Overview
 
 <p align="center"><img src="diagrams/overview.svg" alt="The three skills and the files they read and write" width="900"></p>
 
 - `flow-setup` runs once per repo and writes `docs/agents/*.md`.
-- `flow-plan` turns ideas into tasks in your tracker and never writes code.
+- `flow-backlog` turns ideas into tasks in your tracker and never writes code.
 - `flow-work` takes one issue to a pull request.
-- Both `flow-plan` and `flow-work` read `docs/agents/*.md`, and offer to run `flow-setup` when `workflow.md` is missing.
+- Both `flow-backlog` and `flow-work` read `docs/agents/*.md`, and offer to run `flow-setup` when `workflow.md` is missing.
 
 ## flow-work phases
 
@@ -122,7 +122,7 @@ Small vertical slices are easy to review but can lose the big picture. `flow` ke
 
 | When | What | Where it lands |
 |---|---|---|
-| Planning a feature (`flow-plan`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
+| Planning a feature (`flow-backlog`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
 | Phase 4, Plan | **ADR candidates**: decisions that are hard to reverse, span modules, or were chosen between alternatives. Conflicts with existing ADRs go to you as questions | Plan note and the plan record's "Architecture decisions" |
 | Phase 7, Review | The standards reviewer checks the code against the **ADRs, the glossary and the architecture notes**; a contradiction is a finding that cites the ADR | Review report |
 | Phase 8, before the PR | Each candidate that held becomes an **ADR** in `docs/adr/`, after your OK, in a `docs(<commit-ref>)` commit | The repo, with the PR |

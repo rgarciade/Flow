@@ -1,13 +1,13 @@
 ---
 name: flow-setup
-description: Configure the current repo for the flow skills (flow-plan, flow-work). Asks which task tracker the project uses (GitHub Issues, GitLab, Jira, Linear, local files or any other) and records how to do every task operation in docs/agents/tracker.md, then writes docs/agents/workflow.md with the base branch, branch naming, languages, models and test commands. Use when the user runs /flow-setup, or when flow-plan or flow-work find docs/agents/workflow.md missing and the user agrees to run it.
+description: Configure the current repo for the flow skills (flow-backlog, flow-work). Asks which task tracker the project uses (GitHub Issues, GitLab, Jira, Linear, local files or any other) and records how to do every task operation in docs/agents/tracker.md, then writes docs/agents/workflow.md with the base branch, branch naming, languages, models and test commands. Use when the user runs /flow-setup, or when flow-backlog or flow-work find docs/agents/workflow.md missing and the user agrees to run it.
 ---
 
 # flow-setup
 
 Paths starting with `../` are relative to this skill's folder: they point at sibling skills in the same skills directory.
 
-One-time, per-repo configuration for the flow skills. It writes the files that `flow-plan` and `flow-work` read, so those skills stay generic and each repo keeps its own rules.
+One-time, per-repo configuration for the flow skills. It writes the files that `flow-backlog` and `flow-work` read, so those skills stay generic and each repo keeps its own rules.
 
 Output files (all inside the repo, unless the user chooses a shared tracker file):
 
@@ -33,7 +33,7 @@ Read, don't assume:
 
 ## 2. The task tracker
 
-This is the heart of the setup: `flow-plan` and `flow-work` never call a tracker directly, they look up each operation in `docs/agents/tracker.md`.
+This is the heart of the setup: `flow-backlog` and `flow-work` never call a tracker directly, they look up each operation in `docs/agents/tracker.md`.
 
 1. **Ask which tracker the project uses**, recommending what exploration found (GitHub Issues when the code host is GitHub and nothing else shows up). Also ask where pull requests live, if it differs from the tracker (for example Jira tasks with GitHub PRs).
 2. **Start from a template.** For GitHub Issues, start from [tracker-github.md](tracker-github.md) and only confirm the details (status labels or project, labels). For anything else, fill [tracker-template.md](tracker-template.md).
@@ -97,4 +97,4 @@ Tell the user which files were written, then give the commit command, for exampl
 git add docs/agents AGENTS.md && git commit -m "docs: configure agent workflow"
 ```
 
-Do not run it. If `flow-setup` was started from `flow-plan` or `flow-work`, go back to that skill and continue where it stopped.
+Do not run it. If `flow-setup` was started from `flow-backlog` or `flow-work`, go back to that skill and continue where it stopped.

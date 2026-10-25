@@ -43,12 +43,12 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Una vez por repo_  
   Pregunta qué gestor de tareas usas y escribe `docs/agents/` (cómo se hace cada operación con las tareas, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo.
-- **[`flow-plan`](skills/flow-plan/SKILL.md)** · _Sesiones de planificación_  
+- **[`flow-backlog`](skills/flow-backlog/SKILL.md)** · _Sesiones de planificación_  
   Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Desarrollar una tarea_  
   Lleva una tarea de la rama al PR: investigar → planificar → tests (con tu OK) → implementar + documentar → revisar → ADR → PR.
 
-`flow-plan` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.
+`flow-backlog` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.
 
 ## Cómo avanza una tarea
 
@@ -68,7 +68,7 @@ Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md]
 
 # 2. En el proyecto, abre tu agente y ejecuta:
 /flow-setup          # una vez por repo
-/flow-plan           # crear tareas
+/flow-backlog           # crear tareas
 /flow-work #42       # desarrollar una
 ```
 

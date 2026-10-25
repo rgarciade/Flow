@@ -121,7 +121,7 @@ Approved tests change only through the procedure in `references/approved-test-ch
 ## Phase 1: The task
 
 - **Task id given** (`#42`, `PROJ-123` or a URL): read it with `view-task`. State its title back to the user. If it is assigned to someone else, or its status is already "in progress" or later, or a branch for it already exists on the remote with someone else's commits, tell the user and ask whether to continue before doing anything else: someone may already be on it.
-- **No id**: the task comes from the current conversation. Draft it with the template in `../flow-plan/SKILL.md`, show it, and create it with `create-task` once the user approves. Then continue with that id.
+- **No id**: the task comes from the current conversation. Draft it with the template in `../flow-backlog/SKILL.md`, show it, and create it with `create-task` once the user approves. Then continue with that id.
 
 Then check its position:
 
@@ -159,9 +159,9 @@ Show the user the research in three to five lines: what the task builds on, the 
 **If the task is too big**, stop and offer the user, as one question:
 
 - **(a) Keep this task small**: trim it to the first slice and create the rest as new issues for later. If this task has a parent, they become siblings under the same parent. If not, they are created as standalone issues that this one blocks.
-- **(b) Turn it into a parent**: this task becomes the parent, the slices become its children (`create-child`) with blocking links (`add-blocker`), and the work continues on a group branch with the first child. Propose adding "Architecture notes" to its description (see `../flow-plan/SKILL.md`), as an edit the user approves.
+- **(b) Turn it into a parent**: this task becomes the parent, the slices become its children (`create-child`) with blocking links (`add-blocker`), and the work continues on a group branch with the first child. Propose adding "Architecture notes" to its description (see `../flow-backlog/SKILL.md`), as an edit the user approves.
 
-Create the issues by following `../to-tickets/SKILL.md` with the overrides in `../flow-plan/SKILL.md`. For (b), rename the branch to the group pattern if no commits exist yet, otherwise ask the user how to proceed. Then continue with the chosen task.
+Create the issues by following `../to-tickets/SKILL.md` with the overrides in `../flow-backlog/SKILL.md`. For (b), rename the branch to the group pattern if no commits exist yet, otherwise ask the user how to proceed. Then continue with the chosen task.
 
 ## Phase 4: Plan (strong)
 
