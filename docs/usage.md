@@ -36,7 +36,7 @@ What you will be asked to do, in order:
    The plan is then recorded on the task and, if the requirements changed, you approve the update to the task description.
 5. **Check the test edge cases**, if any (see [Working modes](#working-modes)): one line each, with a link to the test. Reply `OK`, or ask for changes. Without edge cases it just tells you how many tests it wrote and goes on. In pair mode you approve every test here, then run the `test(#42)` commit.
 6. **Run, or authorise, the `test(#42)` and `feat(#42)` commits**, in that order, once the implementation passes and the docs it listed are updated. The `test` commit is the record of the approved tests.
-7. **Choose which review findings to fix** (including stale or redundant docs and code that contradicts an ADR), then the `fix(#42)` or `refactor(#42)` commit.
+7. **Choose which review findings to fix**, by number. They come as one short table per axis, must-fix first, and include stale or redundant docs and code that contradicts an ADR. Then the `fix(#42)` or `refactor(#42)` commit.
 8. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
 9. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
 10. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.

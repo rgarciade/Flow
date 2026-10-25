@@ -63,21 +63,31 @@ Issue both sub-agent calls together, in the foreground, and aggregate the report
 
 - The full diff command and commit list.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full (the sub-agent has no other access to it).
-- The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+- The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. For each finding, also give its `path:line`, a one-line summary, a one-line proposed fix, and whether it is **must fix** (a hard violation) or **optional** (a judgement call). Under 400 words."
 
 **Spec sub-agent prompt** should include:
 
 - The diff command and commit list.
 - The path or fetched contents of the spec.
-- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong; (d) places the change should reach but does not: for each operation the change hooks into, search the whole codebase for where that operation happens and list any place that is neither handled nor left out with evidence. Treat the spec's out-of-scope list as a claim to check, not as proof. Quote the spec line for each finding. Under 400 words."
+- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong; (d) places the change should reach but does not: for each operation the change hooks into, search the whole codebase for where that operation happens and list any place that is neither handled nor left out with evidence. Treat the spec's out-of-scope list as a claim to check, not as proof. Quote the spec line for each finding. For each finding, also give its `path:line`, a one-line summary, a one-line proposed fix, and whether it is **must fix** ((a), (c) and (d)) or **optional** ((b), unless the extra behaviour breaks something). Under 400 words."
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 
 ### 5. Aggregate
 
-Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
+The full reports stay in the notes. Show the user one table per axis, under `## Standards` and `## Spec` headings, with one short line per finding:
+
+| # | Level | Where | Finding | Proposed fix |
+|---|---|---|---|---|
+| 1 | must fix | `path:line` | One line | One line |
+
+- Order each table by level, **must fix** first, then **optional**.
+- Number the findings once, across both tables: Standards first (1, 2, 3…), then Spec carrying on (4, 5…). The number is the finding's name from here on: in the selector, in the fix brief and in the commit summary.
+- Do **not** merge or rerank findings across axes, because the two axes are deliberately separate (see _Why two axes_).
 
 End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
+
+Then ask which findings to fix. With a question tool that has selectable options (for example `AskUserQuestion` in Claude Code), use multi-select with one option per finding, in table order, each label starting with its number (`#3 Missing null check`), and the must-fix ones marked as recommended. Split them over several questions when the tool limits the options per question, keeping the order. When there are more findings than the tool can show, ask for the numbers instead ("1, 3, 5", or "all must fix"). Without such a tool, ask for the numbers the same way.
 
 ## Why two axes
 

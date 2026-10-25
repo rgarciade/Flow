@@ -13,7 +13,7 @@ You are the **orchestrator**. You work **with the user, in the session**: you sh
 
 These override anything more permissive elsewhere, including the user's general git instructions:
 
-- **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next. Don't chain phases silently. The test gate and autonomous mode follow "Working modes".
+- **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next (see "Phase messages"). Don't chain phases silently. The test gate and autonomous mode follow "Working modes".
 - **Decisions belong to the user.** Anything the issue and the agreed plan don't settle (a design choice, a dependency, a trade-off, a scope question) goes to the user as a question with your recommendation. Never decide it for them.
 - **Never commit on your own.** At each commit point, give the user the exact command and wait. Run it only if the user explicitly tells you to.
 - **Never merge PRs.** The user reviews and merges every PR on the code host.
@@ -105,6 +105,18 @@ Task-driven work is visible while it happens, not only when the PR arrives. Anyo
   | The user confirms the task (Phase 1) | in progress |
   | The PR is opened (Phase 8) | in review |
   | The PR is merged | done (often automatic through the `closing-reference`; only propose it if it did not happen) |
+
+## Phase messages
+
+Every message to the user between phases is short and built for scanning. The detail lives in the notes; the user can ask for it.
+
+- **Action first.** The first line says what you need from the user (an OK, an answer, a choice) or, if nothing, what comes next.
+- **At most about eight lines** before the questions: only what the user must know to decide. One line per item, with `path:line` links instead of quoted code. Lists the user must approve item by item (seams and scenarios, test edge cases, review findings) may run longer, but still one line per item.
+- **No preamble, no recap.** Don't repeat earlier phases, don't retell what a subagent did, don't list what went as expected. Say only what is new, surprising or needs a decision.
+- **Questions last**, batched as in "Batch independent questions".
+- When a phase finds nothing worth reporting, say so in one line and go on.
+
+The final report (Phase 8) is the one exception: it follows its own shape.
 
 ## Working modes
 
@@ -212,7 +224,7 @@ Brief a tests subagent with the plan key. It writes only test files, matching th
 - With edge cases: present only those, in the format below, and wait for the OK on them.
 - Without: don't wait. Record the tests with the `.scratch/flow/<id>/approved-tests/` manifest (see below), then show in one message the number of tests, that each fails for the expected reason and the command to run them. Go on to Phase 6. The test commit comes together with the implementation commit (see Phase 6).
 
-**Pair mode.** Present every test to the user. For this one message, shape the output for fast scanning. If the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise follow these rules: the action first, numbered lines, no preamble, no recap.
+**Pair mode.** Present every test to the user. This message may run longer than "Phase messages" allows, one line per test, so shape it for fast scanning: if the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise use the action first, numbered lines, no preamble, no recap.
 
 - First line: the action, "Review the tests and reply OK to continue."
 - One numbered line per scenario: what it checks, with a link to the test.
@@ -257,7 +269,7 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
 - **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 
-Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show both reports side by side, without merging them, and ask the user which findings to fix.
+Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show the findings as numbered tables, one per axis, and ask the user which to fix by number, as described in "Aggregate" in `references/code-review.md`.
 
 If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(<commit-ref>): …` or `refactor(<commit-ref>): …`, ending with `&& git push`). If a fix changes the plan, propose the plan record edit as in Phase 6.
 
