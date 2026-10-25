@@ -2,7 +2,12 @@
 
 [Leer en español](README-es.md)
 
+**Issue-Driven Development** for AI coding agents.
+
 A small set of [Agent Skills](https://agentskills.io/specification) for planning work as GitHub issues and developing it one vertical slice at a time, with the human in the driver's seat.
+
+> [!IMPORTANT]
+> `flow` is strictly a flow **from tasks**. Spec-driven development starts from a specification; `flow` starts from a GitHub issue. Nothing is built without one: every branch, test, commit and pull request belongs to an issue, and the issue stays the source of truth for what was asked and how it was built.
 
 <p align="center">
   <img src="docs/diagrams/overview.svg" alt="The three flow skills and the files they read and write" width="900">
@@ -10,8 +15,12 @@ A small set of [Agent Skills](https://agentskills.io/specification) for planning
 
 ## Why
 
-Spec-driven workflows plan everything up front, build layer by layer and end in huge pull requests that nobody really reviews. `flow` takes the opposite approach:
+Spec-driven workflows plan everything up front, build layer by layer and end in huge pull requests that nobody really reviews. Issue-driven development takes the opposite approach:
 
+- **You are in the loop, all the way.** This is not a job you launch and come back to. You work with the agent: it shows you what each phase found, asks you whenever something is not settled, and waits for your OK before moving on. Think pair programming, with you as the navigator. For a simple task you can tell it to work autonomously: it then stops only for what really needs you.
+- **Visible from the first minute, not at the PR.** In spec-driven teams nobody knows where a piece of work stands until the pull request lands. Here the branch is linked to the issue from the start, every approved commit is pushed, the plan is on the issue, and its status moves (with your OK) from in progress to in review.
+- **The issue drives everything.** Requirements live in the issue description, the implementation plan in one comment on it, and the summary in another. When requirements change, the description is updated with a log of what changed and why.
+- **Detail just in time.** A spec tries to define everything up front, and much of it is stale by the time someone builds it. An issue gives the big picture, the few outcomes that define "done" and the leads from a preliminary look (libraries, connectors, risks). The detailed criteria, design and tests are worked out in the plan phase, against the code as it is when the task starts. That is how teams worked before specs: no guessing too early, but no empty tickets either.
 - **Plan small, plan when you want.** Tasks live as GitHub issues. You create them in a planning session, or right before starting one.
 - **One task, one vertical slice.** Each task works end to end when it is done, and fits one working session. Too big? Split it into child issues.
 - **Tests first, approved by you.** The AI writes the tests, you approve them, and from then on they are frozen: the implementation must make them pass without touching them.

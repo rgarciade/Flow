@@ -9,6 +9,10 @@ Paths starting with `../` are relative to this skill's folder: they point at sib
 
 Create well-formed GitHub issues. This skill never writes code, never creates branches and never commits. Developing a task is `flow-work`'s job, and it can happen much later.
 
+Planning is a conversation with the user: you propose, they decide. Nothing is published until they approve it. The issues you create are meant to be developed **with the user** through `flow-work`, never picked up by an agent working alone. Where `to-tickets` talks about agent-ready or AFK tickets, read it as "ready to start with `flow-work`".
+
+**Detail comes just in time.** An issue gives the big picture and the important leads, not a full functional or technical specification: things change between planning a task and building it. Describe what is wanted and why, the few outcomes that define "done", and what a preliminary look has found (libraries, connectors, APIs, constraints, risks). Leave the detailed criteria, design and test scenarios to `flow-work`'s plan phase, which works them out against the code as it is at that moment. Don't invent detail to make an issue look complete.
+
 ## 0. Preflight
 
 1. Read `docs/agents/workflow.md`. If it does not exist, tell the user and ask, in one line, whether to run `flow-setup` now. If yes, read `../flow-setup/SKILL.md`, follow it, then come back here. If no, stop. If it exists but lacks a field this skill needs, ask only for that field.
@@ -22,6 +26,8 @@ Then decide which of these it is. If unsure, ask:
 
 - **Separate tasks**: one or several issues, unrelated or loosely related. Go to step 2.
 - **A breakdown**: one piece of work that needs several dependent tasks. Go to step 3.
+
+**Preliminary research (optional).** When the work touches something unknown (a new library, an external service, an unfamiliar part of the code), offer a short research pass before drafting. If the user agrees, brief a read-only subagent (or do it yourself if the harness has none) to answer, in at most 15 lines: which libraries, connectors or APIs fit, what the code already has to build on, and the main risks or open questions. It gives direction, not decisions. Its findings go into each issue's "Preliminary notes" section.
 
 ## 2. Separate tasks
 
@@ -53,12 +59,15 @@ Write titles and bodies in the issue language from `docs/agents/workflow.md`. Tr
 
 ## What to build
 
-The end-to-end behaviour this task makes work, from the user's point of view. Optionally one user-story line: "As <role>, I want <capability>, so that <benefit>."
+The big picture: the end-to-end behaviour this task makes work, from the user's point of view, and why it is wanted. Optionally one user-story line: "As <role>, I want <capability>, so that <benefit>."
 
 ## Acceptance criteria
 
-- [ ] Criterion 1
-- [ ] Criterion 2
+- [ ] The few outcomes that define "done" (two to four). The plan phase refines them.
+
+## Preliminary notes
+
+Leads from planning or preliminary research: candidate libraries, connectors or APIs, related parts of the code, constraints, risks, open questions. Direction, not decisions. (Omit the section if there is nothing worth saying.)
 
 ## Out of scope
 
@@ -69,7 +78,7 @@ The end-to-end behaviour this task makes work, from the user's point of view. Op
 - #<n>, or "None (can start immediately)". Omit when the blockers were set as native dependencies.
 ```
 
-No file paths or code snippets: they go stale. Technical detail is decided later, when the task is picked up with `flow-work`.
+No file paths or code snippets: they go stale. Naming a library, service or module in "Preliminary notes" is fine. Detailed criteria, design and test scenarios are decided later, in `flow-work`'s plan phase.
 
 ## 4. Close
 

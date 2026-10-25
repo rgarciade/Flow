@@ -47,6 +47,8 @@ Ask one question at a time. Lead with the value you detected as the recommended 
 5. Test file glob(s): the patterns that match every test file (used to check that implementation never edits approved tests).
 6. Labels to apply when creating issues. Default: none.
 7. Models for the two tiers: **strong** (plan, tests) and **fast** (research, implement, review, fix). Default in Claude Code: `opus` and `sonnet`. In another harness, propose its equivalents in the names it accepts, or `inherit`.
+8. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
+9. Status tracking: how `flow-work` moves issues to "in progress", "in review" and "done" (always asking first). `project` if the repo's issues live in a GitHub Project (find it with `gh project list --owner <owner>` and read its status field with `gh project field-list`), `labels` if the repo uses status labels, otherwise `none`. Record the exact names.
 
 ## 4. Draft, confirm, write
 

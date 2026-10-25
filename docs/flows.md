@@ -1,6 +1,6 @@
 # Flows
 
-How the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-plan](../skills/flow-plan/SKILL.md), [flow-work](../skills/flow-work/SKILL.md).
+`flow` is **Issue-Driven Development**: every piece of work starts from a GitHub issue and stays tied to it, from the branch name to the pull request. This page shows how the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-plan](../skills/flow-plan/SKILL.md), [flow-work](../skills/flow-work/SKILL.md).
 
 ## Overview
 
@@ -18,14 +18,16 @@ How the pieces fit together. The skills themselves are the source of truth: [flo
 | Phase | Who | Output | Your part |
 |---|---|---|---|
 | 0. Preflight | orchestrator | Settings loaded, clean tree | Run `flow-setup` if asked |
-| 1. Task | orchestrator | The issue (read or created) and its position: parent, blockers, children | Approve the draft if it was created |
-| 2. Branch | orchestrator | `task/<n>-<slug>` (and the group branch if needed) | |
-| 3. Research | research subagent | What exists, open questions, size verdict | Choose (a) or (b) if it is too big |
-| 4. Plan | plan subagent | Refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
+| 1. Task | orchestrator | The issue (read or created) and its position: parent, blockers, children | Approve the draft if it was created; confirm the task and branch; OK the move to in progress |
+| 2. Branch | orchestrator | `task/<n>-<slug>` linked to the issue with `gh issue develop` (and the group branch if needed) | |
+| 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, open questions, size verdict | Read the summary and comment; choose (a) or (b) if it is too big |
+| 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
 | 5. Tests | tests subagent | Failing tests, each for the expected reason | **Approve the tests**, `test(#n)` commit |
-| 6. Implement | implement subagent(s) | Code that passes the frozen tests | `feat(#n)` commit |
+| 6. Implement | implement subagent(s) | Code that passes the frozen tests | Answer any question not settled by the plan; `feat(#n)` commit |
 | 7. Review | 2 review subagents, then fix | Standards and spec reports | Choose findings, `fix`/`refactor` commit |
-| 8. Report and PR | orchestrator | Report and PR | Review the code, merge the PR |
+| 8. Report and PR | orchestrator | Report, PR and closing comment | Review the code, OK the move to in review, merge the PR |
+
+**You are in the loop.** Every phase ends by showing you its result and waiting for you before the next one. Anything the issue and the plan don't settle comes to you as a question with a recommendation; subagents return such questions instead of guessing.
 
 **Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If a test looks wrong during implementation, the work stops and you decide.
 
@@ -82,3 +84,30 @@ Anyone can understand a task from its GitHub issue alone, without the agent's no
 - **At most two comments per task** from `flow-work`. Changes edit what exists instead of adding more.
 - **Creating** these comments needs no confirmation; **editing** the description or a comment, and **deleting** anything, always asks you first.
 - Both comments start with a GitHub `[!NOTE]` box saying they are implementation notes, not requirements. A hidden marker lets `flow-work` find the same comment every time.
+
+## Engram sync
+
+When the Engram CLI is installed, a project's memory can travel with the repo in `.engram/`, so another machine or teammate gets the same context. The **Engram sync** setting in `docs/agents/workflow.md` controls it (`ask`, `always` or `never`).
+
+- **In, when a branch is created.** After pulling the base or group branch, `flow-work` runs `engram sync --status` and, if there are new chunks, `engram sync --import`.
+- **Out, before the PR.** After the final report, `flow-work` offers to run `engram sync`, which exports the project's memory to `.engram/` (prompts excluded), and gives you the commit command.
+
+The export holds every memory of the project, not only the current task's notes. Check what you share before pushing a public repo.
+
+## Team visibility
+
+Spec-driven teams only see a piece of work when its pull request arrives. Issue-driven work is visible while it happens:
+
+| What the team sees | Where | How |
+|---|---|---|
+| Who is on it | Issue assignee | Assigned to you when you confirm the task |
+| Which branch | Issue → Development panel | Branches are created with `gh issue develop`, linked to the issue |
+| Every approved step | Commits on the linked branch | Each commit command ends with `git push` |
+| How it is being built | The plan comment on the issue | Posted after planning, edited when the plan changes |
+| Which stage | Issue status (labels or a GitHub Project field) | Moved to in progress, in review and done, always after your OK |
+
+Status tracking is configured per repo in `docs/agents/workflow.md` (`none`, `labels` or `project`).
+
+## Autonomous mode
+
+For simple tasks you can let `flow-work` chain the phases on its own. It is never the default and never switched on without your yes. It still stops for decisions the plan doesn't settle, suspicious tests, failing checks, tasks that grow, and anything that leaves your machine. See the [usage guide](usage.md#let-it-work-on-its-own-simple-tasks).

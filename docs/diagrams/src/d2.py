@@ -1,6 +1,6 @@
 from lib import *
 d=D(900,540,"flow-work-phases","flow-work phases 0 to 8","Flow of flow-work phases 0 to 8 with user gates, commit points and the task-too-big branch after research.")
-d.header("FLOW-WORK","Nine phases, six user gates")
+d.header("FLOW-WORK","Nine phases, you decide at every gate")
 W,H=140,100
 def ph(x,y,n,t,sub,gate=None,commit=None,model=None):
     g=gate is not None
@@ -11,13 +11,13 @@ def ph(x,y,n,t,sub,gate=None,commit=None,model=None):
         d.text(x+W/2,y+87,commit,9,600,"#fff",mono=True)
 A=60;B=190;C=330
 ph(30,A,"0","Preflight",["read workflow.md","git status"])
-ph(198,A,"1","Task",["load issue","check blockers"])
-ph(366,A,"2","Branch",["task/<n>-<slug>"])
-ph(534,A,"3","Research",["sonnet","size verdict"])
-ph(366,B,"4","Plan",["opus"],gate="confirm seams")
-ph(198,B,"5","Tests",["opus, tests only"],gate="approve tests",commit="test(#n)")
-ph(30,B,"6","Implement",["sonnet, tests frozen"],commit="feat(#n)")
-ph(30,C,"7","Review",["2 x sonnet, parallel"],gate="choose findings",commit="fix|refactor(#n)")
+ph(198,A,"1","Task",["issue + blockers"],gate="confirm task")
+ph(366,A,"2","Branch",["gh issue develop","linked to the issue"])
+ph(534,A,"3","Research",["fast, size verdict"],gate="read summary")
+ph(366,B,"4","Plan",["strong"],gate="confirm seams")
+ph(198,B,"5","Tests",["strong, tests only"],gate="approve tests",commit="test(#n)")
+ph(30,B,"6","Implement",["fast, tests frozen"],commit="feat(#n)")
+ph(30,C,"7","Review",["2 x fast, parallel"],gate="choose findings",commit="fix|refactor(#n)")
 ph(198,C,"8","Report + PR",["summary + files"],gate="open PR?")
 d.box(366,C,W,H,"You merge the PR",["on GitHub, never","the agent"],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
 d.chip(374,C+72+4,W-16,"GATE",h=15)
@@ -39,5 +39,6 @@ d.path([(674,cy),(710,cy)],ACC,mk="c");d.label(692,cy-9,"YES")
 d.path([(366,B+H/2),(338,B+H/2)]);d.path([(198,B+H/2),(170,B+H/2)])
 d.path([(100,B+H),(100,C)])
 d.path([(170,C+H/2),(198,C+H/2)]);d.path([(338,C+H/2),(366,C+H/2)]);d.path([(506,C+H/2),(534,C+H/2)],dash=True)
-d.legend(480,[("gate","user decides"),("commit","user runs the command; agent never commits"),("dash","after merge")])
+d.legend(480,[("gate","user decides"),("commit","user runs commit + push; agent never commits"),("dash","after merge")])
+d.text(30,530,"Status moves (in progress, in review) and autonomous mode for simple tasks: always on your OK.",10,400,MUT,"start")
 d.save()

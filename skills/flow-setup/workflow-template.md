@@ -33,6 +33,20 @@ Model tiers used by `flow-work`'s subagents. Use the model names your harness ac
 - **strong** (plan, tests): `<model>`
 - **fast** (research, implement, review, fix): `<model>`
 
+## Status tracking
+
+How `flow-work` moves an issue through its states. It always asks before each move.
+
+- **Status tracking**: `<none | labels | project>`
+- If `labels`: in progress `<label>`, in review `<label>`, done `<label, or "closed">`
+- If `project`: owner `<owner>`, project number `<n>`, field `<Status>`, options: in progress `<option>`, in review `<option>`, done `<option>`
+
+## Engram sync
+
+Shares this project's Engram memory through git, in the `.engram/` folder. `flow-work` imports new chunks when it creates a branch, and offers to export before opening a PR.
+
+- **Engram sync**: `<ask | always | never>`
+
 ## Tests
 
 - **Test file globs**: `<glob>`, `<glob>`

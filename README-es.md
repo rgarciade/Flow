@@ -2,7 +2,12 @@
 
 [Read in English](README.md)
 
+**Issue-Driven Development** (desarrollo dirigido por issues) para agentes de programación con IA.
+
 Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) para planificar el trabajo como issues de GitHub y desarrollarlo por porciones verticales, una a una, con la persona al mando.
+
+> [!IMPORTANT]
+> `flow` es estrictamente un flujo **desde las tareas**. El desarrollo dirigido por especificaciones parte de una especificación; `flow` parte de un issue de GitHub. No se construye nada sin él: cada rama, test, commit y pull request pertenece a un issue, y el issue sigue siendo la fuente de verdad de lo que se pidió y de cómo se construyó.
 
 <p align="center">
   <img src="docs/diagrams/overview.svg" alt="Las tres skills de flow y los archivos que leen y escriben" width="900">
@@ -10,8 +15,12 @@ Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) par
 
 ## Por qué
 
-Los flujos dirigidos por especificaciones lo planifican todo de antemano, construyen capa a capa y acaban en pull requests enormes que nadie revisa de verdad. `flow` hace lo contrario:
+Los flujos dirigidos por especificaciones lo planifican todo de antemano, construyen capa a capa y acaban en pull requests enormes que nadie revisa de verdad. El desarrollo dirigido por issues hace lo contrario:
 
+- **Estás dentro del flujo de principio a fin.** No es un trabajo que se lanza y se recoge después. Trabajas con el agente: te enseña lo que ha encontrado en cada fase, te pregunta siempre que algo no está decidido y espera tu OK antes de seguir. Es programación en pareja, y tú llevas el rumbo. Para una tarea sencilla puedes decirle que trabaje de forma autónoma: entonces solo para por lo que de verdad te necesita.
+- **Visible desde el primer minuto, no al llegar el PR.** En equipos con desarrollo dirigido por especificaciones nadie sabe en qué punto está un desarrollo hasta que llega el pull request. Aquí la rama está enlazada al issue desde el principio, cada commit aprobado se sube, el plan está en el issue y su estado avanza (con tu OK) de en curso a en revisión.
+- **El issue lo dirige todo.** Los requisitos viven en la descripción del issue, el plan de implementación en un comentario y el resumen en otro. Cuando cambian los requisitos, se actualiza la descripción con un registro de qué cambió y por qué.
+- **El detalle, justo a tiempo.** Una especificación intenta definirlo todo de antemano, y buena parte está obsoleta cuando alguien la construye. Un issue da la visión general, los pocos resultados que definen "terminado" y las pistas de una primera investigación (librerías, conectores, riesgos). Los criterios detallados, el diseño y los tests se deciden en la fase de plan, sobre el código tal como está cuando empieza la tarea. Es como se trabajaba antes de las especificaciones: sin suponer demasiado pronto, pero sin tickets vacíos.
 - **Planificar poco, y cuando quieras.** Las tareas viven como issues de GitHub. Se crean en una sesión de planificación o justo antes de empezar una.
 - **Una tarea, una porción vertical.** Cada tarea funciona de principio a fin cuando se termina y cabe en una sesión de trabajo. ¿Es demasiado grande? Se divide en issues hijos.
 - **Primero los tests, aprobados por ti.** La IA escribe los tests, tú los apruebas y a partir de ese momento quedan congelados: la implementación tiene que hacerlos pasar sin tocarlos.
