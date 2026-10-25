@@ -8,7 +8,7 @@
 /flow-plan
 ```
 
-Describe what you want. The skill asks independent questions together as a numbered list, always proposing an answer, so you can reply "OK" or correct only some by number. It asks one alone when its answer changes the rest, and pushes towards the minimum.
+Describe what you want. The skill asks independent questions together, always proposing an answer: as selectors with a free-text option when your agent supports them, otherwise as a numbered list you can answer with "OK" or corrections by number. It asks one alone when its answer changes the rest, and pushes towards the minimum.
 
 - **Separate tasks**: you get a numbered list of drafts (title and one line each). Ask to see any full body, ask for changes, then approve. The tasks are created in your tracker.
 - **A bigger piece of work**: it proposes a parent task and child tasks, each one a vertical slice, with the blocking links between them. Adjust granularity and dependencies, then approve.

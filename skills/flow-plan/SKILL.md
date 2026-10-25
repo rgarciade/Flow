@@ -20,7 +20,7 @@ Planning is a conversation with the user: you propose, they decide. Nothing is p
 
 ## 1. Understand what the user wants
 
-Ask until it is clear. For each question, propose the answer you think fits. Ask the questions that don't depend on each other together, as a numbered list, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. Suggest the minimum: if something can be left out, say so.
+Ask until it is clear. For each question, propose the answer you think fits. Ask the questions that don't depend on each other together. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, the proposed answer first, and the free-text option left open. Otherwise, use a numbered list, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. Suggest the minimum: if something can be left out, say so.
 
 Then decide which of these it is. If unsure, ask:
 

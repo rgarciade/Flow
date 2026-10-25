@@ -20,7 +20,7 @@ These override anything more permissive elsewhere, including the user's general 
 - **Never modify approved tests on your own.** After the test gate, the test files are frozen. If a test looks wrong, follow "Changing an approved test": stop, explain why, and change it only after the user's OK.
 - **One writer at a time.** Subagents that edit files run one after another. Read-only subagents (research, review) may run in parallel.
 - **No worktrees, no child branches beyond the ones in `docs/agents/workflow.md`.**
-- **Batch independent questions.** Ask the questions that don't depend on each other together, as a numbered list with your proposed answer for each, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. After asking, stop and wait.
+- **Batch independent questions.** Ask the questions that don't depend on each other together. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, your proposed answer first, and the free-text option left open. Otherwise, use a numbered list with your proposed answer for each, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. After asking, stop and wait.
 
 ## Subagents
 

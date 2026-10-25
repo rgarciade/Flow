@@ -48,7 +48,7 @@ Read `../setup-matt-pocock-skills/SKILL.md` and apply only its **Section C** (do
 
 ## 4. Our questions
 
-Ask the questions that don't depend on each other together, as a numbered list. Lead each with the value you detected as the recommended answer, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. Skip any question that exploration already settled beyond doubt, and say what you assumed.
+Ask the questions that don't depend on each other together, leading each with the value you detected as the recommended answer. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, the recommended answer first, and the free-text option left open. Otherwise, use a numbered list, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. Skip any question that exploration already settled beyond doubt, and say what you assumed.
 
 1. Base branch: the branch every finished feature ends up in (for example `dev`).
 2. Branch naming for groups and tasks. Default: `feature/<id>-<slug>` for a group branch (a parent task) and `task/<id>-<slug>` for a task branch, with `<id>` as the tracker's "id in branch names".
