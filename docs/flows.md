@@ -68,7 +68,7 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 
 ## Review
 
-Phase 7 follows Matt Pocock's two-axis review ([reference](../skills/flow-work/references/code-review.md)):
+Phase 7 is a two-axis review ([reference](../skills/flow-work/references/code-review.md)):
 
 - **Standards**: does the diff follow the repo's documented rules (`CLAUDE.md`, `AGENTS.md`, `.claude/rules/*`, `CONTRIBUTING.md`…), plus a baseline of code smells that the repo's own rules can override? It also checks the code against the ADRs, the glossary and the parent's architecture notes.
 - **Spec**: does it do what the task and the plan asked for, without missing parts or scope creep? It also checks that the docs the plan listed match the code, and flags docs that only repeat it.

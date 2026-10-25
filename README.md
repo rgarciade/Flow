@@ -77,4 +77,4 @@ Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex 
 ## Credits
 
 - The working method is inspired by a talk on replacing spec-driven development with backlog + user stories + vertical slices + pair programming with AI.
-- [`to-tickets`, `setup-matt-pocock-skills`](vendor/mattpocock-skills), and the TDD and code-review references in [`skills/flow-work/references`](skills/flow-work/references) come from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- Some vendored skills and references are adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).

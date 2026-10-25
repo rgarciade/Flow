@@ -79,4 +79,4 @@ La documentación detallada está en inglés:
 ## Créditos
 
 - El método de trabajo se inspira en una charla que propone sustituir el desarrollo dirigido por especificaciones por backlog, historias de usuario, porciones verticales y programación en pareja con la IA.
-- [`to-tickets` y `setup-matt-pocock-skills`](vendor/mattpocock-skills), y las referencias de TDD y revisión de código de [`skills/flow-work/references`](skills/flow-work/references), vienen de [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Ver [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- Algunas skills incluidas y referencias se adaptan de [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).

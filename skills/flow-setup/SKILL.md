@@ -42,7 +42,7 @@ This is the heart of the setup: `flow-plan` and `flow-work` never call a tracker
 5. **Format.** Record the task id format, how tasks are referenced in text, the markup the tracker uses, and how the note block and record marker are rendered there.
 6. **Where the file lives.** By default `docs/agents/tracker.md` in the repo. If several repos share one tracker (for example a company Jira), offer to keep the file in a shared place and write its path in `workflow.md` instead.
 
-## 3. Domain docs (Matt Pocock's setup)
+## 3. Domain docs
 
 Read `../setup-matt-pocock-skills/SKILL.md` and apply only its **Section C** (domain docs), using its `domain.md` seed template. Its Section A (issue tracker) is replaced by step 2 above, and Section B (triage labels) is skipped. Default: single-context. Do not create `GLOSSARY.md` or ADRs.
 
