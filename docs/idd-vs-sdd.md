@@ -45,6 +45,8 @@ Neither is better everywhere. This page compares them honestly and says when to 
 
 **Prefer IDD (`flow`) when:**
 
+- it is not yet clear what you are building, so you find it out task by task;
+- the project already works from tasks in a tracker;
 - the product evolves and requirements change while you build;
 - you want small PRs that you or your team actually review;
 - teammates need to see where each piece of work stands before the PR;

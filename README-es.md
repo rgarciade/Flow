@@ -13,6 +13,16 @@ Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) par
   <img src="docs/diagrams/overview.svg" alt="Las tres skills de flow y los archivos que leen y escriben" width="900">
 </p>
 
+## Cuándo usarlo
+
+`flow` no pretende ser un estándar para cualquier proyecto. Encaja cuando hay incertidumbre y las cosas aún no están claras:
+
+- **Un proyecto personal** en el que no sabes exactamente qué quieres construir y lo vas descubriendo poco a poco.
+- **Un proyecto de trabajo con mucha indefinición**, donde los requisitos llegan tarde o cambian a menudo.
+- **Un proyecto antiguo con un flujo basado en tareas**, como trabajaban muchos equipos antes de las especificaciones: el trabajo llega como tareas en un gestor y el código crece tarea a tarea.
+
+Cuando el alcance está claro y es estable desde el principio, puede servirte mejor un enfoque dirigido por especificaciones (ver [IDD frente a SDD](docs/idd-vs-sdd.md)).
+
 ## Por qué
 
 Los flujos dirigidos por especificaciones lo planifican todo de antemano, construyen capa a capa y acaban en pull requests enormes que nadie revisa de verdad. El desarrollo dirigido por issues hace lo contrario (comparación completa, y cuándo conviene más SDD: [IDD frente a SDD](docs/idd-vs-sdd.md)):
