@@ -11,15 +11,15 @@ def ph(x,y,n,t,sub,gate=None,commit=None,model=None):
         d.text(x+W/2,y+87,commit,9,600,"#fff",mono=True)
 A=60;B=190;C=330
 ph(30,A,"0","Preflight",["read workflow.md","git status"])
-ph(198,A,"1","Task",["issue + blockers"],gate="confirm task")
-ph(366,A,"2","Branch",["gh issue develop","linked to the issue"])
+ph(198,A,"1","Task",["task + blockers"],gate="confirm task")
+ph(366,A,"2","Branch",["create-branch","linked to the task"])
 ph(534,A,"3","Research",["fast, size verdict"],gate="read summary")
 ph(366,B,"4","Plan",["strong"],gate="confirm seams")
-ph(198,B,"5","Tests",["strong, tests only"],gate="approve tests",commit="test(#n)")
-ph(30,B,"6","Implement",["fast, code + docs"],commit="feat(#n)")
-ph(30,C,"7","Review",["2 x fast, parallel"],gate="choose findings",commit="fix|refactor(#n)")
+ph(198,B,"5","Tests",["strong, tests only"],gate="approve tests",commit="test(<ref>)")
+ph(30,B,"6","Implement",["fast, code + docs"],commit="feat(<ref>)")
+ph(30,C,"7","Review",["2 x fast, parallel"],gate="choose findings",commit="fix|refactor(<ref>)")
 ph(198,C,"8","Report + PR",["report, ADRs"],gate="open PR?")
-d.box(366,C,W,H,"You merge the PR",["on GitHub, never","the agent"],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
+d.box(366,C,W,H,"You merge the PR",["on the code host,","never the agent"],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
 d.chip(374,C+72+4,W-16,"GATE",h=15)
 d.box(534,C,W,H,"After merge",["next sibling, or","arch review + group PR"],dash=True,tsize=12)
 # decision
@@ -28,7 +28,7 @@ d.front.append(f'<polygon points="{cx},{cy-46} {cx+70},{cy} {cx},{cy+46} {cx-70}
 d.text(cx,cy-2,"Task too big?",12,700);d.text(cx,cy+13,"size verdict",9,400,MUT,mono=True)
 d.box(710,B-14,170,152,"Too big: you choose",[],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
 d.chip(718,B+14,154,"GATE",h=15)
-for i,t in enumerate(["(a) trim to first slice;","new issues for the rest","(b) become parent;","slices = sub-issues","then continue"]):
+for i,t in enumerate(["(a) trim to first slice;","new tasks for the rest","(b) become parent;","slices = child tasks","then continue"]):
     d.text(718,B+46+i*15,t,10,400,MUT,"start",mono=True)
 # arrows
 y1=A+H/2

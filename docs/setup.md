@@ -5,11 +5,11 @@
 | Tool | Why | |
 |---|---|---|
 | An agent harness with [Agent Skills](https://agentskills.io/specification) support | Runs the skills | Claude Code, OpenCode, Codex CLI, Cursor, Gemini CLI |
-| [GitHub CLI](https://cli.github.com) 2.94+ | Issues, sub-issues, PRs | `gh --version`, `gh auth status` |
+| Access to your task tracker and code host | Reading and updating tasks, opening PRs | A CLI (`gh`, `glab`, `jira`, `az`…), an MCP server or an API token. For the GitHub example: [GitHub CLI](https://cli.github.com) 2.94+, `gh auth status` |
 | [Engram](https://github.com/Gentleman-Programming/engram) MCP server and CLI (recommended) | Shared notes between the orchestrator and its subagents; optional memory sync through git (`.engram/`) | Without it, notes go to `.scratch/flow/` in the repo and sync is off |
 | [i-have-adhd](https://github.com/ayghri/i-have-adhd) skill (optional) | Formatting rules for the test-approval message | Without it, `flow-work` uses built-in equivalents |
 
-Native sub-issues and issue dependencies must be available on the GitHub repo (they are on github.com).
+Any task tracker works: `flow-setup` records how to reach it (CLI, API or MCP server). The GitHub example uses the GitHub CLI; on GitHub, native sub-issues and issue dependencies are used when available.
 
 ## 1. Install the skills
 
@@ -55,12 +55,24 @@ These harnesses follow the shared Agent Skills format, but `flow` is developed a
 
 ## 2. Configure each repo
 
+### Task trackers
+
+`flow-plan` and `flow-work` never call a tracker directly. They use named operations (`view-task`, `create-task`, `create-child`, `add-blocker`, `create-record`, `edit-description`, `move-status`, `create-branch`, `open-pr`…) and look up how to do each one in the repo's `docs/agents/tracker.md`. `flow-setup` writes that file:
+
+- **GitHub Issues**: from a ready example ([tracker-github.md](../skills/flow-setup/tracker-github.md)); it only confirms labels and status.
+- **Any other tracker** (GitLab, Jira, Linear, Azure Boards…): from [tracker-template.md](../skills/flow-setup/tracker-template.md), filling each operation with the tracker's CLI, MCP server or API.
+- **What the tracker can't do** gets an agreed alternative, recorded in the same file: for example a task folder in the repo (`.flow/tasks/<id>/plan.md`, linked from the task) instead of comments, a "Blocked by" line instead of native dependencies, or the task id in the branch name instead of a branch link. With no automated access at all, **manual mode** gives you the exact text to paste.
+- **Shared trackers**: if several repos use the same tracker (a company Jira), the file can live in one shared place, with its path in each repo's `workflow.md`.
+
+Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): the file records both.
+
+
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
 It explores the repo, asks one question at a time (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
 
 ```
-docs/agents/issue-tracker.md   how issues are created, linked and closed
+docs/agents/tracker.md         how every task operation is done in your tracker
 docs/agents/domain.md          where the glossary and ADRs live
 docs/agents/workflow.md        base branch, branch names, languages, models, commands, Engram sync, status tracking, docs
 AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the above

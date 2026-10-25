@@ -1,6 +1,6 @@
 ---
 name: flow-work
-description: Develop one GitHub issue end to end as an orchestrator with role subagents - research, plan, tests first with a user approval gate, implementation, two-axis review, PR. Takes an issue number, or creates the issue from the current conversation and starts right away. Never commits on its own. Use when the user runs /flow-work, or asks to pick up, start or develop a task.
+description: Develop one task end to end, from any task tracker (GitHub Issues, GitLab, Jira, Linear, local files…), as an orchestrator with role subagents - research, plan, tests first with a user approval gate, implementation, two-axis review, PR. Takes a task id, or creates the task from the current conversation and starts right away. Never commits on its own. Use when the user runs /flow-work, or asks to pick up, start or develop a task.
 ---
 
 # flow-work
@@ -16,7 +16,7 @@ These override anything more permissive elsewhere, including the user's general 
 - **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next. Don't chain phases silently. The only exception is autonomous mode, and only when the user asks for it (see "Autonomous mode").
 - **Decisions belong to the user.** Anything the issue and the agreed plan don't settle (a design choice, a dependency, a trade-off, a scope question) goes to the user as a question with your recommendation. Never decide it for them.
 - **Never commit on your own.** At each commit point, give the user the exact command and wait. Run it only if the user explicitly tells you to.
-- **Never merge PRs.** The user reviews and merges every PR on GitHub.
+- **Never merge PRs.** The user reviews and merges every PR on the code host.
 - **Never modify approved tests on your own.** After the test gate, the test files are frozen. If a test looks wrong, follow "Changing an approved test": stop, explain why, and change it only after the user's OK.
 - **One writer at a time.** Subagents that edit files run one after another. Read-only subagents (research, review) may run in parallel.
 - **No worktrees, no child branches beyond the ones in `docs/agents/workflow.md`.**
@@ -39,55 +39,59 @@ Each role uses a model **tier**. The **Models** section of `docs/agents/workflow
 
 Every subagent brief includes:
 
-- The repo path, issue number and current branch.
-- Pointers, not pasted content: the issue (`gh issue view <n>`), `docs/agents/*.md`, and the notes from earlier phases.
+- The repo path, task id and current branch.
+- Pointers, not pasted content: the task (read it with `view-task`), `docs/agents/*.md` including the tracker file, and the notes from earlier phases.
 - The rule: read only what the role needs; do not spawn agents; artifacts (code, comments, test names) in English unless the repo already uses another language.
 - The rule: subagents cannot talk to the user. When something is not settled by the issue, the plan or the brief, stop and return it as a question, with options and a recommendation. Do not guess.
 - The hand-back contract: **save the full result as a note under the key given, then return at most 15 lines**: outcome, files touched (as `path:line` links), the note key, and any blocker or question for the user. No pasted logs or file contents.
 
-**Notes.** Keys follow `flow/<repo>/<issue>/<phase>`, for example `flow/my-app/42/research`.
+**Notes.** Keys follow `flow/<repo>/<id>/<phase>`, for example `flow/my-app/42/research`.
 
 - With the Engram MCP server available: save with `mem_save` (topic key = the note key), read with `mem_search` and `mem_get_observation`, update with `mem_update`.
-- Without it: write the note to `.scratch/flow/<issue>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored.
+- Without it: write the note to `.scratch/flow/<id>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored.
 
-Notes are working memory for this session's subagents. The durable record lives on the issue.
+Notes are working memory for this session's subagents. The durable record lives with the task.
 
-## The issue is the source of truth
+## The task tracker
 
-Anyone must be able to understand the task from the GitHub issue alone, without the notes. Keep the issue lean: **at most two comments per task from this flow** (the plan comment and the closing comment). When something changes, **edit** what exists instead of posting something new.
+This skill works with any task tracker. It never calls one directly: every operation written in backticks, such as `view-task`, `create-record` or `move-status`, is looked up in `docs/agents/tracker.md` (or the shared tracker file named in `workflow.md`), and done exactly as written there. That file also says:
+
+- how a task is identified (`<id>`), referenced in text (`<ref>`, for example `#42` or `PROJ-123`), written in branch names (`<id>`) and in commit messages (`<commit-ref>`, as in `feat(<commit-ref>): …`);
+- the markup, the **note block** and the **record marker** to use;
+- which **alternatives** replace what the tracker can't do, for example a task folder in the repo (`.flow/tasks/<id>/`) instead of comments. When an operation uses an alternative, follow the alternative.
+
+In this skill, "task" means a task in that tracker, and "issue" is used in the same sense. If an operation is missing from the tracker file, ask the user how to do it, propose adding it to the file, and continue.
+
+## The task is the source of truth
+
+Anyone must be able to understand the task from the tracker alone (plus its task folder, if the tracker uses that alternative), without the notes. Keep the task lean: **at most two records per task from this flow**, the plan record and the summary record. A record is a comment on the task, or a file in the task folder, depending on the tracker. When something changes, **edit** what exists instead of adding something new.
 
 **Permissions:**
 
-- **Creating** the plan comment or the closing comment needs no confirmation.
-- **Editing** the description or a comment, and **deleting** anything, always need the user's OK: show the exact change first and wait.
+- **Creating** the plan record or the summary record needs no confirmation.
+- **Editing** the description or a record, and **deleting** anything, always need the user's OK: show the exact change first and wait.
 
-**The description holds the _what_**: what to build, acceptance criteria, out of scope. When the agreed requirements change, propose an edit of the description (never a new comment) with:
+**The description holds the _what_**: what to build, acceptance criteria, out of scope. When the agreed requirements change, propose an edit of the description (never a new record) with:
 
 - the requirements rewritten as they now stand, and
-- at the bottom, a `## Changes` section (heading in the issue language) with one dated line per change: what changed and why. Keep earlier lines.
+- at the bottom, a `## Changes` section (heading in the task language) with one dated line per change: what changed and why. Keep earlier lines.
 
-Apply it with `gh issue edit <n> --body-file <file>` once the user approves.
+Apply it with `edit-description` once the user approves.
 
-**One plan comment holds the _how_**: a short implementation summary, created at the end of Phase 4. Never post a second plan comment: if the plan changes, propose an edit of this one. Find it by its hidden marker:
+**The plan record holds the _how_**: a short implementation summary, created with `create-record` at the end of Phase 4. Never create a second plan record: if the plan changes, find it with `find-record` (marker `flow:plan`) and propose an edit with `edit-record`.
 
-```sh
-gh api repos/{owner}/{repo}/issues/<n>/comments --jq '.[] | select(.body | contains("<!-- flow:plan -->")) | .id'
-```
+**The summary record** is created once, when the PR is opened (Phase 8), with the marker `flow:summary`. If it already exists (for example, the PR was reopened), propose an edit instead.
 
-Create it with `gh issue comment <n> --body-file <file>`. Edit it, after the user's OK, with `gh api --method PATCH repos/{owner}/{repo}/issues/comments/<id> -F body=@<file>`.
+To link the description to the plan record, include `Implementation notes: <record link>` in the next description edit the user approves. Don't edit the description only to add this link.
 
-**The closing comment** is posted once, when the PR is opened (Phase 8), with the marker `<!-- flow:summary -->`. If it already exists (for example, the PR was reopened), propose an edit instead.
+Write both records in the task language from `docs/agents/workflow.md`, in the tracker's markup, with its note block and record marker; translate the headings and the note text too. The templates below are in GitHub Markdown; adapt them to the tracker's format.
 
-To link the description to the plan comment, include `Implementation notes: <comment URL>` in the next description edit the user approves. Don't edit the description only to add this link.
-
-Write both comments in the issue language from `docs/agents/workflow.md`; translate the headings and the note text too.
-
-Plan comment template (10 to 15 lines below the header):
+Plan record template (10 to 15 lines below the header):
 
 ```markdown
 <!-- flow:plan -->
 > [!NOTE]
-> **Implementation notes**: how this task is being built. The requirements are in the issue description; flow-work updates this comment when the plan changes.
+> **Implementation notes**: how this task is being built. The requirements are in the task description; flow-work updates these notes when the plan changes.
 > Last update: <YYYY-MM-DD> · branch `<task branch>`
 
 ### Seams under test
@@ -109,12 +113,12 @@ Plan comment template (10 to 15 lines below the header):
 - <YYYY-MM-DD>: <what changed and why> (omit the section until something changes)
 ```
 
-Closing comment template:
+Summary record template:
 
 ```markdown
 <!-- flow:summary -->
 > [!NOTE]
-> **Implementation summary**: what was built for this task. PR: #<pr>
+> **Implementation summary**: what was built for this task. PR: <PR link>
 
 - **Works now**: <one or two lines>
 - **Acceptance criteria**: <n>/<n> ✅ (list any ❌)
@@ -126,24 +130,19 @@ Closing comment template:
 
 ## Team visibility
 
-Issue-driven work is visible while it happens, not only when the PR arrives. Anyone looking at the issue can see who is on it, in which branch, at which stage, and every commit so far.
+Task-driven work is visible while it happens, not only when the PR arrives. Anyone looking at the task can see who is on it, in which branch, at which stage, and every commit so far.
 
-- **Linked branch.** Create task branches with `gh issue develop` (Phase 2). The branch then appears in the issue's "Development" panel from the first minute.
+- **Linked branch.** Create task branches with `create-branch` (Phase 2), which links the branch to the task, or names it so the tracker links it.
 - **Pushed commits.** Every commit command you give the user ends with `git push`, so each approved step shows up on the linked branch.
-- **The plan comment** tells the team how the task is being built (see "The issue is the source of truth").
-- **Assignment.** When the user confirms the task (Phase 1), propose assigning the issue to them (`gh issue edit <n> --add-assignee @me`) and do it after their OK. This does not depend on status tracking.
-- **Status moves.** If **Status tracking** in `docs/agents/workflow.md` is not `none`, propose moving the issue's status at these points, and move it only after the user's OK (one line, it can share a message with the phase's other question):
+- **The plan record** tells the team how the task is being built (see "The task is the source of truth").
+- **Assignment.** When the user confirms the task (Phase 1), propose assigning the task to them with `assign`, and do it after their OK. Skip it if the tracker file says `assign` is not used.
+- **Status moves.** Unless the tracker file says `move-status` is not used, propose moving the task's status at these points with `move-status`, and move it only after the user's OK (one line, it can share a message with the phase's other question):
 
   | When | Move to |
   |---|---|
   | The user confirms the task (Phase 1) | in progress |
   | The PR is opened (Phase 8) | in review |
-  | The PR is merged | done (usually automatic through `Closes #<n>`; only propose it if it did not happen) |
-
-  How to move it, depending on **Status tracking**:
-
-  - `labels`: `gh issue edit <n> --remove-label "<old>" --add-label "<new>"`, with the label names in `workflow.md`.
-  - `project`: `gh project item-edit --owner <owner> <project-number> --url <issue-url> --field "<field>" --value "<option>"`, with the project, field and option names in `workflow.md`. If the issue is not in the project yet, add it first with `gh project item-add`.
+  | The PR is merged | done (often automatic through the `closing-reference`; only propose it if it did not happen) |
 
 ## Autonomous mode
 
@@ -157,7 +156,7 @@ In autonomous mode, chain the phases without stopping for routine confirmations:
   - a test that looks wrong (see "Changing an approved test"), or a check you cannot make pass;
   - a task that turns out bigger than it looked;
   - anything that leaves the machine or changes shared state: commits, pushes, status moves, issue edits, the PR.
-- **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<n>/approved-tests/` manifest right after writing them, and check them against it as usual.
+- **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<id>/approved-tests/` manifest right after writing them, and check them against it as usual.
 - **Commits come at the end.** Instead of a commit command per phase, give the user the `test`, `feat` and `fix`/`refactor` commands (and `chore` for an Engram export) together with the final report, each ending with `&& git push`.
 - **The final report is never skipped.** It also lists every assumption you made on the user's behalf, so they can check them.
 
@@ -171,48 +170,48 @@ Sometimes implementation shows that an approved test was wrong: the requirement 
 2. **The user decides.** Show it in a few lines with your recommendation, and say which case it is: the test was wrong, or the requirement changed. If the honest answer is "the test is right and the code is hard", say so and recommend keeping the test.
 3. **Change.** After the user's OK, brief the tests subagent (strong tier) to change **only** those tests. Each must again fail for the expected reason, or pass if the implementation already covers it. Never loosen an assertion only to make it pass.
 4. **Record.**
-   - Give the commit command `git add <test files> && git commit -m "test(#n): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.scratch` record instead, refresh the manifest.
-   - Propose a line under "Changes to the plan" in the plan comment (an edit, so it needs the user's OK).
+   - Give the commit command `git add <test files> && git commit -m "test(<commit-ref>): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.scratch` record instead, refresh the manifest.
+   - Propose a line under "Changes to the plan" in the plan record (an edit, so it needs the user's OK).
    - If a requirement changed, also propose the `## Changes` line in the issue description.
 5. **Continue** implementing against the new tests.
 
 ## Phase 0: Preflight
 
 1. Read `docs/agents/workflow.md`. If it does not exist, tell the user and ask, in one line, whether to run `flow-setup` now. If yes, read `../flow-setup/SKILL.md`, follow it, then come back here. If no, stop. If a field this skill needs is missing, ask only for that field.
-2. Read `docs/agents/issue-tracker.md`.
+2. Read the tracker file (`docs/agents/tracker.md`, or the shared path in `workflow.md`). If only an old `docs/agents/issue-tracker.md` exists, offer to run `flow-setup` to convert it.
 3. Run `git status`. If there are uncommitted changes that are not part of this task, stop and ask the user what to do with them.
 
 ## Phase 1: The task
 
-- **Issue number given** (`#42`, `42` or a URL): read it with `gh issue view <n> --json number,title,body,labels,comments,state`. State its title back to the user.
-- **No number**: the task comes from the current conversation. Draft the issue with the template in `../flow-plan/SKILL.md`, show it, and create it with `gh issue create` once the user approves. Then continue with that number.
+- **Task id given** (`#42`, `PROJ-123` or a URL): read it with `view-task`. State its title back to the user.
+- **No id**: the task comes from the current conversation. Draft it with the template in `../flow-plan/SKILL.md`, show it, and create it with `create-task` once the user approves. Then continue with that id.
 
 Then check its position:
 
-- **Parent**: `gh api repos/{owner}/{repo}/issues/<n>/parent` (404 means no parent).
-- **Open blockers**: `gh api repos/{owner}/{repo}/issues/<n> --jq .issue_dependencies_summary`. If any blocker is still open, or its PR is not merged into the group branch, stop and tell the user which one.
-- **Children**: if the issue itself has open sub-issues, it is a group. Ask which child to start, and suggest the first one with no open blockers.
+- **Parent**: `get-parent`.
+- **Open blockers**: `open-blockers`. If any blocker is still open, or `pr-status` shows its PR is not merged into the group branch, stop and tell the user which one.
+- **Children**: `list-children`. If the task itself has open children, it is a group. Ask which child to start, and suggest the first one with no open blockers.
 
-Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. Start once they confirm. In the same message, ask whether to assign the issue to them and, if status tracking is on, move it to "in progress" (see "Team visibility").
+Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. Start once they confirm. In the same message, ask whether to assign the issue to them and, unless `move-status` is not used, move it to "in progress" (see "Team visibility").
 
 ## Phase 2: Branch
 
 Use the patterns and base branch in `docs/agents/workflow.md`. Before branching off a branch, bring it up to date: `git fetch origin`, check it out, then `git pull --ff-only`. Pulling with `--ff-only` is part of this flow and needs no confirmation; if it cannot fast-forward, stop and tell the user.
 
-Create branches with `gh issue develop`, so each one is linked to its issue and visible in the issue's "Development" panel:
+Create branches with `create-branch`, so each one is linked to its task:
 
-- **Child task**: make sure the group branch `feature/<parent>-<slug>` exists. If it doesn't, create it linked to the parent issue: `gh issue develop <parent> --name feature/<parent>-<slug> --base <base branch>`. Then update the group branch and create the task branch: `gh issue develop <n> --name task/<n>-<slug> --base feature/<parent>-<slug> --checkout`.
-- **Standalone task**: update the base branch and run `gh issue develop <n> --name task/<n>-<slug> --base <base branch> --checkout`.
-- `gh issue develop` creates the branch on GitHub and checks it out locally; this is part of the flow and needs no extra confirmation once the user has confirmed the task.
-- If the task branch already exists, check it out and continue from where it was: look for this issue's plan comment, its notes and its commits to find the current phase.
+- **Child task**: make sure the group branch `feature/<parent-id>-<slug>` exists. If it doesn't, create it from the updated base branch with `create-branch` for the parent task, and push it. Then update the group branch and create `task/<id>-<slug>` from it with `create-branch`.
+- **Standalone task**: update the base branch and create `task/<id>-<slug>` from it with `create-branch`.
+- Creating these branches is part of the flow and needs no extra confirmation once the user has confirmed the task.
+- If the task branch already exists, check it out and continue from where it was: look for this task's plan record, its notes and its commits to find the current phase.
 
 **Sync Engram in.** If the Engram CLI is available and the repo has a `.engram/` folder, run `engram sync --status`. If it reports chunks that are not imported yet, run `engram sync --import`, then tell the user in one line what was imported. Skip this when **Engram sync** in `docs/agents/workflow.md` is `never`.
 
-Tell the user, in one line, the branch name (now linked to the issue) and what was imported from Engram, if anything, then go on to research. The user already confirmed the branch in Phase 1, so there is nothing to wait for here.
+Tell the user, in one line, the branch name (now linked to the task) and what was imported from Engram, if anything, then go on to research. The user already confirmed the branch in Phase 1, so there is nothing to wait for here.
 
 ## Phase 3: Research (fast)
 
-Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<n>/research` and returns:
+Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<id>/research` and returns:
 
 - What exists today that the task builds on (as `path:line` links).
 - Open questions about the task itself.
@@ -223,7 +222,7 @@ Show the user the research in three to five lines: what the task builds on, the 
 **If the task is too big**, stop and offer the user, as one question:
 
 - **(a) Keep this task small**: trim it to the first slice and create the rest as new issues for later. If this task has a parent, they become siblings under the same parent. If not, they are created as standalone issues that this one blocks.
-- **(b) Turn it into a parent**: this issue becomes the parent, the slices become its sub-issues with native blocking links, and the work continues on a group branch with the first child. Propose adding "Architecture notes" to its description (see `../flow-plan/SKILL.md`), as an edit the user approves.
+- **(b) Turn it into a parent**: this task becomes the parent, the slices become its children (`create-child`) with blocking links (`add-blocker`), and the work continues on a group branch with the first child. Propose adding "Architecture notes" to its description (see `../flow-plan/SKILL.md`), as an edit the user approves.
 
 Create the issues by following `../to-tickets/SKILL.md` with the overrides in `../flow-plan/SKILL.md`. For (b), rename the branch to the group pattern if no commits exist yet, otherwise ask the user how to proceed. Then continue with the chosen task.
 
@@ -231,7 +230,7 @@ Create the issues by following `../to-tickets/SKILL.md` with the overrides in `.
 
 This is where the task gets its detail. The issue gives the big picture and some leads; the plan turns them into precise criteria, seams, scenarios and steps against the code as it is now. Expect it to refine or even contradict the issue: that is the point, and the description is then updated with a `## Changes` line.
 
-Brief a plan subagent with the issue and the research key. Point it to `references/tdd.md`, `references/tests.md` and `references/mocking.md` in this skill's folder. It saves under `flow/<repo>/<n>/plan` and returns:
+Brief a plan subagent with the issue and the research key. Point it to `references/tdd.md`, `references/tests.md` and `references/mocking.md` in this skill's folder. It saves under `flow/<repo>/<id>/plan` and returns:
 
 - Questions that remove ambiguity, each with the answer it would assume.
 - Refined acceptance criteria and an "out of scope" list.
@@ -243,14 +242,14 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 
 Ask the user the questions one by one, assumed answer first. Then show the seams and scenarios and get the user's OK. No test is written at a seam the user has not confirmed. Save the agreed result back to the same note.
 
-Then update the issue (see "The issue is the source of truth"):
+Then update the task (see "The task is the source of truth"):
 
-1. Post the plan comment with the agreed seams, scenarios and steps.
-2. If the refined acceptance criteria or the out-of-scope list differ from the description, propose the description edit (requirements as they now stand, the `## Changes` line, and the link to the plan comment) and apply it once the user approves.
+1. Create the plan record (`create-record`) with the agreed seams, scenarios and steps.
+2. If the refined acceptance criteria or the out-of-scope list differ from the description, propose the description edit (requirements as they now stand, the `## Changes` line, and the link to the plan record) and apply it once the user approves.
 
 ## Phase 5: Tests (strong) and the test gate
 
-Brief a tests subagent with the plan key. It writes only test files, matching the globs in `docs/agents/workflow.md`, at the confirmed seams and following `references/tests.md` and `references/mocking.md`. It runs them and confirms each fails **for the expected reason**: missing behaviour, not a syntax, import or setup error. It saves under `flow/<repo>/<n>/tests` and returns one line per scenario with its `path:line` link and its failure reason.
+Brief a tests subagent with the plan key. It writes only test files, matching the globs in `docs/agents/workflow.md`, at the confirmed seams and following `references/tests.md` and `references/mocking.md`. It runs them and confirms each fails **for the expected reason**: missing behaviour, not a syntax, import or setup error. It saves under `flow/<repo>/<id>/tests` and returns one line per scenario with its `path:line` link and its failure reason.
 
 Present the tests to the user. For this one message, shape the output for fast scanning. If the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise follow these rules: the action first, numbered lines, no preamble, no recap.
 
@@ -263,14 +262,14 @@ Wait for the OK. If the user wants changes, send them to the tests subagent and 
 After the OK, give the commit command, for example:
 
 ```sh
-git add <test files> && git commit -m "test(#42): <summary>" && git push
+git add <test files> && git commit -m "test(<commit-ref>): <summary>" && git push
 ```
 
-This commit is the record of the approved tests. Once the user confirms it is done, save its hash under `flow/<repo>/<n>/tests`. If the user does not want this commit, copy the test files to `.scratch/flow/<n>/approved-tests/` with a `sha256sum` manifest, and use that as the record instead.
+This commit is the record of the approved tests. Once the user confirms it is done, save its hash under `flow/<repo>/<id>/tests`. If the user does not want this commit, copy the test files to `.scratch/flow/<id>/approved-tests/` with a `sha256sum` manifest, and use that as the record instead.
 
 ## Phase 6: Implement (fast)
 
-Brief an implement subagent with the plan and tests keys. It writes the minimum code that makes the tests pass, following the plan's outline, and must not edit any test file. It runs the single test files and the typecheck regularly, and the full suite once at the end (commands in `docs/agents/workflow.md`). If a test seems wrong or impossible to satisfy, it stops and reports it as step 1 of "Changing an approved test", instead of working around it. It saves under `flow/<repo>/<n>/implement`.
+Brief an implement subagent with the plan and tests keys. It writes the minimum code that makes the tests pass, following the plan's outline, and must not edit any test file. It runs the single test files and the typecheck regularly, and the full suite once at the end (commands in `docs/agents/workflow.md`). If a test seems wrong or impossible to satisfy, it stops and reports it as step 1 of "Changing an approved test", instead of working around it. It saves under `flow/<repo>/<id>/implement`.
 
 The work can be split into several implement subagents, one after another, when the plan has clearly separate steps. Between them, tell the user in one line which step is done and which comes next. If a subagent returns a question, bring it to the user before continuing.
 
@@ -283,9 +282,9 @@ Then check it yourself:
 - `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.scratch` manifest). If not, stop and tell the user.
 - The full suite and typecheck pass.
 
-If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan comment: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.
+If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan record: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.
 
-Give the commit command (`feat(#n): …`, ending with `&& git push`) and wait, as in the hard rules.
+Give the commit command (`feat(<commit-ref>): …`, ending with `&& git push`) and wait, as in the hard rules.
 
 ## Phase 7: Review (2 × fast, parallel)
 
@@ -296,9 +295,9 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
 - **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 
-Each saves under `flow/<repo>/<n>/review-standards` or `flow/<repo>/<n>/review-spec`. Show both reports side by side, without merging them, and ask the user which findings to fix.
+Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show both reports side by side, without merging them, and ask the user which findings to fix.
 
-If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(#n): …` or `refactor(#n): …`, ending with `&& git push`). If a fix changes the plan, propose the plan comment edit as in Phase 6.
+If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(<commit-ref>): …` or `refactor(<commit-ref>): …`, ending with `&& git push`). If a fix changes the plan, propose the plan record edit as in Phase 6.
 
 ## Phase 8: Final report and PR
 
@@ -315,7 +314,7 @@ Write the report in this shape:
 2. **Files to review, in vertical order**: tests → entry point → logic → data. One `path:line` link per file, with one line on what changed. The user reviews the code; do not ask them to skip it.
 3. **Short summary** at the end: three lines at most.
 
-**Write the ADRs**, before the PR. For each ADR candidate from the plan that still holds after implementation and review, draft `docs/adr/<NNNN>-<title>.md` from `references/adr-template.md` (location and language as in `docs/agents/domain.md`). Show the drafts to the user and write them once they approve; if an ADR supersedes an older one, propose updating the old one's status too. Give the commit command `git add docs/adr && git commit -m "docs(#n): add ADR-<NNNN> <title>" && git push`. Skip this step when there are no candidates.
+**Write the ADRs**, before the PR. For each ADR candidate from the plan that still holds after implementation and review, draft `docs/adr/<NNNN>-<title>.md` from `references/adr-template.md` (location and language as in `docs/agents/domain.md`). Show the drafts to the user and write them once they approve; if an ADR supersedes an older one, propose updating the old one's status too. Give the commit command `git add docs/adr && git commit -m "docs(<commit-ref>): add ADR-<NNNN> <title>" && git push`. Skip this step when there are no candidates.
 
 **Sync Engram out**, before the PR. Follow **Engram sync** in `docs/agents/workflow.md`:
 
@@ -323,31 +322,31 @@ Write the report in this shape:
 - `always`: export without asking.
 - `never`: skip.
 
-To export, run `engram sync` from the repo root. It writes this project's memory to `.engram/` as compressed chunks; prompts are excluded. Then give the commit command, for example `git add .engram && git commit -m "chore(#42): sync engram memory" && git push`, and wait, as in the hard rules. The export holds every memory of this project, not only this task's notes: remind the user of that the first time.
+To export, run `engram sync` from the repo root. It writes this project's memory to `.engram/` as compressed chunks; prompts are excluded. Then give the commit command, for example `git add .engram && git commit -m "chore(<commit-ref>): sync engram memory" && git push`, and wait, as in the hard rules. The export holds every memory of this project, not only this task's notes: remind the user of that the first time.
 
-Then ask, in one line, whether to open the PR. If yes, create it with `gh pr create`:
+Then ask, in one line, whether to open the PR. If yes, create it with `open-pr`:
 
 - `--base`: the group branch for a child task, or the base branch for a standalone task.
 - Title and body in the PR language from `docs/agents/workflow.md`.
-- `Closes #<n>` in the body, plus a link to the parent issue if there is one.
+- The `closing-reference` for this task in the body, plus a link to the parent task if there is one.
 
-Then post the closing comment on the issue, with the PR number. If status tracking is on, ask whether to move the issue to "in review". The user reviews and merges the PR.
+Then create the summary record on the task, with the PR link. Unless `move-status` is not used, ask whether to move the task to "in review". The user reviews and merges the PR.
 
 ## After the merge
 
 When the user says the PR is merged:
 
-- **Child task**: list the siblings that are now unblocked and suggest the next one (`/flow-work #<n>`).
-- **All children closed**: run the group architecture review below, then offer to open the group PR from `feature/<parent>-<slug>` to the base branch with `Closes #<parent>`.
+- **Child task**: list the siblings that are now unblocked and suggest the next one (`/flow-work <ref>`).
+- **All children closed**: run the group architecture review below, then offer to open the group PR from `feature/<parent-id>-<slug>` to the base branch with the parent's `closing-reference`.
 
 ### Group architecture review (strong)
 
-Before the group PR, brief a read-only subagent (strong tier) with the parent issue and its "Architecture notes", its sub-issues and their plan comments, the ADRs and glossary, and the whole group diff (`git diff <base branch>...feature/<parent>-<slug>`). It saves under `flow/<repo>/<parent>/architecture-review` and returns, in at most 15 lines:
+Before the group PR, brief a read-only subagent (strong tier) with the parent issue and its "Architecture notes", its children and their plan records, the ADRs and glossary, and the whole group diff (`git diff <base branch>...feature/<parent-id>-<slug>`). It saves under `flow/<repo>/<parent-id>/architecture-review` and returns, in at most 15 lines:
 
 - whether the feature holds together as a whole, against the parent's "Architecture notes";
 - duplication or inconsistencies between children (two helpers doing the same thing, different names for one concept, diverging patterns);
 - decisions that were made but have no ADR, and code that contradicts an ADR;
 - glossary drift;
-- whether the feature as a whole is documented: an overview that no single child writes (what the feature does, its main pieces, how to use it). If it is missing or stale, propose it as a document to write on the group branch, with the user's OK and a `docs(#<parent>)` commit.
+- whether the feature as a whole is documented: an overview that no single child writes (what the feature does, its main pieces, how to use it). If it is missing or stale, propose it as a document to write on the group branch, with the user's OK and a `docs(<parent commit-ref>)` commit.
 
-Show it to the user. For each finding they want addressed, propose either a new child issue under the parent (through `flow-plan`'s template, developed with `flow-work` before the group PR) or a follow-up issue for later. Missing ADRs can be written directly on the group branch, with the user's OK and a `docs(#<parent>)` commit. If the user changed the architecture along the way, propose updating the parent's "Architecture notes" (an edit, so it asks).
+Show it to the user. For each finding they want addressed, propose either a new child issue under the parent (through `flow-plan`'s template, developed with `flow-work` before the group PR) or a follow-up issue for later. Missing ADRs can be written directly on the group branch, with the user's OK and a `docs(<parent commit-ref>)` commit. If the user changed the architecture along the way, propose updating the parent's "Architecture notes" (an edit, so it asks).

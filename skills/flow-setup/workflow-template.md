@@ -2,18 +2,23 @@
 
 Settings read by the `flow-plan` and `flow-work` skills. Edit this file directly to change them.
 
+## Task tracker
+
+- **Tracker file**: `docs/agents/tracker.md` (or the shared path where it lives). It says how every task operation is done: reading, creating, records, status, branch links, PRs.
+
 ## Branches
 
 - **Base branch**: `<base>`. Every feature ends up here.
-- **Group branch** (a parent issue with child tasks): `feature/<issue>-<slug>`, created from the base branch. Its PR targets the base branch.
-- **Task branch**: `task/<issue>-<slug>`.
+- **Group branch** (a parent task with child tasks): `feature/<id>-<slug>`, created from the base branch. Its PR targets the base branch.
+- **Task branch**: `task/<id>-<slug>`.
   - A child task branches from its group branch, and its PR targets the group branch.
   - A standalone task (no parent) branches from the base branch, and its PR targets the base branch.
+- `<id>` is written as the tracker's "id in branch names".
 - A child task starts only after the PRs of the tasks that block it are merged into the group branch. The user reviews and merges every PR.
 
 ## Languages
 
-- **Issues** (titles and bodies): `<language>`
+- **Tasks** (titles, descriptions, records): `<language>`
 - **Pull requests** (titles and bodies): `<language>`
 - **Commit messages**: Conventional Commits, `<language>`
 
@@ -41,14 +46,6 @@ Where the project's own documentation lives, and how `flow-work` keeps it curren
 - **Project rules**: `<where the project says which docs to update, e.g. a matrix in AGENTS.md; or none>`. These rules take precedence over the plan's own judgement.
 - Just enough docs: only what the code cannot easily tell (purpose, usage and configuration, cross-module flows, integrations, non-obvious constraints). Nothing that reading the code gives quickly.
 
-## Status tracking
-
-How `flow-work` moves an issue through its states. It always asks before each move.
-
-- **Status tracking**: `<none | labels | project>`
-- If `labels`: in progress `<label>`, in review `<label>`, done `<label, or "closed">`
-- If `project`: owner `<owner>`, project number `<n>`, field `<Status>`, options: in progress `<option>`, in review `<option>`, done `<option>`
-
 ## Engram sync
 
 Shares this project's Engram memory through git, in the `.engram/` folder. `flow-work` imports new chunks when it creates a branch, and offers to export before opening a PR.
@@ -62,7 +59,7 @@ Shares this project's Engram memory through git, in the `.engram/` folder. `flow
 
 ## Labels
 
-- Applied when creating issues: `<labels, or none>`
+- Applied when creating tasks: `<labels, or none>`
 
 ## Notes
 

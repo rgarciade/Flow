@@ -7,7 +7,7 @@
 Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) para planificar el trabajo como issues de GitHub y desarrollarlo por porciones verticales, una a una, con la persona al mando.
 
 > [!IMPORTANT]
-> `flow` es estrictamente un flujo **desde las tareas**. El desarrollo dirigido por especificaciones parte de una especificación; `flow` parte de un issue de GitHub. No se construye nada sin él: cada rama, test, commit y pull request pertenece a un issue, y el issue sigue siendo la fuente de verdad de lo que se pidió y de cómo se construyó.
+> `flow` es estrictamente un flujo **desde las tareas**. El desarrollo dirigido por especificaciones parte de una especificación; `flow` parte de una tarea de tu gestor de tareas (un issue). No se construye nada sin ella: cada rama, test, commit y pull request pertenece a un issue, y el issue sigue siendo la fuente de verdad de lo que se pidió y de cómo se construyó.
 
 <p align="center">
   <img src="docs/diagrams/overview.svg" alt="Las tres skills de flow y los archivos que leen y escriben" width="900">
@@ -19,11 +19,12 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 - **Estás dentro del flujo de principio a fin.** No es un trabajo que se lanza y se recoge después. Trabajas con el agente: te enseña lo que ha encontrado en cada fase, te pregunta siempre que algo no está decidido y espera tu OK antes de seguir. Es programación en pareja, y tú llevas el rumbo. Para una tarea sencilla puedes decirle que trabaje de forma autónoma: entonces solo para por lo que de verdad te necesita.
 - **Visible desde el primer minuto, no al llegar el PR.** En equipos con desarrollo dirigido por especificaciones nadie sabe en qué punto está un desarrollo hasta que llega el pull request. Aquí la rama está enlazada al issue desde el principio, cada commit aprobado se sube, el plan está en el issue y su estado avanza (con tu OK) de en curso a en revisión.
-- **El issue lo dirige todo.** Los requisitos viven en la descripción del issue, el plan de implementación en un comentario y el resumen en otro. Cuando cambian los requisitos, se actualiza la descripción con un registro de qué cambió y por qué.
+- **Cualquier gestor de tareas.** GitHub Issues, GitLab, Jira, Linear, Azure Boards o archivos en el propio repo. `flow-setup` guarda cómo se hace cada operación en tu gestor, así que las tareas y sus registros quedan siempre igual; lo que el gestor no permita se resuelve con una alternativa acordada (por ejemplo, una carpeta del repo enlazada a la tarea).
+- **El issue lo dirige todo.** Los requisitos viven en la descripción de la tarea, el plan de implementación en un registro y el resumen en otro. Cuando cambian los requisitos, se actualiza la descripción con un registro de qué cambió y por qué.
 - **El detalle, justo a tiempo.** Una especificación intenta definirlo todo de antemano, y buena parte está obsoleta cuando alguien la construye. Un issue da la visión general, los pocos resultados que definen "terminado" y las pistas de una primera investigación (librerías, conectores, riesgos). Los criterios detallados, el diseño y los tests se deciden en la fase de plan, sobre el código tal como está cuando empieza la tarea. Es como se trabajaba antes de las especificaciones: sin suponer demasiado pronto, pero sin tickets vacíos.
 - **La arquitectura se escribe mientras se construye.** Con tareas pequeñas se puede perder la visión global, así que `flow` la mantiene explícita: los issues padre llevan notas de arquitectura, cada plan señala sus decisiones de arquitectura, esas decisiones se convierten en ADR antes del PR, las revisiones contrastan el código con los ADR existentes y cada funcionalidad completa pasa una revisión de arquitectura antes de llegar a la rama base.
 - **La documentación es parte de "terminado".** Cada plan lista los documentos del proyecto que afecta la tarea, se actualizan junto con la implementación y la revisión señala los que se hayan quedado desactualizados. La justa y necesaria: solo lo que el código no cuenta fácilmente. El issue guarda qué se pidió, los ADR el porqué y la documentación cómo funciona ahora.
-- **Planificar poco, y cuando quieras.** Las tareas viven como issues de GitHub. Se crean en una sesión de planificación o justo antes de empezar una.
+- **Planificar poco, y cuando quieras.** Las tareas viven en tu gestor de tareas. Se crean en una sesión de planificación o justo antes de empezar una.
 - **Una tarea, una porción vertical.** Cada tarea funciona de principio a fin cuando se termina y cabe en una sesión de trabajo. ¿Es demasiado grande? Se divide en issues hijos.
 - **Primero los tests, aprobados por ti.** La IA escribe los tests, tú los apruebas y a partir de ese momento quedan congelados: la implementación tiene que hacerlos pasar sin tocarlos.
 - **La IA escribe y tú decides.** Nunca hace commits ni merges por su cuenta. Te da el comando y tú lo ejecutas, o le dices que lo haga.
@@ -33,8 +34,8 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 | Skill | Cuándo | Qué hace |
 |---|---|---|
-| [`flow-setup`](skills/flow-setup/SKILL.md) | Una vez por repo | Escribe `docs/agents/` (gestor de issues, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo |
-| [`flow-plan`](skills/flow-plan/SKILL.md) | Sesiones de planificación | Convierte ideas en issues de GitHub: tareas sueltas, o un issue padre con sub-issues y sus bloqueos. Sin código |
+| [`flow-setup`](skills/flow-setup/SKILL.md) | Una vez por repo | Pregunta qué gestor de tareas usas y escribe `docs/agents/` (cómo se hace cada operación con las tareas, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo |
+| [`flow-plan`](skills/flow-plan/SKILL.md) | Sesiones de planificación | Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código |
 | [`flow-work`](skills/flow-work/SKILL.md) | Desarrollar una tarea | Lleva un issue de la rama al PR: investigar → planificar → tests (con tu OK) → implementar → revisar → PR |
 
 `flow-plan` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.

@@ -1,22 +1,22 @@
 ---
 name: flow-plan
-description: Planning session that turns ideas into GitHub issues without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent issue with child sub-issues and blocking links. Use when the user runs /flow-plan or wants to plan, create, split or organise tasks for later.
+description: Planning session that turns ideas into tasks in the project's tracker (GitHub Issues, GitLab, Jira, Linear, local files…) without writing any code. Creates one or several tasks (related or not), or breaks a bigger piece of work into a parent task with child tasks and blocking links. Use when the user runs /flow-plan or wants to plan, create, split or organise tasks for later.
 ---
 
 # flow-plan
 
 Paths starting with `../` are relative to this skill's folder: they point at sibling skills in the same skills directory.
 
-Create well-formed GitHub issues. This skill never writes code, never creates branches and never commits. Developing a task is `flow-work`'s job, and it can happen much later.
+Create well-formed tasks in the project's tracker. In this skill, "issue" and "task" mean the same thing: a task in the project's tracker. Every tracker operation written in backticks (`create-task`, `create-child`, `add-blocker`…) is looked up in the tracker file and done exactly as written there, including any alternative it records for what the tracker can't do. This skill never writes code, never creates branches and never commits. Developing a task is `flow-work`'s job, and it can happen much later.
 
-Planning is a conversation with the user: you propose, they decide. Nothing is published until they approve it. The issues you create are meant to be developed **with the user** through `flow-work`, never picked up by an agent working alone. Where `to-tickets` talks about agent-ready or AFK tickets, read it as "ready to start with `flow-work`".
+Planning is a conversation with the user: you propose, they decide. Nothing is published until they approve it. The tasks you create are meant to be developed **with the user** through `flow-work`, never picked up by an agent working alone. Where `to-tickets` talks about agent-ready or AFK tickets, read it as "ready to start with `flow-work`".
 
 **Detail comes just in time.** An issue gives the big picture and the important leads, not a full functional or technical specification: things change between planning a task and building it. Describe what is wanted and why, the few outcomes that define "done", and what a preliminary look has found (libraries, connectors, APIs, constraints, risks). Leave the detailed criteria, design and test scenarios to `flow-work`'s plan phase, which works them out against the code as it is at that moment. Don't invent detail to make an issue look complete.
 
 ## 0. Preflight
 
 1. Read `docs/agents/workflow.md`. If it does not exist, tell the user and ask, in one line, whether to run `flow-setup` now. If yes, read `../flow-setup/SKILL.md`, follow it, then come back here. If no, stop. If it exists but lacks a field this skill needs, ask only for that field.
-2. Read `docs/agents/issue-tracker.md` for the exact `gh` operations (create, sub-issues, blocking links). Read `docs/agents/domain.md` and the glossary it points to, if any, so issue titles use the project's vocabulary.
+2. Read the tracker file (`docs/agents/tracker.md`, or the shared path in `workflow.md`) for how to create tasks, children and blocking links, and for the tracker's id format and markup. If only an old `docs/agents/issue-tracker.md` exists, offer to run `flow-setup` to convert it. Read `docs/agents/domain.md` and the glossary it points to, if any, so task titles use the project's vocabulary.
 
 ## 1. Understand what the user wants
 
@@ -31,7 +31,7 @@ Then decide which of these it is. If unsure, ask:
 
 ## 2. Separate tasks
 
-For each task, draft an issue with the template below. Show all drafts together as a numbered list (title plus one line each) and the full body of any the user wants to see. Iterate until the user approves, then create them with `gh issue create`.
+For each task, draft an issue with the template below. Show all drafts together as a numbered list (title plus one line each) and the full body of any the user wants to see. Iterate until the user approves, then create them with `create-task`.
 
 Check every task against these rules before showing it:
 
@@ -43,19 +43,20 @@ Check every task against these rules before showing it:
 
 Read `../to-tickets/SKILL.md` and follow its process: gather context, explore the codebase if needed, draft tracer-bullet vertical slices with their blocking edges, quiz the user, publish in dependency order. These overrides apply:
 
-- **Parent issue**: if the work does not have one yet, create a parent issue first that describes the whole feature. Create every child as its sub-issue. The parent carries an **"Architecture notes"** section (template below): the global view the children build towards. Draft it with the user, reading the existing ADRs and glossary from `docs/agents/domain.md`; if it contradicts an ADR, say so and ask.
-- **Blocking edges**: use GitHub's native issue dependencies, as described in `docs/agents/issue-tracker.md`.
+- **Parent issue**: if the work does not have one yet, create a parent issue first that describes the whole feature. Create every child with `create-child`. The parent carries an **"Architecture notes"** section (template below): the global view the children build towards. Draft it with the user, reading the existing ADRs and glossary from `docs/agents/domain.md`; if it contradicts an ADR, say so and ask.
+- **Blocking edges**: add them with `add-blocker`, in dependency order (blockers first), so each one can reference a real task id.
+- **Tracker**: wherever `to-tickets` says "issue tracker", "GitHub" or `gh`, use the operations in the tracker file instead.
 - **Labels**: apply only the labels listed in `docs/agents/workflow.md`. Do not apply `ready-for-agent` or any other label it does not list.
-- **Body**: use the issue template below. It extends to-tickets' template with "Out of scope".
+- **Body**: use the task template below. It extends to-tickets' template with "Out of scope".
 
-## Issue template
+## Task template
 
-Write titles and bodies in the issue language from `docs/agents/workflow.md`. Translate the section headings into that language.
+Write titles and bodies in the task language from `docs/agents/workflow.md`, in the tracker's markup. Translate the section headings into that language.
 
 ```markdown
 ## Parent
 
-#<parent> (omit the section if there is no parent)
+<parent ref> (omit the section if there is no parent)
 
 ## What to build
 
@@ -75,7 +76,7 @@ Leads from planning or preliminary research: candidate libraries, connectors or 
 
 ## Blocked by
 
-- #<n>, or "None (can start immediately)". Omit when the blockers were set as native dependencies.
+- <ref>, or "None (can start immediately)". Omit when the blockers were set with `add-blocker` and the tracker shows them.
 ```
 
 A **parent issue** uses the same template, without "Parent" and "Blocked by", and adds this section after "What to build":
@@ -90,4 +91,4 @@ No file paths or code snippets: they go stale. Naming a library, service or modu
 
 ## 4. Close
 
-List every issue created, with its link, and say which ones can start now (no open blockers). End with the command to start the first one, for example `/flow-work #42`.
+List every task created, with its link (`task-url`), and say which ones can start now (no open blockers). End with the command to start the first one, for example `/flow-work <ref>`.
