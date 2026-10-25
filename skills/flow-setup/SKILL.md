@@ -56,7 +56,7 @@ Ask the questions that don't depend on each other together, leading each with th
 4. Commands: full test suite, a single test file, typecheck, lint. Mark any that don't exist as `none`.
 5. Test file glob(s): the patterns that match every test file (used to check that implementation never edits approved tests).
 6. Labels to apply when creating tasks, if the tracker has labels. Default: none.
-7. Models for the two tiers: **strong** (plan, tests) and **fast** (research, implement, review, fix). Default in Claude Code: `opus` and `sonnet`. In another harness, propose its equivalents in the names it accepts, or `inherit`.
+7. Models for the two profiles, each mapping the tiers **strong** (plan, tests) and **fast** (research, implement, review, fix). **standard** runs every task; **deep** is used only when `flow-work` judges a task very complex and the user agrees. Default in Claude Code: standard `sonnet` for both tiers, deep `strong: opus`, `fast: sonnet`. In another harness, propose its equivalents in the names it accepts, or `inherit`.
 8. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
 9. Status: which states `move-status` uses (in progress, in review, done) and how, recorded in `tracker.md`. `not used` if the user doesn't want status moves.
 10. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off. If the docs folder already exists, propose adding its reading guide: a `README.md` from [docs-readme-template.md](docs-readme-template.md), or its note merged into an existing index, with the "Contents" list filled from the documents already there. If the folder does not exist yet, don't create it: `flow-work` does so with the first document.
@@ -84,7 +84,7 @@ Show the user a draft of every file you will write or edit, including the `## Ag
 
 ### Workflow
 
-Branches, base branch, languages, model tiers, test commands, Engram sync and docs for the flow skills. See `docs/agents/workflow.md`.
+Branches, base branch, languages, model profiles, test commands, Engram sync and docs for the flow skills. See `docs/agents/workflow.md`.
 ```
 
 If the user chose the task folder alternative, make sure `.flow/` is **not** git-ignored: those records are part of the repo.

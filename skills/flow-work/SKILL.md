@@ -26,7 +26,7 @@ These override anything more permissive elsewhere, including the user's general 
 
 Launch each role as a subagent with your harness's own mechanism: the `Agent` tool in Claude Code (`subagent_type: "general-purpose"`), the `Task` tool in OpenCode and Cursor, the subagent support in Codex or Gemini CLI. If the harness cannot spawn subagents, run the phase yourself, keeping the same brief and hand-back discipline.
 
-Each role uses a model **tier**. The **Models** section of `docs/agents/workflow.md` maps each tier to a model for this repo (for example `strong: opus`, `fast: sonnet`). That mapping is the user's choice and overrides any default subagent model. If the harness cannot choose a model per subagent, the subagent inherits the session model. Start each subagent's visible name with the model it runs on, for example `opus: tests #42`.
+Each role uses a model **tier**, and a **profile** maps each tier to a model. The **Models** section of `docs/agents/workflow.md` defines two profiles for this repo: **standard** (for example every tier on `sonnet`) and **deep** (for example `strong: opus`, `fast: sonnet`). That mapping is the user's choice and overrides any default subagent model. If the section has a single tier mapping and no profiles, use it as the only profile. If the harness cannot choose a model per subagent, the subagent inherits the session model. Start each subagent's visible name with the model it runs on, for example `sonnet: tests #42`.
 
 | Role | Tier | Writes files? |
 |---|---|---|
@@ -36,6 +36,8 @@ Each role uses a model **tier**. The **Models** section of `docs/agents/workflow
 | implement | fast | yes (never test files) |
 | review-standards, review-spec | fast | no |
 | fix | fast | yes (never test files) |
+
+**Profiles.** Every task runs on **standard**. Switch to **deep** only after the user's explicit OK, never on your own. Propose it, as one question with your reasons and a recommendation, when you judge the task very complex: the impact map spans several modules, there is a hard concurrency, data-migration or security concern, or the plan must choose between real architectural alternatives. Also propose it when a phase on standard does not converge: the user rejects the plan twice, or tests or fixes still fail after two rounds. The usual moment is the end of research, before the plan. The OK holds for the rest of this task only. Don't propose it for routine tasks: most tasks don't need it.
 
 Every subagent brief includes:
 
@@ -158,7 +160,7 @@ Brief a research subagent to read the issue, the parent issue's "Architecture no
 
 Before showing the research, **verify every scope-narrowing claim yourself** with one direct search. A wrong "this needs no change" spreads: it goes into the out-of-scope list, the plan writes no test for it, and the spec review checks the code against that list and approves the gap.
 
-Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message (see "Autonomous mode").
+Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message (see "Autonomous mode"). If the research shows the task is very complex, propose the deep profile in the same message (see "Profiles").
 
 **If the task is too big**, stop and offer the user, as one question:
 

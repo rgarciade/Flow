@@ -34,7 +34,7 @@ git clone <this-repo> flow && cd flow
 Claude Code reads skills only from `.claude/skills/` (project) and `<config-dir>/skills/` (user). It does not read `.agents/skills/`, which is why project mode adds links in `.claude/skills/`.
 
 - **Instructions file**: Claude Code reads `CLAUDE.md`. When a project has no `CLAUDE.md`, it loads `AGENTS.md` instead. The `instructionFiles` setting changes this: `claude-md-and-agents-md` loads both.
-- **Subagents and models**: the `Agent` tool can pick a model per subagent, so the tiers in `docs/agents/workflow.md` apply as written (default `strong: opus`, `fast: sonnet`).
+- **Subagents and models**: the `Agent` tool can pick a model per subagent, so the profiles in `docs/agents/workflow.md` apply as written (default standard: `sonnet` for both tiers; deep: `strong: opus`, `fast: sonnet`).
 - **A separate profile**: to keep these skills away from another setup, install them with `--claude` into their own config folder and start Claude Code with `CLAUDE_CONFIG_DIR=<that folder>`. Claude Code still reads `~/.claude/CLAUDE.md` in that case; exclude it from the profile's `settings.json` with `"claudeMdExcludes": ["/Users/<you>/.claude/CLAUDE.md"]` if you don't want it.
 
 ### OpenCode
@@ -70,7 +70,7 @@ Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): t
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
-It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
+It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, model profiles, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
 
 ```
 docs/agents/tracker.md         how every task operation is done in your tracker
