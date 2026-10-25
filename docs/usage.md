@@ -34,14 +34,13 @@ What you will be asked to do, in order:
 3. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
 4. **Confirm the plan**, including the docs it will touch, any **manual verification** steps for parts that can't reasonably be tested (configuration, styling, infrastructure…), and the **seams**: the public interfaces that will be tested, each with what it catches and what it misses.
    The plan is then recorded on the task and, if the requirements changed, you approve the update to the task description.
-5. **Approve the tests.** You get one line per scenario with a link to the test, and the command to run them. Reply `OK`, or ask for changes.
-6. **Run, or authorise, the `test(#42)` commit.** That commit is the record of the approved tests.
-7. **Run, or authorise, the `feat(#42)` commit** once the implementation passes and the docs it listed are updated.
-8. **Choose which review findings to fix** (including stale or redundant docs and code that contradicts an ADR), then the `fix(#42)` or `refactor(#42)` commit.
-9. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
-10. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
-11. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.
-12. **Say yes to the PR**, then review and merge it on your code host.
+5. **Check the test edge cases**, if any (see [Working modes](#working-modes)): one line each, with a link to the test. Reply `OK`, or ask for changes. Without edge cases it just tells you how many tests it wrote and goes on. In pair mode you approve every test here, then run the `test(#42)` commit.
+6. **Run, or authorise, the `test(#42)` and `feat(#42)` commits**, in that order, once the implementation passes and the docs it listed are updated. The `test` commit is the record of the approved tests.
+7. **Choose which review findings to fix** (including stale or redundant docs and code that contradicts an ADR), then the `fix(#42)` or `refactor(#42)` commit.
+8. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
+9. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
+10. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.
+11. **Say yes to the PR**, then review and merge it on your code host.
 
 ## Talk about a task and start right away
 
@@ -52,6 +51,25 @@ Discuss the task in the conversation, then:
 ```
 
 Without an issue number, it drafts the issue from the conversation, creates it once you approve, and continues as above.
+
+## Working modes
+
+| Mode | When | Where it stops | Tests | Commit commands |
+|---|---|---|---|---|
+| **Semi-autonomous** | The default | At every phase | Only the edge cases come to you | `test` and `feat` together, after implementing |
+| **Pair** | Proposed after research when the task has loose ends or is very complex; switched on only with your yes | At every phase | You approve every test | One per phase |
+| **Autonomous** | Small, simple tasks, only with your yes (see below) | Only for what really needs you | No test gate | All together with the final report |
+
+**Edge cases** are the tests the plan did not settle, since you already approved the seams and scenarios there:
+
+- a test that departs from its scenario, or a scenario left without a test;
+- a scenario tested at a different seam than the one agreed, or a test that mocks the code it checks;
+- an expected value or behaviour the plan didn't settle, which the agent had to choose;
+- a test that fails for a reason other than the expected one.
+
+The tests are frozen in every mode: until the `test` commit exists, a recorded copy in `.scratch/flow/<id>/approved-tests/` is the reference.
+
+Ask for a mode when you start (`/flow-work #42, pair mode`) or at any time ("show me every test", "back to semi-autonomous").
 
 ## Let it work on its own (simple tasks)
 

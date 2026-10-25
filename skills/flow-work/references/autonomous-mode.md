@@ -2,7 +2,7 @@
 
 How `flow-work` runs when the user explicitly asks it to work on its own. Read from `SKILL.md` only after the user's yes.
 
-For a task that is not complex, the user can ask you to work autonomously ("work on your own", "autonomous mode"). You may also suggest it after research, when the size verdict says the task is small. Never switch to it without the user's explicit yes.
+For a task that is not complex, the user can ask for it when starting the task or at any point (see "Working modes" in `SKILL.md`) ("work on your own", "autonomous mode"). You may also suggest it after research, when the size verdict says the task is small. Never switch to it without the user's explicit yes.
 
 In autonomous mode, chain the phases without stopping for routine confirmations:
 

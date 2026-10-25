@@ -23,7 +23,7 @@ Neither is better everywhere. This page compares them honestly and says when to 
 - **Small, reviewable PRs.** One vertical slice per task means each PR shows one working change. You can actually review it.
 - **Something works after every task.** Feedback comes in days, not at the end of the whole spec.
 - **The team sees progress before the PR.** The branch is linked to the task from the first minute, every approved commit is pushed, the plan is on the task and its status moves. With SDD, the team usually learns where things stand when the PR lands.
-- **You stay in control.** You confirm the task, answer the open questions, approve the tests (which are then frozen), and decide every commit. The AI saves you typing, not thinking.
+- **You stay in control.** You confirm the task, answer the open questions, approve the test scenarios (the tests are then frozen), and decide every commit. The AI saves you typing, not thinking.
 - **Cheap to change your mind.** Changing direction means changing the next task, not rewriting a spec and everything derived from it.
 - **Less over-engineering.** Each task builds only what it asks for; the agent isn't preparing the code for the whole spec at once.
 - **Fits the tools the team already uses.** Any tracker (GitHub, GitLab, Jira, Linear, files) through `docs/agents/tracker.md`, plus git.

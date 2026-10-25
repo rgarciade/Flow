@@ -22,8 +22,8 @@
 | 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed) | |
 | 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, impact map (every place the change must reach), open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
 | 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
-| 5. Tests | tests subagent | Failing tests, each for the expected reason | **Approve the tests**, `test(<commit-ref>)` commit |
-| 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `feat(<commit-ref>)` commit |
+| 5. Tests | tests subagent | Failing tests, each for the expected reason | **Check the edge cases** (pair mode: approve every test and run the `test(<commit-ref>)` commit) |
+| 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `test(<commit-ref>)` and `feat(<commit-ref>)` commits |
 | 7. Review | 2 review subagents, then fix | Standards and spec reports | Choose findings, `fix`/`refactor` commit |
 | 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), PR and summary record | Review the code, OK the move to in review, merge the PR |
 
@@ -31,7 +31,7 @@
 
 **Parts that can't be tested.** Configuration, visual styling, documentation-only changes or infrastructure scripts may have no reasonable seam for an automated test. The plan then proposes manual verification steps (what to do, what to observe); you approve them, they go into the plan record, and Phase 6 ends by running them: the agent runs what it can and gives you the rest as a checklist. Tests remain the default.
 
-**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty. If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(<commit-ref>): adjust …` commit that becomes the new reference, and the change is logged in the plan record (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
+**Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty (until that commit exists, the tests are checked against a recorded copy in `.scratch/flow/<id>/approved-tests/`). If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(<commit-ref>): adjust …` commit that becomes the new reference, and the change is logged in the plan record (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
 
 ## Branches
 
@@ -112,9 +112,15 @@ Spec-driven teams only see a piece of work when its pull request arrives. Issue-
 
 How assignment and status moves are done, if at all, is recorded per repo in `docs/agents/tracker.md`.
 
-## Autonomous mode
+## Working modes
 
-For simple tasks you can let `flow-work` chain the phases on its own. It is never the default and never switched on without your yes. It still stops for decisions the plan doesn't settle, suspicious tests, failing checks, tasks that grow, and anything that leaves your machine. See the [usage guide](usage.md#let-it-work-on-its-own-simple-tasks).
+| Mode | When | You see the tests |
+|---|---|---|
+| **Semi-autonomous** | The default | Only edge cases the plan did not settle |
+| **Pair** | Loose ends or a very complex task: proposed after research, on with your yes | Every test |
+| **Autonomous** | Small, simple tasks, on with your yes | None; it stops only for what really needs you |
+
+Every mode stops for decisions the plan doesn't settle, suspicious tests, failing checks, tasks that grow, and anything that leaves your machine. Definitions, edge cases and commit timing are in the [usage guide](usage.md#working-modes).
 
 ## Architecture and coherence
 

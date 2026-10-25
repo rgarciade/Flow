@@ -13,7 +13,7 @@ You are the **orchestrator**. You work **with the user, in the session**: you sh
 
 These override anything more permissive elsewhere, including the user's general git instructions:
 
-- **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next. Don't chain phases silently. The only exception is autonomous mode, and only when the user asks for it (see "Autonomous mode").
+- **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next. Don't chain phases silently. The test gate and autonomous mode follow "Working modes".
 - **Decisions belong to the user.** Anything the issue and the agreed plan don't settle (a design choice, a dependency, a trade-off, a scope question) goes to the user as a question with your recommendation. Never decide it for them.
 - **Never commit on your own.** At each commit point, give the user the exact command and wait. Run it only if the user explicitly tells you to.
 - **Never merge PRs.** The user reviews and merges every PR on the code host.
@@ -106,9 +106,14 @@ Task-driven work is visible while it happens, not only when the PR arrives. Anyo
   | The PR is opened (Phase 8) | in review |
   | The PR is merged | done (often automatic through the `closing-reference`; only propose it if it did not happen) |
 
-## Autonomous mode
+## Working modes
 
-For a task that is not complex, the user can ask you to work on your own; you may also suggest it after research when the task is small. Never switch to it without the user's explicit yes. When they say yes, read `references/autonomous-mode.md` and follow it: it lists what you may skip and what you must still stop for. The user can go back to pair mode at any moment.
+Every task runs in **semi-autonomous** mode by default: you stop at every phase, but the test gate stops only for the edge cases the plan did not settle, since the user already approved the seams and scenarios (see Phase 5). The other two modes need the user's explicit yes:
+
+- **Pair**: the user reviews every test. Propose it, as one question with your reasons, when the task has loose ends or is very complex: open questions the plan can't close, an impact map that spans several modules, an architectural choice between real alternatives. The usual moment is the end of research, together with the deep profile if that applies (see "Profiles").
+- **Autonomous**: you chain the phases on your own. Suggest it after research when the task is small and simple. When the user says yes, read `references/autonomous-mode.md` and follow it: it lists what you may skip and what you must still stop for.
+
+The user can ask for any mode when starting (for example `/flow-work #42, pair mode`) or at any moment ("show me every test", "work on your own", "back to semi-autonomous").
 
 ## Changing an approved test
 
@@ -160,7 +165,7 @@ Brief a research subagent to read the issue, the parent issue's "Architecture no
 
 Before showing the research, **verify every scope-narrowing claim yourself** with one direct search. A wrong "this needs no change" spreads: it goes into the out-of-scope list, the plan writes no test for it, and the spec review checks the code against that list and approves the gap.
 
-Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message (see "Autonomous mode"). If the research shows the task is very complex, propose the deep profile in the same message (see "Profiles").
+Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message. If it shows loose ends or a very complex task, propose pair mode and, if needed, the deep profile in the same message (see "Working modes" and "Profiles").
 
 **If the task is too big**, stop and offer the user, as one question:
 
@@ -195,9 +200,19 @@ Then update the task (see "The task is the source of truth"):
 
 If the user agreed that the whole task has no testable seam, skip this phase: the agreed manual verification steps take the place of the tests, and Phase 6 ends by running them. If only some parts are untestable, write the tests for the rest as usual.
 
-Brief a tests subagent with the plan key. It writes only test files, matching the globs in `docs/agents/workflow.md`, at the confirmed seams and following `references/tests.md` and `references/mocking.md`. It runs them and confirms each fails **for the expected reason**: missing behaviour, not a syntax, import or setup error. It saves under `flow/<repo>/<id>/tests` and returns one line per scenario with its `path:line` link and its failure reason.
+Brief a tests subagent with the plan key. It writes only test files, matching the globs in `docs/agents/workflow.md`, at the confirmed seams and following `references/tests.md` and `references/mocking.md`. It runs them and confirms each fails **for the expected reason**: missing behaviour, not a syntax, import or setup error. It saves under `flow/<repo>/<id>/tests` and returns one line per scenario with its `path:line` link and its failure reason, and flags every **edge case**:
 
-Present the tests to the user. For this one message, shape the output for fast scanning. If the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise follow these rules: the action first, numbered lines, no preamble, no recap.
+- a test that departs from its approved scenario, or a scenario left without a test;
+- a scenario tested at a different seam than the one agreed, or a test that mocks the code it checks;
+- an expected value or behaviour the plan did not settle, which the tests subagent had to choose;
+- a test that still fails for a reason other than the expected one.
+
+**Semi-autonomous mode.** Check the hand-back yourself: every approved scenario has a test at its confirmed seam, and every test belongs to a scenario. A mismatch is an edge case too.
+
+- With edge cases: present only those, in the format below, and wait for the OK on them.
+- Without: don't wait. Record the tests with the `.scratch/flow/<id>/approved-tests/` manifest (see below), then show in one message the number of tests, that each fails for the expected reason and the command to run them. Go on to Phase 6. The test commit comes together with the implementation commit (see Phase 6).
+
+**Pair mode.** Present every test to the user. For this one message, shape the output for fast scanning. If the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise follow these rules: the action first, numbered lines, no preamble, no recap.
 
 - First line: the action, "Review the tests and reply OK to continue."
 - One numbered line per scenario: what it checks, with a link to the test.
@@ -231,7 +246,7 @@ Then check it yourself:
 
 If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan record: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.
 
-Give the commit command (`feat(<commit-ref>): …`, ending with `&& git push`) and wait, as in the hard rules.
+Give the commit command (`feat(<commit-ref>): …`, ending with `&& git push`) and wait, as in the hard rules. If the tests have no commit yet (semi-autonomous mode), give the `test(<commit-ref>): …` command first, adding only the test files, then the `feat` one, so the history still shows the tests before the code.
 
 ## Phase 7: Review (2 × fast, parallel)
 
