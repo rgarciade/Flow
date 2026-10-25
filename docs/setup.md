@@ -57,12 +57,12 @@ These harnesses follow the shared Agent Skills format, but `flow` is developed a
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
-It explores the repo, asks one question at a time (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking) and shows you a draft before writing:
+It explores the repo, asks one question at a time (base branch, branch names, languages, model tiers, test commands, test file globs, labels, Engram sync, status tracking, docs folder) and shows you a draft before writing:
 
 ```
 docs/agents/issue-tracker.md   how issues are created, linked and closed
 docs/agents/domain.md          where the glossary and ADRs live
-docs/agents/workflow.md        base branch, branch names, languages, models, commands, Engram sync, status tracking
+docs/agents/workflow.md        base branch, branch names, languages, models, commands, Engram sync, status tracking, docs
 AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the above
 ```
 

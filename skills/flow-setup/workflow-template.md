@@ -33,6 +33,13 @@ Model tiers used by `flow-work`'s subagents. Use the model names your harness ac
 - **strong** (plan, tests): `<model>`
 - **fast** (research, implement, review, fix): `<model>`
 
+## Docs
+
+Where the project's own documentation lives, and how `flow-work` keeps it current: each task's plan lists the documents it affects, they are updated with the implementation, and the review checks them.
+
+- **Docs folder**: `<docs/, or none>`
+- **Project rules**: `<where the project says which docs to update, e.g. a matrix in AGENTS.md; or none>`. These rules take precedence over the plan's own judgement.
+
 ## Status tracking
 
 How `flow-work` moves an issue through its states. It always asks before each move.

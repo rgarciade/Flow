@@ -111,3 +111,38 @@ Status tracking is configured per repo in `docs/agents/workflow.md` (`none`, `la
 ## Autonomous mode
 
 For simple tasks you can let `flow-work` chain the phases on its own. It is never the default and never switched on without your yes. It still stops for decisions the plan doesn't settle, suspicious tests, failing checks, tasks that grow, and anything that leaves your machine. See the [usage guide](usage.md#let-it-work-on-its-own-simple-tasks).
+
+## Architecture and coherence
+
+Small vertical slices are easy to review but can lose the big picture. `flow` keeps it explicit at four points, without specifying everything up front:
+
+| When | What | Where it lands |
+|---|---|---|
+| Planning a feature (`flow-plan`) | **Architecture notes** on the parent issue: main pieces, data flow, boundaries, decisions taken and open | Parent issue description |
+| Phase 4, Plan | **ADR candidates**: decisions that are hard to reverse, span modules, or were chosen between alternatives. Conflicts with existing ADRs go to you as questions | Plan note and the plan comment's "Architecture decisions" |
+| Phase 7, Review | The standards reviewer checks the code against the **ADRs, the glossary and the architecture notes**; a contradiction is a finding that cites the ADR | Review report |
+| Phase 8, before the PR | Each candidate that held becomes an **ADR** in `docs/adr/`, after your OK, in a `docs(#n)` commit | The repo, with the PR |
+| Group PR | A **group architecture review** of the whole feature: coherence, duplication between children, missing ADRs, glossary drift. Findings become new child issues or follow-ups | Report to you before the group PR |
+
+Most tasks produce no ADR at all: only decisions that would be expensive to undo get one. The template is in [`skills/flow-work/references/adr-template.md`](../skills/flow-work/references/adr-template.md).
+
+## Documentation
+
+The project's own documentation (module guides, user guides, the README) is kept current task by task, not in a final catch-up phase:
+
+| When | What |
+|---|---|
+| Phase 4, Plan | The plan lists the **docs to touch** (or "none"), and they appear in the plan comment. Rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence |
+| Phase 6, Implement | With the tests green, those documents are updated or created. The docs folder is created only when a first document needs it |
+| Phase 7, Review | The spec reviewer checks that the documents match what the code now does; a stale or missing one is a finding |
+| Group PR | The group architecture review checks that the feature as a whole is documented, and proposes an overview if it is missing |
+
+Each kind of record has one job:
+
+| Record | Holds | Changes |
+|---|---|---|
+| The issue | What was asked, and its history | Edited with a `## Changes` log |
+| An ADR | Why a decision was taken | Never edited; superseded by a new ADR |
+| The docs | How things work now | Updated whenever the code changes |
+
+The docs folder and the project's own rules are set in the **Docs** section of `docs/agents/workflow.md`.

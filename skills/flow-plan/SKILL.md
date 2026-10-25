@@ -43,7 +43,7 @@ Check every task against these rules before showing it:
 
 Read `../to-tickets/SKILL.md` and follow its process: gather context, explore the codebase if needed, draft tracer-bullet vertical slices with their blocking edges, quiz the user, publish in dependency order. These overrides apply:
 
-- **Parent issue**: if the work does not have one yet, create a parent issue first that describes the whole feature. Create every child as its sub-issue.
+- **Parent issue**: if the work does not have one yet, create a parent issue first that describes the whole feature. Create every child as its sub-issue. The parent carries an **"Architecture notes"** section (template below): the global view the children build towards. Draft it with the user, reading the existing ADRs and glossary from `docs/agents/domain.md`; if it contradicts an ADR, say so and ask.
 - **Blocking edges**: use GitHub's native issue dependencies, as described in `docs/agents/issue-tracker.md`.
 - **Labels**: apply only the labels listed in `docs/agents/workflow.md`. Do not apply `ready-for-agent` or any other label it does not list.
 - **Body**: use the issue template below. It extends to-tickets' template with "Out of scope".
@@ -76,6 +76,14 @@ Leads from planning or preliminary research: candidate libraries, connectors or 
 ## Blocked by
 
 - #<n>, or "None (can start immediately)". Omit when the blockers were set as native dependencies.
+```
+
+A **parent issue** uses the same template, without "Parent" and "Blocked by", and adds this section after "What to build":
+
+```markdown
+## Architecture notes
+
+The global view of the feature, in a few lines: the main pieces and where they live, how data flows between them, the boundaries to respect, the decisions already taken (link the ADRs) and the ones still open. Direction for the children, not a design spec: each child's plan works out its own detail and may refine this.
 ```
 
 No file paths or code snippets: they go stale. Naming a library, service or module in "Preliminary notes" is fine. Detailed criteria, design and test scenarios are decided later, in `flow-work`'s plan phase.

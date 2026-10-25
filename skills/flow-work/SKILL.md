@@ -99,6 +99,12 @@ Plan comment template (10 to 15 lines below the header):
 ### Steps
 1. <implementation outline, no file-level detail>
 
+### Docs
+- <document to create or update>: <what changes> (or "none")
+
+### Architecture decisions
+- <decision>: <one line on why> (ADR candidate; omit the section if there are none)
+
 ### Changes to the plan
 - <YYYY-MM-DD>: <what changed and why> (omit the section until something changes)
 ```
@@ -114,6 +120,8 @@ Closing comment template:
 - **Acceptance criteria**: <n>/<n> ✅ (list any ❌)
 - **Deviations from the plan**: <none, or one line each>
 - **Open review findings**: <none, or one line each>
+- **ADRs**: <ADR-NNNN title, or none>
+- **Docs**: <documents created or updated, or none>
 ```
 
 ## Team visibility
@@ -204,7 +212,7 @@ Tell the user, in one line, the branch name (now linked to the issue) and what w
 
 ## Phase 3: Research (fast)
 
-Brief a research subagent to read the issue, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<n>/research` and returns:
+Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<n>/research` and returns:
 
 - What exists today that the task builds on (as `path:line` links).
 - Open questions about the task itself.
@@ -215,7 +223,7 @@ Show the user the research in three to five lines: what the task builds on, the 
 **If the task is too big**, stop and offer the user, as one question:
 
 - **(a) Keep this task small**: trim it to the first slice and create the rest as new issues for later. If this task has a parent, they become siblings under the same parent. If not, they are created as standalone issues that this one blocks.
-- **(b) Turn it into a parent**: this issue becomes the parent, the slices become its sub-issues with native blocking links, and the work continues on a group branch with the first child.
+- **(b) Turn it into a parent**: this issue becomes the parent, the slices become its sub-issues with native blocking links, and the work continues on a group branch with the first child. Propose adding "Architecture notes" to its description (see `../flow-plan/SKILL.md`), as an edit the user approves.
 
 Create the issues by following `../to-tickets/SKILL.md` with the overrides in `../flow-plan/SKILL.md`. For (b), rename the branch to the group pattern if no commits exist yet, otherwise ask the user how to proceed. Then continue with the chosen task.
 
@@ -230,6 +238,8 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 - The **seams** (public interfaces) to test, each with one line on what it catches and what it misses.
 - The test scenarios, one per acceptance criterion where possible.
 - An implementation outline: steps, not file-level detail.
+- **Docs to touch**: the project documents this task makes stale or needs (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
+- **ADR candidates**: the architectural decisions this plan makes (a new dependency, a pattern, a boundary between modules, a data model change), each with one line on why. Only decisions that are hard to reverse, affect more than one module, or were chosen between real alternatives (see `references/adr-template.md`). Most tasks have none. It also flags any conflict with an existing ADR or with the parent's "Architecture notes", which goes to the user as a question.
 
 Ask the user the questions one by one, assumed answer first. Then show the seams and scenarios and get the user's OK. No test is written at a seam the user has not confirmed. Save the agreed result back to the same note.
 
@@ -264,6 +274,8 @@ Brief an implement subagent with the plan and tests keys. It writes the minimum 
 
 The work can be split into several implement subagents, one after another, when the plan has clearly separate steps. Between them, tell the user in one line which step is done and which comes next. If a subagent returns a question, bring it to the user before continuing.
 
+**Docs.** With the tests green, update or create the documents listed in the plan's "Docs to touch" (an implement subagent, fast tier, never touching tests). Describe how things work now, not the history of the change: that lives in the issue and the ADRs. Create the docs folder only when a first document needs it. If the plan said "none" but the change clearly makes a document stale, add it and tell the user.
+
 Then check it yourself:
 
 - `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.scratch` manifest). If not, stop and tell the user.
@@ -278,8 +290,9 @@ Give the commit command (`feat(#n): …`, ending with `&& git push`) and wait, a
 Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 - **Fixed point**: the merge-base of the task branch with its target (the group branch, or the base branch for a standalone task). Diff with `git diff <merge-base>...HEAD`, plus `git diff` for anything not committed.
-- **Spec source**: the issue and the plan key.
+- **Spec source**: the issue and the plan key. The spec axis also checks that the documents in "Docs to touch" match what the code now does: a stale or missing document is a finding.
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
+- **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 
 Each saves under `flow/<repo>/<n>/review-standards` or `flow/<repo>/<n>/review-spec`. Show both reports side by side, without merging them, and ask the user which findings to fix.
 
@@ -294,9 +307,13 @@ Write the report in this shape:
    - each acceptance criterion with ✅ or ❌;
    - test results;
    - review findings fixed and left open;
-   - any deviation from the plan.
+   - any deviation from the plan;
+   - the documents created or updated;
+   - the ADR candidates, which become ADRs in the next step.
 2. **Files to review, in vertical order**: tests → entry point → logic → data. One `path:line` link per file, with one line on what changed. The user reviews the code; do not ask them to skip it.
 3. **Short summary** at the end: three lines at most.
+
+**Write the ADRs**, before the PR. For each ADR candidate from the plan that still holds after implementation and review, draft `docs/adr/<NNNN>-<title>.md` from `references/adr-template.md` (location and language as in `docs/agents/domain.md`). Show the drafts to the user and write them once they approve; if an ADR supersedes an older one, propose updating the old one's status too. Give the commit command `git add docs/adr && git commit -m "docs(#n): add ADR-<NNNN> <title>" && git push`. Skip this step when there are no candidates.
 
 **Sync Engram out**, before the PR. Follow **Engram sync** in `docs/agents/workflow.md`:
 
@@ -319,4 +336,16 @@ Then post the closing comment on the issue, with the PR number. If status tracki
 When the user says the PR is merged:
 
 - **Child task**: list the siblings that are now unblocked and suggest the next one (`/flow-work #<n>`).
-- **All children closed**: offer to open the group PR from `feature/<parent>-<slug>` to the base branch with `Closes #<parent>`.
+- **All children closed**: run the group architecture review below, then offer to open the group PR from `feature/<parent>-<slug>` to the base branch with `Closes #<parent>`.
+
+### Group architecture review (strong)
+
+Before the group PR, brief a read-only subagent (strong tier) with the parent issue and its "Architecture notes", its sub-issues and their plan comments, the ADRs and glossary, and the whole group diff (`git diff <base branch>...feature/<parent>-<slug>`). It saves under `flow/<repo>/<parent>/architecture-review` and returns, in at most 15 lines:
+
+- whether the feature holds together as a whole, against the parent's "Architecture notes";
+- duplication or inconsistencies between children (two helpers doing the same thing, different names for one concept, diverging patterns);
+- decisions that were made but have no ADR, and code that contradicts an ADR;
+- glossary drift;
+- whether the feature as a whole is documented: an overview that no single child writes (what the feature does, its main pieces, how to use it). If it is missing or stale, propose it as a document to write on the group branch, with the user's OK and a `docs(#<parent>)` commit.
+
+Show it to the user. For each finding they want addressed, propose either a new child issue under the parent (through `flow-plan`'s template, developed with `flow-work` before the group PR) or a follow-up issue for later. Missing ADRs can be written directly on the group branch, with the user's OK and a `docs(#<parent>)` commit. If the user changed the architecture along the way, propose updating the parent's "Architecture notes" (an edit, so it asks).

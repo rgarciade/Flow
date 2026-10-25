@@ -32,15 +32,16 @@ What you will be asked to do, in order:
 1. **Confirm the task** as the agent understood it, and the branch it will create.
 2. **Read the research summary** (what exists, open questions, size) and add anything it missed.
 3. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
-4. **Confirm the seams**: the public interfaces that will be tested, each with what it catches and what it misses.
+4. **Confirm the plan**, including the docs it will touch, and the **seams**: the public interfaces that will be tested, each with what it catches and what it misses.
    The plan is then posted as a comment on the issue and, if the requirements changed, you approve the update to the issue description.
 5. **Approve the tests.** You get one line per scenario with a link to the test, and the command to run them. Reply `OK`, or ask for changes.
 6. **Run, or authorise, the `test(#42)` commit.** That commit is the record of the approved tests.
 7. **Run, or authorise, the `feat(#42)` commit** once the implementation passes.
 8. **Choose which review findings to fix**, then the `fix(#42)` or `refactor(#42)` commit.
 9. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
-10. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.
-11. **Say yes to the PR**, then review and merge it on GitHub.
+10. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
+11. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.
+12. **Say yes to the PR**, then review and merge it on GitHub.
 
 ## Talk about a task and start right away
 
@@ -87,7 +88,7 @@ After research, `flow-work` may report that the task does not fit one session as
 Tell `flow-work` it is merged.
 
 - **A child task**: it lists the siblings that are now unblocked and suggests the next one.
-- **The last child**: it offers to open the group PR, from `feature/<parent>-<slug>` to the base branch.
+- **The last child**: it runs a group architecture review of the whole feature (coherence, duplication between children, missing ADRs) and shows it to you. Findings become new child issues or follow-ups. Then it offers to open the group PR, from `feature/<parent>-<slug>` to the base branch.
 
 ## Resume a task
 

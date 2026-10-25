@@ -49,6 +49,7 @@ Ask one question at a time. Lead with the value you detected as the recommended 
 7. Models for the two tiers: **strong** (plan, tests) and **fast** (research, implement, review, fix). Default in Claude Code: `opus` and `sonnet`. In another harness, propose its equivalents in the names it accepts, or `inherit`.
 8. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
 9. Status tracking: how `flow-work` moves issues to "in progress", "in review" and "done" (always asking first). `project` if the repo's issues live in a GitHub Project (find it with `gh project list --owner <owner>` and read its status field with `gh project field-list`), `labels` if the repo uses status labels, otherwise `none`. Record the exact names.
+10. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off.
 
 ## 4. Draft, confirm, write
 
