@@ -6,22 +6,21 @@
 
 Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) para planificar el trabajo como tareas de tu gestor y desarrollarlo por porciones verticales, una a una, con la persona al mando.
 
+> [!NOTE]
+> **Cuándo usarlo.** `flow` no pretende ser un estándar para cualquier proyecto. Encaja cuando hay incertidumbre y las cosas aún no están claras:
+>
+> - **Un proyecto personal** en el que no sabes exactamente qué quieres construir y lo vas descubriendo poco a poco.
+> - **Un proyecto de trabajo con mucha indefinición**, donde los requisitos llegan tarde o cambian a menudo.
+> - **Un proyecto antiguo con un flujo basado en tareas**, como trabajaban muchos equipos antes de las especificaciones: el trabajo llega como tareas en un gestor y el código crece tarea a tarea.
+>
+> Cuando el alcance está claro y es estable desde el principio, puede servirte mejor un enfoque dirigido por especificaciones como OpenSpec o BMAD (ver [IDD frente a SDD](docs/idd-vs-sdd.md)).
+
 > [!IMPORTANT]
 > `flow` es estrictamente un flujo **desde las tareas**. El desarrollo dirigido por especificaciones parte de una especificación; `flow` parte de una tarea de tu gestor de tareas (un issue). No se construye nada sin ella: cada rama, test, commit y pull request pertenece a un issue, y el issue sigue siendo la fuente de verdad de lo que se pidió y de cómo se construyó.
 
 <p align="center">
   <img src="docs/diagrams/overview.svg" alt="Las tres skills de flow y los archivos que leen y escriben" width="900">
 </p>
-
-## Cuándo usarlo
-
-`flow` no pretende ser un estándar para cualquier proyecto. Encaja cuando hay incertidumbre y las cosas aún no están claras:
-
-- **Un proyecto personal** en el que no sabes exactamente qué quieres construir y lo vas descubriendo poco a poco.
-- **Un proyecto de trabajo con mucha indefinición**, donde los requisitos llegan tarde o cambian a menudo.
-- **Un proyecto antiguo con un flujo basado en tareas**, como trabajaban muchos equipos antes de las especificaciones: el trabajo llega como tareas en un gestor y el código crece tarea a tarea.
-
-Cuando el alcance está claro y es estable desde el principio, puede servirte mejor un enfoque dirigido por especificaciones como OpenSpec o BMAD (ver [IDD frente a SDD](docs/idd-vs-sdd.md)).
 
 ## Por qué
 

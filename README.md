@@ -6,22 +6,21 @@
 
 A small set of [Agent Skills](https://agentskills.io/specification) for planning work as tasks in your tracker and developing it one vertical slice at a time, with the human in the driver's seat.
 
+> [!NOTE]
+> **When to use it.** `flow` is not meant to be a standard for every project. It fits when there is uncertainty and things are not clear yet:
+>
+> - **A personal project** where you don't know exactly what you want to build and you find it out step by step.
+> - **A work project with a lot left undefined**, where requirements arrive late or keep changing.
+> - **An older project with a task-based workflow**, as many teams worked before specs: work arrives as tasks in a tracker and the code grows task by task.
+>
+> When the scope is clear and stable up front, a spec-driven approach such as OpenSpec or BMAD may serve you better (see [IDD vs SDD](docs/idd-vs-sdd.md)).
+
 > [!IMPORTANT]
 > `flow` is strictly a flow **from tasks**. Spec-driven development starts from a specification; `flow` starts from a task in your tracker (an issue). Nothing is built without one: every branch, test, commit and pull request belongs to an issue, and the issue stays the source of truth for what was asked and how it was built.
 
 <p align="center">
   <img src="docs/diagrams/overview.svg" alt="The three flow skills and the files they read and write" width="900">
 </p>
-
-## When to use it
-
-`flow` is not meant to be a standard for every project. It fits when there is uncertainty and things are not clear yet:
-
-- **A personal project** where you don't know exactly what you want to build and you find it out step by step.
-- **A work project with a lot left undefined**, where requirements arrive late or keep changing.
-- **An older project with a task-based workflow**, as many teams worked before specs: work arrives as tasks in a tracker and the code grows task by task.
-
-When the scope is clear and stable up front, a spec-driven approach such as OpenSpec or BMAD may serve you better (see [IDD vs SDD](docs/idd-vs-sdd.md)).
 
 ## Why
 
