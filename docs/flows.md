@@ -126,6 +126,12 @@ Small vertical slices are easy to review but can lose the big picture. `flow` ke
 
 Most tasks produce no ADR at all: only decisions that would be expensive to undo get one. The template is in [`skills/flow-work/references/adr-template.md`](../skills/flow-work/references/adr-template.md).
 
+## Where knowledge lives
+
+<p align="center"><img src="diagrams/knowledge.svg" alt="Task description, plan record, summary record, ADRs and project docs, and the phases that write or check each one" width="900"></p>
+
+Five records, each with one job, written at fixed points of `flow-work`. The orange cells are shown to you and only done after your OK. The next two sections explain the ADRs and the project docs in detail.
+
 ## Documentation
 
 The project's own documentation (module guides, user guides, the README) is kept current task by task, not in a final catch-up phase:

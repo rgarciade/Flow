@@ -32,11 +32,12 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 
 ## The skills
 
-| Skill | When | What it does |
-|---|---|---|
-| [`flow-setup`](skills/flow-setup/SKILL.md) | Once per repo | Asks which task tracker you use and writes `docs/agents/` (how every task operation is done, domain docs, workflow settings) so the other skills know how this repo works |
-| [`flow-plan`](skills/flow-plan/SKILL.md) | Planning sessions | Turns ideas into tasks in your tracker: standalone tasks, or a parent task with children and blocking links. No code |
-| [`flow-work`](skills/flow-work/SKILL.md) | Developing a task | Takes one issue from branch to PR: research → plan → tests (your OK) → implement → review → PR |
+- **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Once per repo_  
+  Asks which task tracker you use and writes `docs/agents/` (how every task operation is done, domain docs, workflow settings) so the other skills know how this repo works.
+- **[`flow-plan`](skills/flow-plan/SKILL.md)** · _Planning sessions_  
+  Turns ideas into tasks in your tracker: standalone tasks, or a parent task with children and blocking links. No code.
+- **[`flow-work`](skills/flow-work/SKILL.md)** · _Developing a task_  
+  Takes one issue from branch to PR: research → plan → tests (your OK) → implement → review → PR.
 
 `flow-plan` and `flow-work` check for `docs/agents/workflow.md` first, and offer to run `flow-setup` if it is missing.
 
@@ -46,7 +47,7 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
   <a href="docs/flows.md"><img src="docs/diagrams/flow-work-phases.svg" alt="flow-work phases, with the points where you decide and the commit points" width="900"></a>
 </p>
 
-Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)**.
+Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)**. Where the requirements, the plan, the ADRs and the project docs live, and when each is written: **[Where knowledge lives](docs/flows.md#where-knowledge-lives)**.
 
 ## Quick start
 

@@ -36,8 +36,8 @@ What you will be asked to do, in order:
    The plan is then recorded on the task and, if the requirements changed, you approve the update to the task description.
 5. **Approve the tests.** You get one line per scenario with a link to the test, and the command to run them. Reply `OK`, or ask for changes.
 6. **Run, or authorise, the `test(#42)` commit.** That commit is the record of the approved tests.
-7. **Run, or authorise, the `feat(#42)` commit** once the implementation passes.
-8. **Choose which review findings to fix**, then the `fix(#42)` or `refactor(#42)` commit.
+7. **Run, or authorise, the `feat(#42)` commit** once the implementation passes and the docs it listed are updated.
+8. **Choose which review findings to fix** (including stale or redundant docs and code that contradicts an ADR), then the `fix(#42)` or `refactor(#42)` commit.
 9. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
 10. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
 11. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.

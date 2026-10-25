@@ -5,7 +5,7 @@ d.box(340,72,220,58,"Task tracker",["GitHub, Jira, Linear, files…"],stroke=LNK
 d.box(720,72,140,58,"Pull request",["you review + merge"],stroke=LNK)
 d.box(40,190,220,84,"flow-setup",["once per repo","writes docs + config"])
 d.box(340,190,220,84,"flow-plan",["big picture + leads","no code, you approve"])
-d.box(640,190,220,84,"flow-work",["one task to a PR, with you","plan + status on the task"],stroke=ACC,fill=ACT,sw=1.6)
+d.box(640,190,220,84,"flow-work",["one task to a PR, with you","plan + status on the task","code, tests, docs, ADRs"],stroke=ACC,fill=ACT,sw=1.6)
 d.box(40,350,820,90,"docs/agents/ in the target repo",["tracker.md   domain.md   workflow.md","+ an  ## Agent skills  block in CLAUDE.md / AGENTS.md"])
 d.box(40,478,820,62,"Vendored Matt Pocock skills",["setup-matt-pocock-skills (read by flow-setup)  |  to-tickets (read by flow-plan, flow-work)"],dash=True,tsize=12)
 d.path([(450,190),(450,130)],LNK,mk="l");d.label(460,165,"CREATES","start")

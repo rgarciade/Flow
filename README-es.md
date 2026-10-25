@@ -32,11 +32,12 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 ## Las skills
 
-| Skill | Cuándo | Qué hace |
-|---|---|---|
-| [`flow-setup`](skills/flow-setup/SKILL.md) | Una vez por repo | Pregunta qué gestor de tareas usas y escribe `docs/agents/` (cómo se hace cada operación con las tareas, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo |
-| [`flow-plan`](skills/flow-plan/SKILL.md) | Sesiones de planificación | Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código |
-| [`flow-work`](skills/flow-work/SKILL.md) | Desarrollar una tarea | Lleva un issue de la rama al PR: investigar → planificar → tests (con tu OK) → implementar → revisar → PR |
+- **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Una vez por repo_  
+  Pregunta qué gestor de tareas usas y escribe `docs/agents/` (cómo se hace cada operación con las tareas, documentación de dominio, configuración del flujo) para que las otras skills sepan cómo funciona ese repo.
+- **[`flow-plan`](skills/flow-plan/SKILL.md)** · _Sesiones de planificación_  
+  Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código.
+- **[`flow-work`](skills/flow-work/SKILL.md)** · _Desarrollar una tarea_  
+  Lleva un issue de la rama al PR: investigar → planificar → tests (con tu OK) → implementar → revisar → PR.
 
 `flow-plan` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.
 
@@ -46,7 +47,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
   <a href="docs/flows.md"><img src="docs/diagrams/flow-work-phases.svg" alt="Fases de flow-work, con los puntos en los que decides tú y los commits" width="900"></a>
 </p>
 
-Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md](docs/flows.md)**.
+Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md](docs/flows.md)**. Dónde viven los requisitos, el plan, los ADR y la documentación del proyecto, y cuándo se escribe cada uno: **[Where knowledge lives](docs/flows.md#where-knowledge-lives)**.
 
 ## Inicio rápido
 
