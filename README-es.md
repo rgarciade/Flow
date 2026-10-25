@@ -21,7 +21,7 @@ Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) par
 - **Un proyecto de trabajo con mucha indefinición**, donde los requisitos llegan tarde o cambian a menudo.
 - **Un proyecto antiguo con un flujo basado en tareas**, como trabajaban muchos equipos antes de las especificaciones: el trabajo llega como tareas en un gestor y el código crece tarea a tarea.
 
-Cuando el alcance está claro y es estable desde el principio, puede servirte mejor un enfoque dirigido por especificaciones (ver [IDD frente a SDD](docs/idd-vs-sdd.md)).
+Cuando el alcance está claro y es estable desde el principio, puede servirte mejor un enfoque dirigido por especificaciones como OpenSpec o BMAD (ver [IDD frente a SDD](docs/idd-vs-sdd.md)).
 
 ## Por qué
 

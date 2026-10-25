@@ -21,7 +21,7 @@ A small set of [Agent Skills](https://agentskills.io/specification) for planning
 - **A work project with a lot left undefined**, where requirements arrive late or keep changing.
 - **An older project with a task-based workflow**, as many teams worked before specs: work arrives as tasks in a tracker and the code grows task by task.
 
-When the scope is clear and stable up front, a spec-driven approach may serve you better (see [IDD vs SDD](docs/idd-vs-sdd.md)).
+When the scope is clear and stable up front, a spec-driven approach such as OpenSpec or BMAD may serve you better (see [IDD vs SDD](docs/idd-vs-sdd.md)).
 
 ## Why
 
