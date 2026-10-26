@@ -112,8 +112,10 @@ Every message to the user between phases is short and built for scanning. The de
 
 - **Action first.** The first line says what you need from the user (an OK, an answer, a choice) or, if nothing, what comes next.
 - **At most about eight lines** before the questions: only what the user must know to decide. One line per item, with `path:line` links instead of quoted code. Lists the user must approve item by item (seams and scenarios, test edge cases, review findings) may run longer, but still one line per item.
+- **The problem in one line.** Right after the action line, say in plain words what the task fixes or builds, so the user can read the rest without remembering the issue.
+- **Short is not cryptic.** The user has not read the code or the notes. Explain every internal term (a private field, a mock, a seam, an abbreviation such as `mic`/`sys`) in a few words the first time it appears. Write each scenario as what happens, what should happen and what happens today. Give everything left out of scope its reason.
 - **No preamble, no recap.** Don't repeat earlier phases, don't retell what a subagent did, don't list what went as expected. Say only what is new, surprising or needs a decision.
-- **Questions last**, batched as in "Batch independent questions".
+- **Questions last**, batched as in "Batch independent questions". Each question stands on its own: one line on what it is about and why it matters, then the options and your recommendation. Never refer to something the user has not seen in this message.
 - When a phase finds nothing worth reporting, say so in one line and go on.
 
 The final report (Phase 8) is the one exception: it follows its own shape.
