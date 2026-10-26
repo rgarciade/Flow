@@ -22,23 +22,6 @@ A small set of [Agent Skills](https://agentskills.io/specification) for planning
   <img src="docs/diagrams/overview.svg" alt="The three flow skills and the files they read and write" width="900">
 </p>
 
-## Why
-
-Spec-driven workflows plan everything up front, build layer by layer and end in huge pull requests that nobody really reviews. Issue-driven development takes the opposite approach (full comparison, and when SDD is the better choice: [IDD vs SDD](docs/idd-vs-sdd.md)):
-
-- **You are in the loop, all the way.** This is not a job you launch and come back to. You work with the agent: it shows you what each phase found, asks you whenever something is not settled, and waits for your OK before moving on. Think pair programming, with you as the navigator. Tests only come to you when they need your judgment, since you already agreed their scenarios in the plan; ask for pair mode to see every one. For a simple task you can tell it to work autonomously: it then stops only for what really needs you.
-- **Visible from the first minute, not at the PR.** In spec-driven teams nobody knows where a piece of work stands until the pull request lands. Here the branch is linked to the issue from the start, every approved commit is pushed, the plan is on the issue, and its status moves (with your OK) from in progress to in review.
-- **Any task tracker.** GitHub Issues, GitLab, Jira, Linear, Azure Boards, or plain files in the repo. `flow-setup` records how each operation is done in your tracker, so tasks and their records always look the same; what the tracker can't do gets an agreed alternative (for example a task folder in the repo, linked from the task).
-- **The issue drives everything.** Requirements live in the task description, the implementation plan in one record on it, and the summary in another. When requirements change, the description is updated with a log of what changed and why.
-- **Detail just in time.** A spec tries to define everything up front, and much of it is stale by the time someone builds it. An issue gives the big picture, the few outcomes that define "done" and the leads from a preliminary look (libraries, connectors, risks). The detailed criteria, design and tests are worked out in the plan phase, against the code as it is when the task starts. That is how teams worked before specs: no guessing too early, but no empty tickets either.
-- **Architecture written as you go.** Small tasks can lose the big picture, so `flow` keeps it explicit: parent issues carry architecture notes, each plan flags its architectural decisions, those become ADRs before the PR, reviews check the code against existing ADRs, and a whole feature gets an architecture review before it reaches the base branch.
-- **Docs are part of "done".** Each plan lists the project documents the task affects, they are updated with the implementation, and the review flags any that are stale. Just enough: only what the code cannot easily tell. The issue keeps what was asked, ADRs keep why, docs keep how things work now.
-- **Small tasks, created when you want.** Tasks live in your tracker. You create them in a backlog session, or right before starting one.
-- **One task, one vertical slice.** Each task works end to end when it is done, and fits one working session. Too big? Split it into child tasks.
-- **Tests first, approved by you.** The AI writes the tests, you approve them, and from then on they are frozen: the implementation must make them pass without touching them. If one turns out to be wrong, it changes only with your OK, in its own commit.
-- **The AI writes, you decide.** It never commits or merges on its own. It gives you the command; you run it, or tell it to.
-- **Small context, specialised helpers.** An orchestrator talks to you and delegates research, planning, tests, implementation and review to subagents that share details through notes (Engram, or files when it is not available).
-
 ## The skills
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Once per repo_  
@@ -58,6 +41,18 @@ Spec-driven workflows plan everything up front, build layer by layer and end in 
 
 Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)**. Where the requirements, the plan, the ADRs and the project docs live, and when each is written: **[Where knowledge lives](docs/flows.md#where-knowledge-lives)**.
 
+## Why
+
+Spec-driven workflows plan everything up front and end in huge pull requests nobody really reviews. `flow` goes task by task instead ([IDD vs SDD](docs/idd-vs-sdd.md)):
+
+- **You stay in the loop.** It shows you each phase, asks when something is not settled, and never commits or merges on its own.
+- **The issue drives everything.** Requirements, plan and summary live on the task, in any tracker: GitHub, GitLab, Jira, Linear or plain files.
+- **Detail just in time.** The issue gives the big picture; the plan works out criteria, design and tests against the code as it is when the task starts.
+- **One task, one vertical slice.** Each one works end to end and fits one working session. Too big? Split it into child tasks.
+- **Tests first, then frozen.** The implementation must pass them without touching them; any change needs your OK.
+- **Visible from the first minute.** The branch is linked to the issue, every approved commit is pushed, and the status moves with your OK.
+- **Architecture and docs as you go.** Architectural decisions become ADRs, and the docs the task affects are updated before the PR.
+
 ## Quick start
 
 ```sh
@@ -68,7 +63,7 @@ Every phase, branch and subagent, step by step: **[docs/flows.md](docs/flows.md)
 
 # 2. In the project, open your agent and run:
 /flow-setup          # once per repo
-/flow-backlog           # create tasks
+/flow-backlog        # create tasks
 /flow-work #42       # develop one
 ```
 

@@ -22,23 +22,6 @@ Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) par
   <img src="docs/diagrams/overview.svg" alt="Las tres skills de flow y los archivos que leen y escriben" width="900">
 </p>
 
-## Por qué
-
-Los flujos dirigidos por especificaciones lo planifican todo de antemano, construyen capa a capa y acaban en pull requests enormes que nadie revisa de verdad. El desarrollo dirigido por issues hace lo contrario (comparación completa, y cuándo conviene más SDD: [IDD frente a SDD](docs/idd-vs-sdd.md)):
-
-- **Estás dentro del flujo de principio a fin.** No es un trabajo que se lanza y se recoge después. Trabajas con el agente: te enseña lo que ha encontrado en cada fase, te pregunta siempre que algo no está decidido y espera tu OK antes de seguir. Es programación en pareja, y tú llevas el rumbo. Los tests solo te llegan cuando necesitan tu criterio, porque sus escenarios ya los acordaste en el plan; pide el modo pair para verlos todos. Para una tarea sencilla puedes decirle que trabaje de forma autónoma: entonces solo para por lo que de verdad te necesita.
-- **Visible desde el primer minuto, no al llegar el PR.** En equipos con desarrollo dirigido por especificaciones nadie sabe en qué punto está un desarrollo hasta que llega el pull request. Aquí la rama está enlazada al issue desde el principio, cada commit aprobado se sube, el plan está en el issue y su estado avanza (con tu OK) de en curso a en revisión.
-- **Cualquier gestor de tareas.** GitHub Issues, GitLab, Jira, Linear, Azure Boards o archivos en el propio repo. `flow-setup` guarda cómo se hace cada operación en tu gestor, así que las tareas y sus registros quedan siempre igual; lo que el gestor no permita se resuelve con una alternativa acordada (por ejemplo, una carpeta del repo enlazada a la tarea).
-- **El issue lo dirige todo.** Los requisitos viven en la descripción de la tarea, el plan de implementación en un registro y el resumen en otro. Cuando cambian los requisitos, se actualiza la descripción con un registro de qué cambió y por qué.
-- **El detalle, justo a tiempo.** Una especificación intenta definirlo todo de antemano, y buena parte está obsoleta cuando alguien la construye. Un issue da la visión general, los pocos resultados que definen "terminado" y las pistas de una primera investigación (librerías, conectores, riesgos). Los criterios detallados, el diseño y los tests se deciden en la fase de plan, sobre el código tal como está cuando empieza la tarea. Es como se trabajaba antes de las especificaciones: sin suponer demasiado pronto, pero sin tickets vacíos.
-- **La arquitectura se escribe mientras se construye.** Con tareas pequeñas se puede perder la visión global, así que `flow` la mantiene explícita: los issues padre llevan notas de arquitectura, cada plan señala sus decisiones de arquitectura, esas decisiones se convierten en ADR antes del PR, las revisiones contrastan el código con los ADR existentes y cada funcionalidad completa pasa una revisión de arquitectura antes de llegar a la rama base.
-- **La documentación es parte de "terminado".** Cada plan lista los documentos del proyecto que afecta la tarea, se actualizan junto con la implementación y la revisión señala los que se hayan quedado desactualizados. La justa y necesaria: solo lo que el código no cuenta fácilmente. El issue guarda qué se pidió, los ADR el porqué y la documentación cómo funciona ahora.
-- **Tareas pequeñas, cuando quieras.** Las tareas viven en tu gestor de tareas. Se crean en una sesión de backlog o justo antes de empezar una.
-- **Una tarea, una porción vertical.** Cada tarea funciona de principio a fin cuando se termina y cabe en una sesión de trabajo. ¿Es demasiado grande? Se divide en tareas hijas.
-- **Primero los tests, aprobados por ti.** La IA escribe los tests, tú los apruebas y a partir de ese momento quedan congelados: la implementación tiene que hacerlos pasar sin tocarlos. Si uno resulta estar mal, solo cambia con tu OK y en su propio commit.
-- **La IA escribe y tú decides.** Nunca hace commits ni merges por su cuenta. Te da el comando y tú lo ejecutas, o le dices que lo haga.
-- **Contexto pequeño, ayudantes especializados.** Un orquestador habla contigo y delega la investigación, la planificación, los tests, la implementación y la revisión en subagentes que comparten los detalles mediante notas (en Engram o, si no está disponible, en archivos).
-
 ## Las skills
 
 - **[`flow-setup`](skills/flow-setup/SKILL.md)** · _Una vez por repo_  
@@ -58,6 +41,18 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano, constr
 
 Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md](docs/flows.md)**. Dónde viven los requisitos, el plan, los ADR y la documentación del proyecto, y cuándo se escribe cada uno: **[Where knowledge lives](docs/flows.md#where-knowledge-lives)**.
 
+## Por qué
+
+Los flujos dirigidos por especificaciones lo planifican todo de antemano y acaban en pull requests enormes que nadie revisa de verdad. `flow` avanza tarea a tarea ([IDD frente a SDD](docs/idd-vs-sdd.md)):
+
+- **Estás dentro del flujo.** Te enseña cada fase, te pregunta cuando algo no está decidido y nunca hace commits ni merges por su cuenta.
+- **El issue lo dirige todo.** Requisitos, plan y resumen viven en la tarea, en cualquier gestor: GitHub, GitLab, Jira, Linear o archivos.
+- **El detalle, justo a tiempo.** El issue da la visión general; el plan decide criterios, diseño y tests sobre el código tal como está al empezar la tarea.
+- **Una tarea, una porción vertical.** Cada una funciona de principio a fin y cabe en una sesión de trabajo. ¿Demasiado grande? Se divide en tareas hijas.
+- **Primero los tests, y congelados.** La implementación tiene que hacerlos pasar sin tocarlos; cualquier cambio necesita tu OK.
+- **Visible desde el primer minuto.** La rama está enlazada al issue, cada commit aprobado se sube y el estado avanza con tu OK.
+- **Arquitectura y documentación sobre la marcha.** Las decisiones de arquitectura se convierten en ADR y la documentación afectada se actualiza antes del PR.
+
 ## Inicio rápido
 
 ```sh
@@ -68,7 +63,7 @@ Todas las fases, ramas y subagentes, paso a paso (en inglés): **[docs/flows.md]
 
 # 2. En el proyecto, abre tu agente y ejecuta:
 /flow-setup          # una vez por repo
-/flow-backlog           # crear tareas
+/flow-backlog        # crear tareas
 /flow-work #42       # desarrollar una
 ```
 
