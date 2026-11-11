@@ -10,6 +10,12 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-11
+
+### Added
+
+- `npx github:rgarciade/Flow --project <repo>` installs or updates a project without cloning, for the public repo. `package.json` carries the version used for `.flow-version` in that case: keep it equal to the tag when releasing. `--user`, `--claude` and `--dir` still need a clone.
+
 ## [0.4.1] - 2026-11-11
 
 ### Added
@@ -70,6 +76,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.4.2]: https://github.com/rgarciade/Flow/tree/v0.4.2
 [0.4.1]: https://github.com/rgarciade/Flow/tree/v0.4.1
 [0.4.0]: https://github.com/rgarciade/Flow/tree/v0.4.0
 [0.3.0]: https://github.com/rgarciade/Flow/tree/v0.3.0
