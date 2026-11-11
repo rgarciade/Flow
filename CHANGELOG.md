@@ -8,6 +8,14 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.7.1] - 2026-11-11
+
+### Changed
+
+- Autonomous mode says the task branch needs no new stop when `create-branch` also creates it on the remote: the user confirmed it in Phase 1.
+- The review in another harness follows the `review` row of the roles table; "Claude with Codex" is now only an example, not a fixed pairing.
+- `references/code-review.md` says that, when run from `flow-work`, the fixed point and the spec come in the brief, so the agent never asks for them.
+
 ## [0.7.0] - 2026-11-11
 
 ### Behaviour changes
@@ -103,6 +111,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.7.1]: https://github.com/rgarciade/Flow/tree/v0.7.1
 [0.7.0]: https://github.com/rgarciade/Flow/tree/v0.7.0
 [0.6.0]: https://github.com/rgarciade/Flow/tree/v0.6.0
 [0.5.0]: https://github.com/rgarciade/Flow/tree/v0.5.0
