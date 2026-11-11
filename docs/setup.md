@@ -7,7 +7,7 @@
 | An agent harness with [Agent Skills](https://agentskills.io/specification) support | Runs the skills | Claude Code, OpenCode, Codex CLI, Cursor, Gemini CLI |
 | Access to your task tracker and code host | Reading and updating tasks, opening PRs | A CLI (`gh`, `glab`, `jira`, `az`…), an MCP server or an API token. For the GitHub example: [GitHub CLI](https://cli.github.com) 2.94+, `gh auth status` |
 | [Engram](https://github.com/Gentleman-Programming/engram) MCP server and CLI (recommended) | Shared notes between the orchestrator and its subagents; optional memory sync through git (`.engram/`) | Without it, notes go to `.scratch/flow/` in the repo and sync is off |
-| [i-have-adhd](https://github.com/ayghri/i-have-adhd) skill (optional) | Formatting rules for the test-approval message | Without it, `flow-work` uses built-in equivalents |
+| [i-have-adhd](https://github.com/ayghri/i-have-adhd) skill (included) | Formatting rules for the messages `flow-work` writes to you: action first, numbered steps, no preamble | `install.sh` installs a copy (MIT, in `vendor/`) next to the flow skills. If you already have a skill of that name, yours is kept and used |
 
 Any task tracker works: `flow-setup` records how to reach it (CLI, API or MCP server). The GitHub example uses the GitHub CLI; on GitHub, native sub-issues and issue dependencies are used when available.
 

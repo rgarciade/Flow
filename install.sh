@@ -13,7 +13,7 @@
 set -euo pipefail
 
 repo_dir="$(cd "$(dirname "$0")" && pwd)"
-sources=("$repo_dir"/skills/* "$repo_dir"/vendor/mattpocock-skills/*/)
+sources=("$repo_dir"/skills/* "$repo_dir"/vendor/mattpocock-skills/*/ "$repo_dir"/vendor/i-have-adhd/*/)
 
 usage() {
   sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//' >&2

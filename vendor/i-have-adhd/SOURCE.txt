@@ -1,0 +1,1 @@
+Vendored from https://github.com/ayghri/i-have-adhd, version 0.4.1 (MIT, see LICENSE).

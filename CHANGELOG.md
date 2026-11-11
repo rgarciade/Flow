@@ -10,6 +10,16 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+### Behaviour changes
+
+- **`flow-work` writes every message to you in the scannable format of the `i-have-adhd` skill**, when it is installed: the action first, numbered steps, no preamble or recap. Before, only the list of tests in pair mode used it. The flow's own message shape and plain-language rules still win where they differ.
+- **The plan message is lighter.** It lists, in a few one-line items, what you will see change; file, function and parameter names stay in the plan on the task, one link away.
+
+### Added
+
+- `install.sh` now also installs the `i-have-adhd` skill (MIT, version 0.4.1, copied into `vendor/i-have-adhd/`). A skill of yours with that name is kept, and `flow-work` uses it.
+- A worked example of a plan message that is too dense (`skills/flow-work/references/phase-messages.md`).
+
 ## [0.3.0] - 2026-11-11
 
 ### Behaviour changes

@@ -150,6 +150,10 @@ Before your first message to the user, read `references/phase-messages.md`: it s
 - **Everything left out of scope** comes with its reason.
 - **Rewrite, never forward.** A subagent's hand-back is shorthand written for you. Read its note when you need the detail to explain something, then write the message from scratch for the user.
 
+**Keep the plan message light.** The plan message describes what the user will see change, in a few one-line items. File names, function and parameter names, and how the code is split go in the plan record; link to it in one line. Whatever the user does not need in order to say OK stays out of the message.
+
+**Scannable format.** If the `i-have-adhd` skill is installed (flow installs it), read its SKILL.md before your first message and apply its formatting rules to every message you write to the user in this skill: the action first, numbered steps, concrete time estimates, no preamble or recap. Its rules shape the message; they never replace the **Shape** and the **Plain language** rules above, which win where they differ. Don't switch the skill's persistent mode on for the rest of the session.
+
 **Length.** There is no line budget. A message is as long as it needs to be understood at a first reading, and no longer; most fit on one screen. Lists the user approves item by item (where to test and the scenarios, tests with open decisions, review findings) run one line per item. Don't recap earlier phases, don't retell what a subagent did, and don't list what went as expected: the detail lives in the notes, and the user can ask for it.
 
 **Questions.** Ask them as in `../flow-setup/asking-questions.md`: together, each standing on its own, with new or complex topics explained first. Never refer to something the user has not seen in this message.
@@ -268,7 +272,7 @@ Brief a tests subagent with the plan key. It writes only test files, matching th
 - With edge cases: present only those, in the format below, and wait for the OK on them.
 - Without: don't wait. Record the tests with the `.scratch/flow/<id>/approved-tests/` manifest (see below), then show in one message the number of tests, that each fails for the expected reason and the command to run them. Go on to Phase 6. The test commit comes together with the implementation commit (see Phase 6).
 
-**Pair mode.** Present every test to the user. This message is a long list, one line per test, so shape it for fast scanning: if the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise use the action first, numbered lines, no preamble, no recap.
+**Pair mode.** Present every test to the user. This message is a long list, one line per test, so shape it for fast scanning, with the action first, numbered lines, no preamble and no recap (see "Scannable format" in "Phase messages").
 
 - First line: the action, "Review the tests and reply OK to continue."
 - One numbered line per scenario: what it checks, with a link to the test.
