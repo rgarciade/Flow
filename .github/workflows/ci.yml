@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Markdown links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # Vendored skills are third-party text: their links are not ours to fix.
+          # The docs README template holds placeholder links, filled in per project.
+          args: >-
+            --no-progress
+            --exclude-path vendor
+            --exclude-path skills/flow-setup/docs-readme-template.md
+            './**/*.md'
+          fail: true
+
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check install.sh
+        run: shellcheck install.sh
