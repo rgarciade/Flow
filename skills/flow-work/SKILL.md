@@ -67,45 +67,21 @@ In this skill, "task" means a task in that tracker, and "issue" is used in the s
 
 ## The task is the source of truth
 
-Anyone must be able to understand the task from the tracker alone (plus its task folder, if the tracker uses that alternative), without the notes. Keep the task lean: **at most two records per task from this flow**, the plan record and the summary record. A record is a comment on the task, or a file in the task folder, depending on the tracker. When something changes, **edit** what exists instead of adding something new.
-
-**Permissions:**
+Anyone must be able to understand the task from the tracker alone, without the notes. The description holds the _what_. At most two records from this flow hold the rest: the plan record (the _how_) and the summary record. When something changes, **edit** what exists instead of adding something new.
 
 - **Creating** the plan record or the summary record needs no confirmation.
 - **Editing** the description or a record, and **deleting** anything, always need the user's OK: show the exact change first and wait.
 
-**The description holds the _what_**: what to build, acceptance criteria, out of scope. When the agreed requirements change, propose an edit of the description (never a new record) with:
-
-- the requirements rewritten as they now stand, and
-- at the bottom, a `## Changes` section (heading in the task language) with one dated line per change: what changed and why. Keep earlier lines.
-
-Apply it with `edit-description` once the user approves.
-
-**The plan record holds the _how_**: a short implementation summary, created with `create-record` at the end of Phase 4. Never create a second plan record: if the plan changes, find it with `find-record` (marker `flow:plan`) and propose an edit with `edit-record`.
-
-**The summary record** is created once, when the PR is opened (Phase 8), with the marker `flow:summary`. If it already exists (for example, the PR was reopened), propose an edit instead.
-
-To link the description to the plan record, include `Implementation notes: <record link>` in the next description edit the user approves. Don't edit the description only to add this link.
-
-Write both records in the task language from `docs/agents/workflow.md`, in the tracker's markup, with its note block and record marker; translate the headings and the note text too. The templates below are in GitHub Markdown; adapt them to the tracker's format.
-
-Use the templates in `references/records.md` for both records.
+Read `references/records.md` before you first write to the task (the end of Phase 4): it has the rules for the description and for each record, and their templates.
 
 ## Team visibility
 
-Task-driven work is visible while it happens, not only when the PR arrives. Anyone looking at the task can see who is on it, in which branch, at which stage, and every commit so far.
+The work is visible on the task while it happens, not only when the PR arrives: a linked branch, pushed commits, the plan record, the assignee and the status.
 
-- **Linked branch.** Create task branches with `create-branch` (Phase 2), which links the branch to the task, or names it so the tracker links it.
-- **Pushed commits.** Every commit command you give the user ends with `git push`, so each approved step shows up on the linked branch.
-- **The plan record** tells the team how the task is being built (see "The task is the source of truth").
-- **Assignment.** When the user confirms the task (Phase 1), propose assigning the task to them with `assign`, and do it after their OK. Skip it if the tracker file says `assign` is not used.
-- **Status moves.** Unless the tracker file says `move-status` is not used, propose moving the task's status at these points with `move-status`, and move it only after the user's OK (one line, it can share a message with the phase's other question):
+- Every commit command you give the user ends with `git push`.
+- Assigning the task and moving its status are proposed, and done only after the user's OK.
 
-  | When | Move to |
-  |---|---|
-  | The user confirms the task (Phase 1) | in progress |
-  | The PR is opened (Phase 8) | in review |
-  | The PR is merged | done (often automatic through the `closing-reference`; only propose it if it did not happen) |
+Read `references/team-visibility.md` in Phase 1, before you confirm the task with the user: it says when to propose the assignment and each status move.
 
 ## Phase messages
 
