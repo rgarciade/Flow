@@ -18,6 +18,7 @@ Rule: "Phase messages" in [flow-work](../skills/flow-work/SKILL.md), with the ex
 | M6 | It ends by saying what happens once you answer, and what a plain "OK" accepts. |
 | M7 | You could understand it after a break, without scrolling up. |
 | M8 | Before a long step, one line says what starts and what you will get back. |
+| M9 | The message can be scanned: the action or answer needed comes first, there is no preamble or recap, and file, function and parameter names stay out of it. The plan message lists what you will see change in about five one-line items and links to the plan on the task for the technical detail. |
 
 ## Questions
 
