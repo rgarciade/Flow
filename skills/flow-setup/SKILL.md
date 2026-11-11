@@ -48,7 +48,7 @@ Read `../setup-matt-pocock-skills/SKILL.md` and apply only its **Section C** (do
 
 ## 4. Our questions
 
-Ask all the questions that don't depend on each other in a single round, leading each with the value you detected as the recommended answer. Never drip-feed them (ask one, wait, ask the next) unless the answer to one changes the others; in that case ask that one alone first and say that more questions follow. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, the recommended answer first, and the free-text option left open; if the tool takes fewer questions per call than you have, fill each call to its limit. Otherwise, use a numbered list, so the user can reply "OK" or correct only some by number. Skip any question that exploration already settled beyond doubt, and say what you assumed.
+Ask these questions following [asking-questions.md](asking-questions.md) (read it first): the independent ones in a single round, leading each with the value you detected as the recommended answer. Skip any question that exploration already settled beyond doubt, and say what you assumed.
 
 Say in one line what each setting is for when its name does not explain it (model profiles, Engram sync, test file globs): the user may be seeing these for the first time.
 
