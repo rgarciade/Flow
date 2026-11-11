@@ -58,7 +58,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano y acaba
 
 ```sh
 # 1. Instala las skills (ver docs/setup.md)
-npx github:rgarciade/Flow --project ~/code/mi-app   # sin clonar; también actualiza un repo (añade #v0.6.0 para fijar versión)
+npx github:rgarciade/Flow --project ~/code/mi-app   # sin clonar; también actualiza un repo (añade #v0.7.0 para fijar versión)
 ./install.sh --project ~/code/mi-app      # en un repo, para cualquier entorno (copias versionadas)
 ./install.sh --user                       # o para tu usuario: OpenCode, Codex, Cursor, Gemini CLI
 ./install.sh --claude ~/.claude-personal  # o en un perfil de Claude Code

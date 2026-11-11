@@ -8,7 +8,21 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
-## [Unreleased]
+## [0.7.0] - 2026-11-11
+
+### Behaviour changes
+
+- **New setting, Task memory (`repo` or `local`), asked by `flow-setup`.** Without Engram, the closed note of a finished task is written to `.flow/memory/<id>.md`. With `repo` you get a `docs(<commit-ref>): save task memory` command to commit it, so it reaches every machine and teammate; with `local` (also when the setting is missing) the folder is git-ignored and you are told it stays on this machine. The research phase of later tasks reads closed notes from Engram, or from `.flow/memory/` without it. With Engram nothing changes.
+- **Turning a task into a parent no longer renames its branch.** If the task branch has no commits, the agent creates the group branch for the parent from the updated base branch, pushes it, switches to it and proposes deleting the old task branch locally and on the remote, with the exact commands, which run only with your OK. With commits it asks you, as before.
+- **The test gate is explicit in semi-autonomous mode.** The tests are always recorded with the `approved-tests` manifest at the gate, with or without edge cases; the `test` commit comes in Phase 6 before the `feat` one, and once you confirm it, its hash becomes the approved-tests reference.
+- **A role run in another harness gets its notes as files.** If notes live in Engram, the agent exports what that role needs to `.scratch/flow/<id>/` first and passes the paths; the role writes its result there and the agent saves it to Engram afterwards.
+- **After the fixes in Phase 7, one short automatic review looks only at the fix diff.** Nothing found: one line to you. Something found: the same numbered table, and the agent asks. At most one pass per fix round.
+
+### Changed
+
+- `flow-work` now says it is not a job that runs on its own unless you choose autonomous mode, and names the **Harnesses** section (not **Agents**) as where the default working mode is set.
+- Two blocks of `flow-work/SKILL.md` moved into `references/other-harnesses.md` and `references/state-note.md`, with no other change.
+- `evals/README.md` has a "Before a release" section: run the evals and note the result in the CHANGELOG entry. Evals were not run for these changes.
 
 ## [0.6.0] - 2026-11-11
 
@@ -89,6 +103,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.7.0]: https://github.com/rgarciade/Flow/tree/v0.7.0
 [0.6.0]: https://github.com/rgarciade/Flow/tree/v0.6.0
 [0.5.0]: https://github.com/rgarciade/Flow/tree/v0.5.0
 [0.4.2]: https://github.com/rgarciade/Flow/tree/v0.4.2
