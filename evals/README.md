@@ -46,6 +46,10 @@ project: <where it was run>
 
 Quote the failing line: it is what tells you which sentence of the skill to change.
 
+## Before a release
+
+Before tagging a version, run the tasks in [tasks.md](tasks.md) against [checklist.md](checklist.md) for the skills touched since the last version. Add a line to that version's `CHANGELOG.md` entry saying which evals were run and their result, or "evals not run" and why.
+
 ## Reading the result
 
 - A failed item points at a rule in a skill. Fix the rule (or its example), then re-run the task that failed.

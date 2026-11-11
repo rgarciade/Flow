@@ -71,12 +71,12 @@ Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): t
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
-It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, test commands, test file globs, labels, Engram sync, status tracking, docs folder, and in a round of its own the harnesses and models: which harnesses you use, their models, the default working mode and who takes each role) and shows you a draft before writing:
+It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, test commands, test file globs, labels, Engram sync, task memory, status tracking, docs folder, and in a round of its own the harnesses and models: which harnesses you use, their models, the default working mode and who takes each role) and shows you a draft before writing:
 
 ```
 docs/agents/tracker.md         how every task operation is done in your tracker
 docs/agents/domain.md          where the glossary and ADRs live
-docs/agents/workflow.md        base branch, branch names, languages, models, harnesses, commands, Engram sync, docs
+docs/agents/workflow.md        base branch, branch names, languages, models, harnesses, commands, Engram sync, task memory, docs
 AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the above
 <docs>/README.md               a reading guide for the project docs (only if the docs folder already exists)
 ```

@@ -51,7 +51,7 @@ Read `../setup-matt-pocock-skills/SKILL.md` and apply only its **Section C** (do
 
 Ask these questions following [asking-questions.md](asking-questions.md) (read it first): the independent ones in a single round, leading each with the value you detected as the recommended answer. Skip any question that exploration already settled beyond doubt, and say what you assumed.
 
-Say in one line what each setting is for when its name does not explain it (harnesses and models, Engram sync, test file globs): the user may be seeing these for the first time.
+Say in one line what each setting is for when its name does not explain it (harnesses and models, Engram sync, task memory, test file globs): the user may be seeing these for the first time.
 
 1. Base branch: the branch every finished feature ends up in (for example `dev`).
 2. Branch naming for groups and tasks. Default: `feature/<id>-<slug>` for a group branch (a parent task) and `task/<id>-<slug>` for a task branch, with `<id>` as the tracker's "id in branch names".
@@ -62,7 +62,8 @@ Say in one line what each setting is for when its name does not explain it (harn
 7. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
 8. Status: which states `move-status` uses (in progress, in review, done) and how, recorded in `tracker.md`. `not used` if the user doesn't want status moves.
 9. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off. If the docs folder already exists, propose adding its reading guide: a `README.md` from [docs-readme-template.md](docs-readme-template.md), or its note merged into an existing index, with the "Contents" list filled from the documents already there. If the folder does not exist yet, don't create it: `flow-work` does so with the first document.
-10. Harnesses and models: see the next section. Ask it after the questions above, as its own round.
+10. Task memory: where the closed note of a finished task is kept when Engram is not available. `repo` saves it in `.flow/memory/` and commits it with the work, so every machine and teammate can read it; `local` keeps it git-ignored on this machine only. It only matters without Engram. Recommend `repo` when Engram is not installed; with Engram, leave `local` and say the setting is not used.
+11. Harnesses and models: see the next section. Ask it after the questions above, as its own round.
 
 ## Harnesses and models
 
@@ -101,10 +102,10 @@ Show the user a draft of every file you will write or edit, including the `## Ag
 
 ### Workflow
 
-Branches, base branch, languages, harnesses and models, working mode, test commands, Engram sync and docs for the flow skills. See `docs/agents/workflow.md`.
+Branches, base branch, languages, harnesses and models, working mode, test commands, Engram sync, task memory and docs for the flow skills. See `docs/agents/workflow.md`.
 ```
 
-If the user chose the task folder alternative, make sure `.flow/` is **not** git-ignored: those records are part of the repo.
+If the user chose the task folder alternative, make sure `.flow/` is **not** git-ignored: those records are part of the repo. For **Task memory**, `repo` needs `.flow/memory/` not git-ignored, and `local` needs it git-ignored.
 
 ## 6. Done
 

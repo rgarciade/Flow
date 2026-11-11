@@ -68,7 +68,7 @@ Without an issue number, it drafts the issue from the conversation, creates it o
 - an expected value or behaviour the plan didn't settle, which the agent had to choose;
 - a test that fails for a reason other than the expected one.
 
-The tests are frozen in every mode: until the `test` commit exists, a recorded copy in `.scratch/flow/<id>/approved-tests/` is the reference.
+The tests are frozen in every mode: at the test gate they are recorded in `.scratch/flow/<id>/approved-tests/` (in semi-autonomous mode, also after you approve edge cases), and that copy is the reference until the `test` commit exists. Once you confirm that commit, its hash becomes the reference.
 
 Ask for a mode when you start (`/flow-work #42, pair mode`) or at any time ("show me every test", "back to semi-autonomous").
 

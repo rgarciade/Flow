@@ -62,6 +62,7 @@ Rule: "Hard rules" and "Phase 5" to "Phase 7" in flow-work.
 | T1 | No commit was run without you saying so, and every commit command ends with `git push`. |
 | T2 | The test files did not change after they were approved (`git log --stat` on the branch shows them only in `test` commits). |
 | T3 | Review findings come as one numbered table per question ("does it follow the project's rules", "does it do what the task asks"), and each finding can be decided without opening the file. |
+| T4 | After fixes, one short review of only the fix diff runs on its own: with nothing found you get one line, otherwise the findings come in the same numbered table. It runs once per fix round. |
 
 ## Closing
 
@@ -71,8 +72,8 @@ Rule: "Phase 8" in flow-work.
 |---|---|
 | C1 | The closing decisions (ticking the criteria, ADRs, memory export, opening the PR) are asked together, right after the report. |
 | C2 | The report marks each criterion with the same text the description has. |
-| C3 | After the PR is opened, the state note is in its closed form: what the task does, where, decisions and what to watch out for, and no progress fields (`phase:`, `done:`, `waiting on:`, `pending commits:`). Read it in Engram under `flow/<repo>/<id>/state`, or in `.scratch/flow/<id>/state.md`. |
-| C4 | One line tells you that the task's memory was saved, and where. |
+| C3 | After the PR is opened, the state note is in its closed form: what the task does, where, decisions and what to watch out for, and no progress fields (`phase:`, `done:`, `waiting on:`, `pending commits:`). Read it in Engram under `flow/<repo>/<id>/state`, or in `.flow/memory/<id>.md` without Engram. |
+| C4 | One line tells you that the task's memory was saved, and where. Without Engram: with Task memory `repo` you are given a commit command for `.flow/memory/<id>.md`; with `local` (or no setting) you are told it stays on this machine. |
 
 ## The state note and resuming
 
