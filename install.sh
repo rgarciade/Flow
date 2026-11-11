@@ -65,6 +65,7 @@ link_into() {
 
 install_project() {
   local project agents_dir claude_dir version stamp src name dest link
+  local ignored=()
   project="$(cd "$1" && pwd)"
   refuse_default_claude_profile "$project"
   if [[ "$project" == "$HOME" ]]; then
@@ -110,7 +111,14 @@ install_project() {
       ln -s "../../.agents/skills/$name" "$link"
     fi
     echo "$action  $name"
+    git -C "$project" check-ignore -q "$dest" && ignored+=("$name")
   done < <(each_source)
+
+  if ((${#ignored[@]})); then
+    echo
+    echo "Warning: your .gitignore ignores these skills in .agents/skills, so they will not be committed: $(IFS=,; echo "${ignored[*]}")."
+    echo "Add a line like '!.agents/skills/<name>/' for each one, or teammates will miss them."
+  fi
 
   echo
   echo "Installed flow $version into $agents_dir (linked from $claude_dir)"
