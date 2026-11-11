@@ -12,16 +12,29 @@
 # Nothing is overwritten unless this script installed it.
 set -euo pipefail
 
-repo_dir="$(cd "$(dirname "$0")" && pwd)"
+# Resolve symlinks, so this also works when npx runs it through a link.
+script="${BASH_SOURCE[0]}"
+while [[ -L "$script" ]]; do
+  link_dir="$(cd "$(dirname "$script")" && pwd)"
+  script="$(readlink "$script")"
+  [[ "$script" == /* ]] || script="$link_dir/$script"
+done
+repo_dir="$(cd "$(dirname "$script")" && pwd)"
 sources=("$repo_dir"/skills/* "$repo_dir"/vendor/mattpocock-skills/*/ "$repo_dir"/vendor/i-have-adhd/*/)
 
 usage() {
-  sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//' >&2
+  sed -n '2,12p' "$script" | sed 's/^# \{0,1\}//' >&2
   exit 1
 }
 
 flow_version() {
   local rev
+  # Without a git checkout (npx), the version comes from package.json.
+  if [[ ! -e "$repo_dir/.git" ]]; then
+    rev="$(sed -n 's/^ *"version": *"\([^"]*\)".*/\1/p' "$repo_dir/package.json" 2>/dev/null | head -n 1)"
+    echo "v${rev:-unknown}"
+    return
+  fi
   # A version tag when HEAD is on one (v0.1.0), the tag plus the distance from it
   # otherwise (v0.1.0-3-gb44f7bd), or the bare commit when there are no tags.
   rev="$(git -C "$repo_dir" describe --tags --always 2>/dev/null || echo "uncommitted")"
@@ -125,15 +138,24 @@ install_project() {
   echo "Next: open your agent in $project, run flow-setup, then commit .agents/skills, .claude/skills and docs/agents."
 }
 
+require_checkout() {
+  if [[ ! -e "$repo_dir/.git" ]]; then
+    echo "$1 links to this folder, which npx deletes. Clone the repo and run ./install.sh $1 from there." >&2
+    exit 1
+  fi
+}
+
 case "${1:-}" in
   --project)
     [[ -n "${2:-}" ]] || usage
     install_project "$2"
     ;;
   --user)
+    require_checkout --user
     link_into "$HOME/.agents/skills"
     ;;
   --claude)
+    require_checkout --claude
     [[ -n "${2:-}" ]] || usage
     [[ -d "$2" ]] || { echo "Claude Code config folder not found: $2" >&2; exit 1; }
     target="$(cd "$2" && pwd)"
@@ -141,6 +163,7 @@ case "${1:-}" in
     link_into "$target/skills"
     ;;
   --dir)
+    require_checkout --dir
     [[ -n "${2:-}" ]] || usage
     mkdir -p "$2"
     target="$(cd "$2" && pwd)"

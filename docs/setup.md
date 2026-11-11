@@ -24,6 +24,7 @@ git clone <this-repo> flow && cd flow
 | `./install.sh --claude <config-dir>` | `<config-dir>/skills/` | Symlinks to this repo | Claude Code (that profile) |
 | `./install.sh --dir <skills-dir>` | Any skills folder | Symlinks to this repo | Whatever reads that folder |
 
+- **Without cloning.** `npx github:rgarciade/Flow --project <repo>` runs the same script, and running it again updates the repo. Add `#v0.4.1` to the name to pin a version (`npx github:rgarciade/Flow#v0.4.1 --project <repo>`). It needs Node, and only `--project` works: the other modes link to this folder, which npx deletes, so for them clone the repo.
 - **Symlinked installs** update with a `git pull` here.
 - **Project installs** are copies, so the project works on any machine and in CI. Run the command again to update them, then commit. Each skill's `.flow-version` file records the `flow` version it came from: a tag such as `v0.1.0`, or the tag plus the commits after it (`v0.1.0-3-gb44f7bd`). Look that version up in the [changelog](../CHANGELOG.md) to see what changed since your copy, behaviour changes first. Commit `flow` before installing, or the version ends in `-dirty`.
 - **Nothing is overwritten** unless this script installed it. A skill of your own with the same name is reported as `skipped`.

@@ -1,0 +1,10 @@
+{
+  "name": "flow-skills",
+  "version": "0.4.1",
+  "description": "Agent skills for issue-driven development: flow-setup, flow-backlog and flow-work.",
+  "license": "MIT",
+  "private": true,
+  "bin": {
+    "flow-install": "install.sh"
+  }
+}
