@@ -19,7 +19,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - **The closing decisions are asked together**, right after the final report: ticking the met criteria, the ADRs, the Engram export, opening the PR and moving the task to "in review". Before, each was its own stop.
 - **`flow-work` writes a state note for every task** (`flow/<repo>/<id>/state` in Engram, or `.scratch/flow/<id>/state.md`), reads it when a task is resumed, and rewrites it as the task's memory once the PR is opened. That last step needs no confirmation. The research phase of later tasks reads those notes.
 - **A note that cannot be saved to Engram goes to `.scratch/flow/<id>/`** in the repo, and you are told. Make sure `.scratch/` is git-ignored.
-- **The review may run in a different agent** (for example Codex when the flow runs in Claude) when an agent manager such as Orca is installed and your own instructions allow it. Without one, nothing changes.
+- **A repo can say who runs each role and which mode tasks start in.** The new **Agents** section of `docs/agents/workflow.md` sets the default working mode and, per role, whether it runs as a subagent or in another coding agent through an agent manager such as Orca (for example the review in Codex when the flow runs in Claude). Without the section nothing changes: semi-autonomous, and subagents for every role. Run `flow-setup` again, or copy the section from `skills/flow-setup/workflow-template.md`, to use it.
 - **Messages between phases have a fixed shape and no line budget**: where the task stands, what is needed from you, what the task is about, what the phase found, the questions, and what happens next, in plain words without the skill's internal vocabulary.
 
 ### Added

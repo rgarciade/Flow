@@ -72,6 +72,18 @@ The tests are frozen in every mode: until the `test` commit exists, a recorded c
 
 Ask for a mode when you start (`/flow-work #42, pair mode`) or at any time ("show me every test", "back to semi-autonomous").
 
+A repo can start its tasks in another mode: set **Default working mode** in the Agents section of `docs/agents/workflow.md`. With `autonomous` as the default, only tasks that research finds small and simple run that way; the rest start in semi-autonomous and you are told why.
+
+## Run a role in another agent
+
+By default the research, plan, tests, implementation and review are done by subagents of the agent you are using. If you have an agent manager installed (for example Orca), the same Agents section can send a role to another coding agent:
+
+```markdown
+| review | `orca:codex` |
+```
+
+The usual case is the review, for a second opinion from a different model. The other agent works in the same checkout, gets the same instructions as a subagent and never commits. On a machine without the manager, the role runs as a subagent and you are told in one line, so teammates don't need it.
+
 ## Let it work on its own (simple tasks)
 
 For a small task, say so when you start (`/flow-work #42, work autonomously`), or accept when `flow-work` suggests it after research. It then chains the phases without the routine confirmations and stops only for:

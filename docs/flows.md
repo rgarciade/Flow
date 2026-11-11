@@ -63,6 +63,7 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 - **Model profiles.** Each repo maps `strong` and `fast` to real models in `docs/agents/workflow.md`, in two profiles. **standard** runs every task (in Claude Code, by default `sonnet` for both). **deep** (by default `strong: opus`, `fast: sonnet`) is only used when the orchestrator judges a task very complex and you agree; it holds for that task only. Where the harness cannot pick a model per subagent, subagents inherit the session model.
 - **A state note per task.** The orchestrator keeps `flow/<repo>/<issue>/state` up to date: the phase, the working mode, the model profile, the approved-tests reference, what is waiting on you and the commits still pending. It reads it first when a task is resumed or its context was summarised. When the PR is opened the note is rewritten in a closed form (what was built, where it lives, decisions, gotchas, open ends), and the research phase of later tasks in the same area reads it.
 - **Notes as the shared memory.** Each subagent saves its full result under `flow/<repo>/<issue>/<phase>` and returns at most 15 lines. The orchestrator passes note keys between phases, not content, so its context stays small. Notes go to Engram when its MCP server is available, or to `.scratch/flow/<issue>/<phase>.md` otherwise. If a save to Engram fails, that note goes to `.scratch/` too and you are told.
+- **Who runs each role is set per repo.** By default every role is a subagent of your harness. The **Agents** section of `docs/agents/workflow.md` can send a role (most usefully the review) to another coding agent through an agent manager such as Orca, written `orca:codex`. That agent works in the same checkout, gets the same brief and never commits. On a machine without the manager, the role runs as a subagent and you are told.
 - **Harness-neutral subagents.** The orchestrator uses whatever subagent mechanism the harness offers (`Agent` in Claude Code, `Task` in OpenCode and Cursor…). Without one, it runs each phase itself with the same discipline.
 - **One writer at a time.** Subagents that edit files run one after another; read-only ones may run in parallel.
 - **Visible models.** Every subagent's task name starts with its model, for example `sonnet: tests #42`.
@@ -117,7 +118,7 @@ How assignment and status moves are done, if at all, is recorded per repo in `do
 
 | Mode | When | You see the tests |
 |---|---|---|
-| **Semi-autonomous** | The default | Only edge cases the plan did not settle |
+| **Semi-autonomous** | The default, unless the repo sets another one in `docs/agents/workflow.md` | Only edge cases the plan did not settle |
 | **Pair** | Loose ends or a very complex task: proposed after research, on with your yes | Every test |
 | **Autonomous** | Small, simple tasks, on with your yes | None; it stops only for what really needs you |
 

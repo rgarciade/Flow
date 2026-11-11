@@ -40,6 +40,24 @@ Model profiles used by `flow-work`'s subagents. Each profile maps the two tiers,
 - **standard**: strong `<model>`, fast `<model>`
 - **deep**: strong `<model>`, fast `<model>`
 
+## Agents
+
+How `flow-work` runs in this repo: the mode a task starts in, and who runs each role.
+
+- **Default working mode**: `<semi-autonomous | pair | autonomous>`. The user can still ask for another mode on any task. With `autonomous`, a task that research finds is not small and simple starts in semi-autonomous instead.
+
+| Role | Runs in |
+|---|---|
+| research | `<subagent, or manager:agent>` |
+| plan | `<subagent, or manager:agent>` |
+| tests | `<subagent, or manager:agent>` |
+| implement, fix | `<subagent, or manager:agent>` |
+| review | `<subagent, or manager:agent>` |
+
+- `subagent`: the harness's own subagents, on the models above. This is the default for every role.
+- `<manager>:<agent>`: another coding agent, launched through an agent manager installed on the machine, for example `orca:codex`. Write `<manager>:other` to mean any agent different from the one running the flow, for an independent second opinion (useful for review).
+- When the manager or the agent is not available on a machine, that role runs as `subagent` and the user is told. Nobody needs the manager to work on this repo.
+
 ## Docs
 
 Where the project's own documentation lives, and how `flow-work` keeps it current: each task's plan lists the documents it affects, they are updated with the implementation, and the review checks them.

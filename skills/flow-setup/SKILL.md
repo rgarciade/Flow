@@ -30,6 +30,7 @@ Read, don't assume:
 - Test and typecheck commands: `package.json` scripts, `Makefile`, `pyproject.toml`, `deno.json`, CI workflows.
 - Where tests live (folders and file name patterns), so a glob can match every test file.
 - The language of recent tasks and PRs, through whatever access you found.
+- Agent managers: is a tool that launches other coding agents installed (for example the `orca` CLI), and which agents does it offer?
 
 ## 2. The task tracker
 
@@ -62,6 +63,8 @@ Say in one line what each setting is for when its name does not explain it (mode
 8. Engram sync: share this project's Engram memory through git in `.engram/`. `ask` (default) asks before each export, `always` exports before every PR, `never` turns it off. Propose `never` if the Engram CLI is not installed.
 9. Status: which states `move-status` uses (in progress, in review, done) and how, recorded in `tracker.md`. `not used` if the user doesn't want status moves.
 10. Docs: the folder for the project's own documentation (default `docs/`, or an existing one you found) and whether `AGENTS.md`, `CLAUDE.md` or `CONTRIBUTING.md` already says which documents to update when code changes. If it does, record where; those rules win. `none` turns the docs step off. If the docs folder already exists, propose adding its reading guide: a `README.md` from [docs-readme-template.md](docs-readme-template.md), or its note merged into an existing index, with the "Contents" list filled from the documents already there. If the folder does not exist yet, don't create it: `flow-work` does so with the first document.
+11. Default working mode: the mode every task starts in. `semi-autonomous` (default) stops at every phase and shows only the tests where something had to be decided; `pair` shows every test; `autonomous` chains the phases for small tasks and stops only for what really needs the user.
+12. Who runs each role (research, plan, tests, implement and fix, review): the harness's own subagents (default), or another coding agent launched through an agent manager, written `<manager>:<agent>` (for example `orca:codex`, or `orca:other` for any agent different from the one running the flow). Ask this only when exploration found an agent manager; otherwise record `subagent` for every role and say so. Recommend `subagent` everywhere, and offer a different agent for review as the one case where a second opinion pays off. Explain that a role set to another agent falls back to subagents on machines without the manager.
 
 ## 5. Draft, confirm, write
 
@@ -86,7 +89,7 @@ Show the user a draft of every file you will write or edit, including the `## Ag
 
 ### Workflow
 
-Branches, base branch, languages, model profiles, test commands, Engram sync and docs for the flow skills. See `docs/agents/workflow.md`.
+Branches, base branch, languages, model profiles, agents and working mode, test commands, Engram sync and docs for the flow skills. See `docs/agents/workflow.md`.
 ```
 
 If the user chose the task folder alternative, make sure `.flow/` is **not** git-ignored: those records are part of the repo.

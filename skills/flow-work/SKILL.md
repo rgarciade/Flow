@@ -39,6 +39,14 @@ Each role uses a model **tier**, and a **profile** maps each tier to a model. Th
 
 **Profiles.** Every task runs on **standard**. Switch to **deep** only after the user's explicit OK, never on your own. Propose it, as one question with your reasons and a recommendation, when you judge the task very complex: the impact map spans several modules, there is a hard concurrency, data-migration or security concern, or the plan must choose between real architectural alternatives. Also propose it when a phase on standard does not converge: the user rejects the plan twice, or tests or fixes still fail after two rounds. The usual moment is the end of research, before the plan. The OK holds for the rest of this task only. Don't propose it for routine tasks: most tasks don't need it.
 
+**Who runs each role.** The **Agents** section of `docs/agents/workflow.md` says, per role, whether it runs as a subagent of this harness (`subagent`, the default, and what applies when the section is missing) or in another coding agent launched through an agent manager (`<manager>:<agent>`, for example `orca:codex`; `<manager>:other` means any agent different from the one running this flow). For a role set to another agent:
+
+- Read the manager's own skill or guide before using it, and launch the agent in the current worktree. Never create a worktree or a branch for it.
+- Give it the same brief and the same hand-back contract as a subagent (below), written to stand on its own: it starts with none of this session's context. Add that it must not commit, push or open a PR.
+- Wait for it to finish, then read its note. "One writer at a time" still holds: no other role that edits files starts until it is done.
+- The model tiers don't apply: it runs on its own model. Tell the user in one line which agent runs the role.
+- If the manager or the agent is not available, or the launch fails, run the role as a subagent and say so in one line. Never stop the task for this.
+
 Every subagent brief includes:
 
 - The repo path, task id and current branch.
@@ -147,7 +155,9 @@ The final report (Phase 8) keeps its own shape, and the plain-language rules app
 
 ## Working modes
 
-Every task runs in **semi-autonomous** mode by default: you stop at every phase, but the test gate stops only for the edge cases the plan did not settle, since the user already approved the seams and scenarios (see Phase 5). The other two modes need the user's explicit yes:
+Every task starts in the **Default working mode** set in the **Agents** section of `docs/agents/workflow.md`, or in **semi-autonomous** when it is not set. Say which mode the task starts in, and what it changes for the user, when you confirm the task in Phase 1. A default of `autonomous` counts as the user's yes only for a task that research finds small and simple: until research says so, and for any other task, work in semi-autonomous and tell the user why.
+
+In **semi-autonomous** mode you stop at every phase, but the test gate stops only for the edge cases the plan did not settle, since the user already approved the seams and scenarios (see Phase 5). Changing to a mode that is not the repo's default needs the user's explicit yes:
 
 - **Pair**: the user reviews every test. Propose it, as one question with your reasons, when the task has loose ends or is very complex: open questions the plan can't close, an impact map that spans several modules, an architectural choice between real alternatives. The usual moment is the end of research, together with the deep profile if that applies (see "Profiles").
 - **Autonomous**: you chain the phases on your own. Suggest it after research when the task is small and simple. When the user says yes, read `references/autonomous-mode.md` and follow it: it lists what you may skip and what you must still stop for.
@@ -300,7 +310,7 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show the findings as numbered tables, one per axis, and ask the user which to fix by number, as described in "Aggregate" in `references/code-review.md`. Head each table with what it answers ("Does it follow the project's rules?", "Does it do what the task asks?"), and write each finding so the user can decide without opening the file: what is wrong, and what happens if it stays.
 
-**Cross-agent review (optional).** Only when an agent manager that can launch other coding agents is installed (Orca, or a similar tool) and the user's own instructions allow it: run the two review axes through it with a different agent than the one running this flow, for an independent second opinion. Flow in Claude → review with Codex; flow in Codex or OpenCode → review with Claude. Launch it in the current worktree (never create a new one), with a read-only brief that follows the subagent briefs above (same pointers, notes keys and hand-back contract). If no such manager is available, or the other agent cannot be launched, run the review with the harness's own subagents as described above, and say so in one line. Never require the manager.
+**Review in another agent.** When the `review` role in `docs/agents/workflow.md` is set to another agent, run the two axes through it as in "Who runs each role", with a read-only brief, for an independent second opinion: flow in Claude → review with Codex; flow in Codex or OpenCode → review with Claude. When the section is missing, do the same only if an agent manager is installed and the user's own instructions ask for it. Otherwise, or when the other agent cannot be launched, the harness's own subagents run the review as described above.
 
 If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(<commit-ref>): …` or `refactor(<commit-ref>): …`, ending with `&& git push`). If a fix changes the plan, propose the plan record edit as in Phase 6.
 
