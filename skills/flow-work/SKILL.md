@@ -52,6 +52,22 @@ Every subagent brief includes:
 - With the Engram MCP server available: save with `mem_save` (topic key = the note key), read with `mem_search` and `mem_get_observation`, update with `mem_update`.
 - Without it: write the note to `.scratch/flow/<id>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored.
 
+**The state note.** You, the orchestrator, keep one extra note under `flow/<repo>/<id>/state`: where the task stands, in a few fixed lines. It is what lets the work continue after a break, a new session or a summarised context, without guessing.
+
+```
+phase: <last phase finished> · next: <phase>
+mode: <semi-autonomous | pair | autonomous>
+profile: <standard | deep>
+branch: <task branch>
+approved tests: <commit hash, the manifest path, or "not yet">
+waiting on: <the questions asked and not yet answered, or "nothing">
+decided: <one line per user decision not yet written to the task>
+pending commits: <commit commands given and not yet confirmed, or "none">
+```
+
+- **Update it, never add another**: at the end of every phase, when the mode or the profile changes, and whenever you stop to wait for the user.
+- **Read it first** when you resume a task, and whenever you are not sure where the task stands (for example after your context was summarised). If it contradicts the branch or the task, trust those, fix the note and tell the user in one line.
+
 Notes are working memory for this session's subagents. The durable record lives with the task.
 
 ## The task tracker
@@ -168,7 +184,7 @@ Create branches with `create-branch`, so each one is linked to its task:
 - **Child task**: make sure the group branch `feature/<parent-id>-<slug>` exists. If it doesn't, create it from the updated base branch with `create-branch` for the parent task, and push it. Then update the group branch and create `task/<id>-<slug>` from it with `create-branch`.
 - **Standalone task**: update the base branch and create `task/<id>-<slug>` from it with `create-branch`.
 - Creating these branches is part of the flow and needs no extra confirmation once the user has confirmed the task.
-- If the task branch already exists, check it out and continue from where it was: look for this task's plan record, its notes and its commits to find the current phase.
+- If the task branch already exists, check it out and continue from where it was: read the state note first (see "The state note"), then check it against this task's plan record, its other notes and its commits. Tell the user in one message where the task stands, what was waiting on them, and what you will do next; continue once they confirm.
 
 **Sync Engram in.** If the Engram CLI is available and the repo has a `.engram/` folder, run `engram sync --status`. If it reports chunks that are not imported yet, run `engram sync --import`, then tell the user in one line what was imported. Skip this when **Engram sync** in `docs/agents/workflow.md` is `never`.
 

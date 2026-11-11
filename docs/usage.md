@@ -111,7 +111,7 @@ Tell `flow-work` it is merged.
 
 ## Resume a task
 
-Run `/flow-work #42` again. If the task branch exists, it checks it out and works out where it stopped from its notes (`flow/<repo>/42/*`, in Engram or `.scratch/flow/42/`) and the commits on the branch.
+Run `/flow-work #42` again. If the task branch exists, it checks it out and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.scratch/flow/42/state.md`): the phase it reached, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
 
 ## Commits
 

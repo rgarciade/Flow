@@ -61,6 +61,7 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 | group architecture review | strong | No (before a group PR) |
 
 - **Model profiles.** Each repo maps `strong` and `fast` to real models in `docs/agents/workflow.md`, in two profiles. **standard** runs every task (in Claude Code, by default `sonnet` for both). **deep** (by default `strong: opus`, `fast: sonnet`) is only used when the orchestrator judges a task very complex and you agree; it holds for that task only. Where the harness cannot pick a model per subagent, subagents inherit the session model.
+- **A state note per task.** The orchestrator keeps `flow/<repo>/<issue>/state` up to date: the phase, the working mode, the model profile, the approved-tests reference, what is waiting on you and the commits still pending. It reads it first when a task is resumed or its context was summarised.
 - **Notes as the shared memory.** Each subagent saves its full result under `flow/<repo>/<issue>/<phase>` and returns at most 15 lines. The orchestrator passes note keys between phases, not content, so its context stays small. Notes go to Engram when its MCP server is available, or to `.scratch/flow/<issue>/<phase>.md` otherwise.
 - **Harness-neutral subagents.** The orchestrator uses whatever subagent mechanism the harness offers (`Agent` in Claude Code, `Task` in OpenCode and Cursor…). Without one, it runs each phase itself with the same discipline.
 - **One writer at a time.** Subagents that edit files run one after another; read-only ones may run in parallel.
