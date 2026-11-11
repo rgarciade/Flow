@@ -51,6 +51,7 @@ Spec-driven workflows plan everything up front and end in huge pull requests nob
 - **One task, one vertical slice.** Each one works end to end and fits one working session. Too big? Split it into child tasks.
 - **Tests first, then frozen.** The implementation must pass them without touching them; any change needs your OK.
 - **Visible from the first minute.** The branch is linked to the issue, every approved commit is pushed, and the status moves with your OK.
+- **Your harnesses, your models.** Each repo says which harnesses work on it (Claude Code, OpenCode, Codex… yours, or others launched through Orca or Herdr), which model each uses and who takes each role, with fallbacks when one runs out of quota. `flow-setup` walks you through it, and can be run again to change just that.
 - **Architecture and docs as you go.** Architectural decisions become ADRs, and the docs the task affects are updated before the PR.
 
 ## Quick start
@@ -69,7 +70,7 @@ Spec-driven workflows plan everything up front and end in huge pull requests nob
 
 Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor, Gemini CLI. It is developed and tested on Claude Code; [setup.md](docs/setup.md) covers the differences.
 
-**Where things live.** The skills are installed once per user, or copied into a repo when it should carry them. Each repo's own rules live in its `docs/agents/`, written by `flow-setup`: how its task tracker works (`tracker.md`) and its branches, languages, models and commands (`workflow.md`). Your general instructions file (`CLAUDE.md`, `AGENTS.md`…) stays yours: `flow-setup` only adds a short `## Agent skills` block that points at `docs/agents/`.
+**Where things live.** The skills are installed once per user, or copied into a repo when it should carry them. Each repo's own rules live in its `docs/agents/`, written by `flow-setup`: how its task tracker works (`tracker.md`) and its branches, languages, harnesses and models, and commands (`workflow.md`). Your general instructions file (`CLAUDE.md`, `AGENTS.md`…) stays yours: `flow-setup` only adds a short `## Agent skills` block that points at `docs/agents/`.
 
 ## Documentation
 

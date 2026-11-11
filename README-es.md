@@ -51,6 +51,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano y acaba
 - **Una tarea, una porción vertical.** Cada una funciona de principio a fin y cabe en una sesión de trabajo. ¿Demasiado grande? Se divide en tareas hijas.
 - **Primero los tests, y congelados.** La implementación tiene que hacerlos pasar sin tocarlos; cualquier cambio necesita tu OK.
 - **Visible desde el primer minuto.** La rama está enlazada al issue, cada commit aprobado se sube y el estado avanza con tu OK.
+- **Tus harness, tus modelos.** Cada repo dice qué harness trabajan en él (Claude Code, OpenCode, Codex… el tuyo, u otros lanzados con Orca o Herdr), qué modelo usa cada uno y cuál toma cada rol, con alternativas cuando uno se queda sin cuota. `flow-setup` te acompaña en la configuración y se puede volver a ejecutar para cambiar solo eso.
 - **Arquitectura y documentación sobre la marcha.** Las decisiones de arquitectura se convierten en ADR y la documentación afectada se actualiza antes del PR.
 
 ## Inicio rápido
@@ -69,7 +70,7 @@ Los flujos dirigidos por especificaciones lo planifican todo de antemano y acaba
 
 Funciona con cualquier entorno compatible con Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor y Gemini CLI. Se desarrolla y se prueba en Claude Code; [setup.md](docs/setup.md) explica las diferencias.
 
-**Dónde vive cada cosa.** Las skills se instalan una vez por usuario, o se copian en un repo cuando ese repo debe llevarlas consigo. Las reglas propias de cada repo viven en su `docs/agents/`, que escribe `flow-setup`: cómo funciona su gestor de tareas (`tracker.md`) y sus ramas, idiomas, modelos y comandos (`workflow.md`). Tu archivo de instrucciones generales (`CLAUDE.md`, `AGENTS.md`…) sigue siendo tuyo: `flow-setup` solo añade un bloque corto `## Agent skills` que apunta a `docs/agents/`.
+**Dónde vive cada cosa.** Las skills se instalan una vez por usuario, o se copian en un repo cuando ese repo debe llevarlas consigo. Las reglas propias de cada repo viven en su `docs/agents/`, que escribe `flow-setup`: cómo funciona su gestor de tareas (`tracker.md`) y sus ramas, idiomas, harness y modelos, y comandos (`workflow.md`). Tu archivo de instrucciones generales (`CLAUDE.md`, `AGENTS.md`…) sigue siendo tuyo: `flow-setup` solo añade un bloque corto `## Agent skills` que apunta a `docs/agents/`.
 
 ## Documentación
 
