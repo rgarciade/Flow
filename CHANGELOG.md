@@ -10,6 +10,8 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-11
+
 ### Behaviour changes
 
 - **`flow-work` writes every message to you in the scannable format of the `i-have-adhd` skill**, when it is installed: the action first, numbered steps, no preamble or recap. Before, only the list of tests in pair mode used it. The flow's own message shape and plain-language rules still win where they differ.
