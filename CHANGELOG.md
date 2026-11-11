@@ -10,6 +10,8 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-11
+
 ### Behaviour changes
 
 - **Harnesses and models are defined once per harness, and `flow-setup` walks you through them.** "Harness" is Claude Code, OpenCode, Codex and the like. The section of `docs/agents/workflow.md` is now called **Harnesses** (`flow-work` still reads a section called **Agents**, as in 0.1.0) and has two tables: the harnesses you have (where each runs, `subagent` or `<manager>:<harness>` such as `orca:opencode` or `herdr:claude`, with its strong, fast and optional deep model and its effort) and, per role, an ordered list of harnesses. When the first has no quota left, `flow-work` moves to the next and tells you. The deep profile now means that the strong roles use their harness's deep model. The split is fixed by role: usage is not balanced across subscriptions. `flow-setup` asks for this in a round of its own, and can be run again just to change the harnesses or models, touching only that section. A repo with the older **Models** section keeps working as before.
@@ -42,4 +44,5 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.2.0]: https://github.com/rgarciade/Flow/tree/v0.2.0
 [0.1.0]: https://github.com/rgarciade/Flow/tree/v0.1.0
