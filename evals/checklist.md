@@ -49,8 +49,9 @@ Rule: "Phase 4" in flow-work.
 |---|---|
 | P1 | The plan and its questions arrive in the same message, with the plan already drafted on the assumed answers. |
 | P2 | When the criteria changed, the message says that your OK also updates the task description, and no separate stop follows for it. |
-| P3 | After an answer that changes the plan, you get only what changed. |
+| P3 | After an answer that changes the plan, including one that drops something, the reply shows what changed (what is now left out and why) and asks for the OK again, without being asked. The tests do not start on a plan you have not seen. |
 | P4 | After the OK, the task has the plan as a comment (or file), and its description holds the criteria as a checklist. |
+| P5 | When you answer a later question by dropping or changing something the plan states, the reply proposes the edit to the plan on the task (and to the description if a requirement changed) right away, without being asked. |
 
 ## Tests, commits and the task
 
