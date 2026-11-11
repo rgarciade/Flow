@@ -22,7 +22,9 @@ usage() {
 
 flow_version() {
   local rev
-  rev="$(git -C "$repo_dir" rev-parse --short HEAD 2>/dev/null || echo "uncommitted")"
+  # A version tag when HEAD is on one (v0.1.0), the tag plus the distance from it
+  # otherwise (v0.1.0-3-gb44f7bd), or the bare commit when there are no tags.
+  rev="$(git -C "$repo_dir" describe --tags --always 2>/dev/null || echo "uncommitted")"
   if [[ -n "$(git -C "$repo_dir" status --porcelain 2>/dev/null)" ]]; then
     rev="$rev-dirty"
   fi

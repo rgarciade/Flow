@@ -25,7 +25,7 @@ git clone <this-repo> flow && cd flow
 | `./install.sh --dir <skills-dir>` | Any skills folder | Symlinks to this repo | Whatever reads that folder |
 
 - **Symlinked installs** update with a `git pull` here.
-- **Project installs** are copies, so the project works on any machine and in CI. Run the command again to update them, then commit. Each skill's `.flow-version` file records the `flow` commit it came from; commit `flow` before installing, or it reads `uncommitted`.
+- **Project installs** are copies, so the project works on any machine and in CI. Run the command again to update them, then commit. Each skill's `.flow-version` file records the `flow` version it came from: a tag such as `v0.1.0`, or the tag plus the commits after it (`v0.1.0-3-gb44f7bd`). Look that version up in the [changelog](../CHANGELOG.md) to see what changed since your copy, behaviour changes first. Commit `flow` before installing, or the version ends in `-dirty`.
 - **Nothing is overwritten** unless this script installed it. A skill of your own with the same name is reported as `skipped`.
 - The script refuses `~/.claude` (the default Claude Code profile) unless `FLOW_ALLOW_DEFAULT_PROFILE=1` is set, so a work setup is never touched by accident.
 
