@@ -51,6 +51,7 @@ Every subagent brief includes:
 
 - With the Engram MCP server available: save with `mem_save` (topic key = the note key), read with `mem_search` and `mem_get_observation`, update with `mem_update`.
 - Without it: write the note to `.scratch/flow/<id>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored.
+- **If saving to Engram fails** (the call errors, is blocked, or the note cannot be read back): write that note to `.scratch/flow/<id>/<phase>.md` instead, pass that path in the briefs, and tell the user in one line that the note went to the repo's scratch folder and why. Never go on as if a note had been saved. A subagent that cannot save its note says so in its hand-back and returns the full result in a file under `.scratch/flow/<id>/`.
 
 **The state note.** You, the orchestrator, keep one extra note under `flow/<repo>/<id>/state`: where the task stands, in a few fixed lines. It is what lets the work continue after a break, a new session or a summarised context, without guessing.
 
