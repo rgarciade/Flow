@@ -34,21 +34,21 @@ git clone <this-repo> flow && cd flow
 Claude Code reads skills only from `.claude/skills/` (project) and `<config-dir>/skills/` (user). It does not read `.agents/skills/`, which is why project mode adds links in `.claude/skills/`.
 
 - **Instructions file**: Claude Code reads `CLAUDE.md`. When a project has no `CLAUDE.md`, it loads `AGENTS.md` instead. The `instructionFiles` setting changes this: `claude-md-and-agents-md` loads both.
-- **Subagents and models**: the `Agent` tool can pick a model per subagent, so the profiles in `docs/agents/workflow.md` apply as written (default standard: `sonnet` for both tiers; deep: `strong: opus`, `fast: sonnet`).
+- **Subagents and models**: the `Agent` tool can pick a model per subagent, so the models in the Harnesses section of `docs/agents/workflow.md` apply as written (for example `sonnet` for the strong and fast tiers, and `opus` as the deep model).
 - **A separate profile**: to keep these skills away from another setup, install them with `--claude` into their own config folder and start Claude Code with `CLAUDE_CONFIG_DIR=<that folder>`. Claude Code still reads `~/.claude/CLAUDE.md` in that case; exclude it from the profile's `settings.json` with `"claudeMdExcludes": ["/Users/<you>/.claude/CLAUDE.md"]` if you don't want it.
 
 ### OpenCode
 
 - **Skills**: reads `.agents/skills/`, `.opencode/skills/` and `.claude/skills/` in the project, and `~/.agents/skills/`, `~/.config/opencode/skills/` and `~/.claude/skills/` for the user. Both `--project` and `--user` work.
 - **Instructions file**: `AGENTS.md`; `CLAUDE.md` only as a fallback.
-- **Subagents and models**: launched with the `Task` tool. A model per subagent comes from agent definitions (`opencode.json` or `.opencode/agents/*.md`, with `model: provider/model-id`); otherwise subagents inherit the main model. Set the tiers in `docs/agents/workflow.md` to the names you use, or `inherit`.
+- **Subagents and models**: launched with the `Task` tool. A model per subagent comes from agent definitions (`opencode.json` or `.opencode/agents/*.md`, with `model: provider/model-id`); otherwise subagents inherit the main model. Put the names you use in the Harnesses section of `docs/agents/workflow.md`, or `inherit`.
 - **Engram**: add it as an MCP server under `mcp` in `opencode.json`.
 
 ### Codex CLI, Cursor, Gemini CLI
 
 - **Skills**: all three read `.agents/skills/` and `~/.agents/skills/`. Cursor also reads `.claude/skills/`.
 - **Instructions file**: Codex and Cursor read `AGENTS.md`. Gemini CLI reads `GEMINI.md`; set `context.fileName` in its settings to also read `AGENTS.md`.
-- **Subagents and models**: each has its own way to define subagents with a model (TOML in `.codex/agents/`, Markdown in `.cursor/agents/` or `.gemini/agents/`). Use `inherit` in the tiers if you don't define them.
+- **Subagents and models**: each has its own way to define subagents with a model (TOML in `.codex/agents/`, Markdown in `.cursor/agents/` or `.gemini/agents/`). Use `inherit` as the model if you don't define them.
 - **Engram**: `codex mcp add`, Cursor's MCP settings, or `gemini mcp add`.
 
 These harnesses follow the shared Agent Skills format, but `flow` is developed and tested on Claude Code. Expect small differences elsewhere.
@@ -70,16 +70,16 @@ Tasks and pull requests can live in different places (Jira tasks, GitHub PRs): t
 
 Open your agent inside the project and run `flow-setup` (`/flow-setup` in Claude Code).
 
-It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, model profiles, test commands, test file globs, labels, Engram sync, status tracking, docs folder, the default working mode and, if an agent manager such as Orca is installed, which agent runs each role) and shows you a draft before writing:
+It explores the repo, asks its questions in batches (selectors when your agent supports them, otherwise a numbered list) with a proposed answer for each (base branch, branch names, languages, test commands, test file globs, labels, Engram sync, status tracking, docs folder, and in a round of its own the harnesses and models: which harnesses you use, their models, the default working mode and who takes each role) and shows you a draft before writing:
 
 ```
 docs/agents/tracker.md         how every task operation is done in your tracker
 docs/agents/domain.md          where the glossary and ADRs live
-docs/agents/workflow.md        base branch, branch names, languages, models, agents, commands, Engram sync, docs
+docs/agents/workflow.md        base branch, branch names, languages, models, harnesses, commands, Engram sync, docs
 AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the above
 <docs>/README.md               a reading guide for the project docs (only if the docs folder already exists)
 ```
 
-It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again.
+It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again; to change only the harnesses and models, say so and it walks you through that section alone.
 
 You can skip this step: `flow-backlog` and `flow-work` check for `docs/agents/workflow.md` and offer to run `flow-setup` when it is missing.

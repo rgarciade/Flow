@@ -72,17 +72,32 @@ The tests are frozen in every mode: until the `test` commit exists, a recorded c
 
 Ask for a mode when you start (`/flow-work #42, pair mode`) or at any time ("show me every test", "back to semi-autonomous").
 
-A repo can start its tasks in another mode: set **Default working mode** in the Agents section of `docs/agents/workflow.md`. With `autonomous` as the default, only tasks that research finds small and simple run that way; the rest start in semi-autonomous and you are told why.
+A repo can start its tasks in another mode: set **Default working mode** in the Harnesses section of `docs/agents/workflow.md`. With `autonomous` as the default, only tasks that research finds small and simple run that way; the rest start in semi-autonomous and you are told why.
 
-## Run a role in another agent
+## Choose the harnesses and models
 
-By default the research, plan, tests, implementation and review are done by subagents of the agent you are using. If you have an agent manager installed (for example Orca), the same Agents section can send a role to another coding agent:
+By default every role is done by subagents of the harness you are using (Claude Code, OpenCode, Codex…). The **Harnesses** section of `docs/agents/workflow.md` lets you pick which harnesses work on the repo and which models each one uses, for example Claude Code for the plan and the tests, and OpenCode for the rest:
 
 ```markdown
-| review | `orca:codex` |
+| Harness | Runs in | Strong model | Fast model | Deep model | Effort |
+|---|---|---|---|---|---|
+| claude | `subagent` | `sonnet` | `sonnet` | `opus` | |
+| opencode | `orca:opencode` | `<model id>` | `<model id>` | | |
+
+| Role | Harnesses, in order | Uses |
+|---|---|---|
+| plan, tests | claude | strong |
+| research, implement, fix | opencode, claude | fast |
+| review | opencode, claude | fast |
 ```
 
-The usual case is the review, for a second opinion from a different model. The other agent works in the same checkout, gets the same instructions as a subagent and never commits. On a machine without the manager, the role runs as a subagent and you are told in one line, so teammates don't need it.
+You don't write it by hand: run `/flow-setup` the first time, or run it again and say you want to change the harnesses or models. It asks which harnesses you have, their models and which one takes each role, shows the section before and after, and touches nothing else.
+
+- **Fallbacks.** Several harnesses on a role are alternatives, in order. If the first has no quota left or is not installed, the next one takes over and you are told in one line.
+- **Managers.** `orca:<harness>` uses Orca and `herdr:<harness>` uses Herdr to launch it. On a machine without the manager, the role runs as a subagent and you are told, so teammates don't need it.
+- **Models.** Each harness has its own: strong for the plan and the tests, fast for the rest, and an optional deep one used only when `flow-work` proposes the deep profile for a very complex task and you agree.
+- The orchestrator is the session you open, so its harness and model are your choice. The split is fixed by role: nothing balances usage across your subscriptions.
+- The other harness works in the same checkout, gets the same instructions as a subagent and never commits.
 
 ## Let it work on its own (simple tasks)
 

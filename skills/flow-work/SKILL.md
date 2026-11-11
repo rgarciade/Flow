@@ -26,7 +26,7 @@ These override anything more permissive elsewhere, including the user's general 
 
 Launch each role as a subagent with your harness's own mechanism: the `Agent` tool in Claude Code (`subagent_type: "general-purpose"`), the `Task` tool in OpenCode and Cursor, the subagent support in Codex or Gemini CLI. If the harness cannot spawn subagents, run the phase yourself, keeping the same brief and hand-back discipline.
 
-Each role uses a model **tier**, and a **profile** maps each tier to a model. The **Models** section of `docs/agents/workflow.md` defines two profiles for this repo: **standard** (for example every tier on `sonnet`) and **deep** (for example `strong: opus`, `fast: sonnet`). That mapping is the user's choice and overrides any default subagent model. If the section has a single tier mapping and no profiles, use it as the only profile. If the harness cannot choose a model per subagent, the subagent inherits the session model. Start each subagent's visible name with the model it runs on, for example `sonnet: tests #42`.
+Each role uses a model **tier**, **strong** or **fast**, and the **Harnesses** section of `docs/agents/workflow.md` says which harness (Claude Code, OpenCode, Codex…) runs it and with which model. That choice is the user's and overrides any default subagent model. Start each subagent's visible name with the model it runs on, for example `sonnet: tests #42`.
 
 | Role | Tier | Writes files? |
 |---|---|---|
@@ -37,15 +37,20 @@ Each role uses a model **tier**, and a **profile** maps each tier to a model. Th
 | review-standards, review-spec | fast | no |
 | fix | fast | yes (never test files) |
 
-**Profiles.** Every task runs on **standard**. Switch to **deep** only after the user's explicit OK, never on your own. Propose it, as one question with your reasons and a recommendation, when you judge the task very complex: the impact map spans several modules, there is a hard concurrency, data-migration or security concern, or the plan must choose between real architectural alternatives. Also propose it when a phase on standard does not converge: the user rejects the plan twice, or tests or fixes still fail after two rounds. The usual moment is the end of research, before the plan. The OK holds for the rest of this task only. Don't propose it for routine tasks: most tasks don't need it.
+**Profiles.** Every task runs on **standard**: each role uses its harness's strong or fast model. Switch to **deep** only after the user's explicit OK, never on your own: the roles on the strong tier then use their harness's **deep model**, when it has one. Propose it, as one question with your reasons and a recommendation, when you judge the task very complex: the impact map spans several modules, there is a hard concurrency, data-migration or security concern, or the plan must choose between real architectural alternatives. Also propose it when a phase on standard does not converge: the user rejects the plan twice, or tests or fixes still fail after two rounds. The usual moment is the end of research, before the plan. The OK holds for the rest of this task only. Don't propose it for routine tasks: most tasks don't need it.
 
-**Who runs each role.** The **Agents** section of `docs/agents/workflow.md` says, per role, whether it runs as a subagent of this harness (`subagent`, the default, and what applies when the section is missing) or in another coding agent launched through an agent manager (`<manager>:<agent>`, for example `orca:codex`; `<manager>:other` means any agent different from the one running this flow). For a role set to another agent:
+**Who runs each role.** The **Harnesses** section of `docs/agents/workflow.md` has two tables. The first lists the harnesses the user has: where each runs, its strong, fast and deep models and its effort. The second gives each role an ordered list of harnesses, and the tier it uses. Use the first harness of the list that is available and has quota; the others are fallbacks. `subagent` means a subagent of the harness running this flow; `<manager>:<harness>`, for example `orca:opencode` or `herdr:claude`, means another harness launched through an agent manager (Orca, Herdr); `<manager>:other` means any harness different from the one running this flow. A section titled **Agents**, from version 0.1.0, is read the same way. Effort is passed only when the table gives one.
 
-- Read the manager's own skill or guide before using it, and launch the agent in the current worktree. Never create a worktree or a branch for it.
+If the section is missing, every role is a subagent of this harness. If the repo still has the older **Models** section (two profiles that map the tiers to models, and no harnesses table), use it as before: every role is a subagent on the model its profile gives, and if the harness cannot choose a model per subagent, the subagent inherits the session model.
+
+For a role set to another harness:
+
+- Read the manager's own skill or guide before using it, and launch the harness in the current worktree, passing the model and effort from the table (for Orca, `agent launch --agent <harness> --model <model> --effort <level>`; Herdr has no model or effort options of its own, so its guide, printed by `hc --skill`, says how to launch a program in a folder, and the model and effort go as that harness's own command-line options). Never create a worktree or a branch for it.
 - Give it the same brief and the same hand-back contract as a subagent (below), written to stand on its own: it starts with none of this session's context. Add that it must not commit, push or open a PR.
 - Wait for it to finish, then read its note. "One writer at a time" still holds: no other role that edits files starts until it is done.
-- The model tiers don't apply: it runs on its own model. Tell the user in one line which agent runs the role.
-- If the manager or the agent is not available, or the launch fails, run the role as a subagent and say so in one line. Never stop the task for this.
+- Tell the user in one line which harness and model run the role.
+- If the launch fails, the harness reports that it has no quota left, or the manager is not available, go on to the role's next harness and say so in one line. When none is usable, run the role as a subagent and say so. Never stop the task for this.
+- The split is fixed by the tables: don't spread work across harnesses on your own to even out usage, because the harness gives you no usage figures.
 
 Every subagent brief includes:
 
@@ -310,7 +315,7 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 
 Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show the findings as numbered tables, one per axis, and ask the user which to fix by number, as described in "Aggregate" in `references/code-review.md`. Head each table with what it answers ("Does it follow the project's rules?", "Does it do what the task asks?"), and write each finding so the user can decide without opening the file: what is wrong, and what happens if it stays.
 
-**Review in another agent.** When the `review` role in `docs/agents/workflow.md` is set to another agent, run the two axes through it as in "Who runs each role", with a read-only brief, for an independent second opinion: flow in Claude → review with Codex; flow in Codex or OpenCode → review with Claude. When the section is missing, do the same only if an agent manager is installed and the user's own instructions ask for it. Otherwise, or when the other agent cannot be launched, the harness's own subagents run the review as described above.
+**Review in another harness.** When the `review` role in `docs/agents/workflow.md` is set to another harness, run the two axes through it as in "Who runs each role", with a read-only brief, for an independent second opinion: flow in Claude → review with Codex; flow in Codex or OpenCode → review with Claude. When the section is missing, do the same only if an agent manager is installed and the user's own instructions ask for it. Otherwise, or when the other harness cannot be launched, the harness's own subagents run the review as described above.
 
 If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(<commit-ref>): …` or `refactor(<commit-ref>): …`, ending with `&& git push`). If a fix changes the plan, propose the plan record edit as in Phase 6.
 
