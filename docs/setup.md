@@ -80,6 +80,6 @@ AGENTS.md or CLAUDE.md         a short "## Agent skills" block pointing at the a
 <docs>/README.md               a reading guide for the project docs (only if the docs folder already exists)
 ```
 
-It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again; to change only the harnesses and models, say so and it walks you through that section alone.
+It does not commit. Review the files and commit them yourself; the command is in its last message. To change a setting later, edit `docs/agents/workflow.md` directly, or run `flow-setup` again; to change only the harnesses and models, say so and it walks you through that section alone, plus the `## Agent skills` block if its text is out of date.
 
 You can skip this step: `flow-backlog` and `flow-work` check for `docs/agents/workflow.md` and offer to run `flow-setup` when it is missing.

@@ -91,7 +91,7 @@ By default every role is done by subagents of the harness you are using (Claude 
 | review | opencode, claude | fast |
 ```
 
-You don't write it by hand: run `/flow-setup` the first time, or run it again and say you want to change the harnesses or models. It asks which harnesses you have, their models and which one takes each role, shows the section before and after, and touches nothing else.
+You don't write it by hand: run `/flow-setup` the first time, or run it again and say you want to change the harnesses or models. It asks which harnesses you have, their models and which one takes each role, writes the section and shows it before and after, with no extra approval stop (nothing is committed, so the diff is the review), and touches nothing else except the short `## Agent skills` block in `AGENTS.md` or `CLAUDE.md`, which it brings up to date if its text is out of date.
 
 - **Fallbacks.** Several harnesses on a role are alternatives, in order. If the first has no quota left or is not installed, the next one takes over and you are told in one line.
 - **Managers.** `orca:<harness>` uses Orca and `herdr:<harness>` uses Herdr to launch it. On a machine without the manager, the role runs as a subagent and you are told, so teammates don't need it.

@@ -76,11 +76,11 @@ Ask in three short rounds, each depending on the one before:
 
 Say, once, that the orchestrator is the session the user opens, so it is not set here, and that the split is fixed by role: nothing balances usage across subscriptions on its own. When there is no agent manager, record the one harness running the flow and the same list for every role.
 
-On a change, show the section before and after, write only that section, and give the commit command.
+When the user ran `flow-setup` only to change the harnesses or models, their answers to the three rounds are the confirmation: write the section and show it before and after in the same message, with no further stop to ask for approval. Nothing is committed, so the diff is the review. Write only that section of `workflow.md` and leave `tracker.md`, `domain.md` and the docs `README.md` untouched. The one exception is the `## Agent skills` block (see step 5): if its text differs from the block in this skill's template (for example a repo set up with 0.1 that still says "model tiers" instead of "harnesses and models, working mode"), update it in place in the same step and show it too. Never create the other instructions file. Then give the commit command.
 
 ## 5. Draft, confirm, write
 
-Show the user a draft of every file you will write or edit, including the `## Agent skills` block. Let them edit it. Then write:
+Show the user a draft of every file you will write or edit, including the `## Agent skills` block. Let them edit it. Then write. (When the user ran `flow-setup` only to change the harnesses or models, skip this confirmation: see "Harnesses and models".)
 
 - `docs/agents/tracker.md` (or the shared path the user chose)
 - `docs/agents/domain.md` (from Matt's template)

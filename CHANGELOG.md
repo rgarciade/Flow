@@ -10,6 +10,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-11
+
+### Behaviour changes
+
+- **Changing only the harnesses or models no longer asks for a second approval.** When you run `flow-setup` just to change them, your answers to its three rounds count as the confirmation: it writes the section and shows the before and after in the same message. Nothing is committed, so the diff is the review.
+- **The short `## Agent skills` block in `AGENTS.md` or `CLAUDE.md` is brought up to date on that path too.** It is the one exception to "touch only that section": if its text differs from the current template (a repo set up with 0.1 still says "model tiers"), `flow-setup` updates it in place and shows it. It never creates the other file. `tracker.md`, `domain.md` and the docs `README.md` stay untouched.
+
 ## [0.2.0] - 2026-11-11
 
 ### Behaviour changes
@@ -44,5 +51,6 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.3.0]: https://github.com/rgarciade/Flow/tree/v0.3.0
 [0.2.0]: https://github.com/rgarciade/Flow/tree/v0.2.0
 [0.1.0]: https://github.com/rgarciade/Flow/tree/v0.1.0
