@@ -10,6 +10,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-11
+
+### Added
+
+- A check in `evals/checklist.md` (M9) for the scannable messages and the light plan message.
+- `install.sh --project` warns when the project's `.gitignore` ignores a skill it just installed (a repo that lists its skills one by one needs a `!.agents/skills/<name>/` line for each), so teammates are not left without it.
+
 ## [0.4.0] - 2026-11-11
 
 ### Behaviour changes
@@ -63,6 +70,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.4.1]: https://github.com/rgarciade/Flow/tree/v0.4.1
 [0.4.0]: https://github.com/rgarciade/Flow/tree/v0.4.0
 [0.3.0]: https://github.com/rgarciade/Flow/tree/v0.3.0
 [0.2.0]: https://github.com/rgarciade/Flow/tree/v0.2.0
