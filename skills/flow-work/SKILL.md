@@ -67,6 +67,7 @@ pending commits: <commit commands given and not yet confirmed, or "none">
 
 - **Update it, never add another**: at the end of every phase, when the mode or the profile changes, and whenever you stop to wait for the user.
 - **Read it first** when you resume a task, and whenever you are not sure where the task stands (for example after your context was summarised). If it contradicts the branch or the task, trust those, fix the note and tell the user in one line.
+- **Close it** when the PR is opened: it stops being a progress note and becomes the task's memory for later work (see "Close the state note" in Phase 8).
 
 Notes are working memory for this session's subagents. The durable record lives with the task.
 
@@ -192,7 +193,7 @@ Tell the user, in one line, the branch name (now linked to the task) and what wa
 
 ## Phase 3: Research (fast)
 
-Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<id>/research` and returns:
+Brief a research subagent to read the issue, the parent issue's "Architecture notes" for a child task, the glossary and ADRs from `docs/agents/domain.md`, and the code the task touches. It also looks for the closed state notes of earlier tasks in the same area (`flow/<repo>/*/state`; with Engram, search by the modules and terms the task touches) and reads their decisions, gotchas and open ends. They are leads to check against the code, never facts. It checks the issue's "Preliminary notes" (libraries, connectors, APIs) against the code and the dependencies as they are today, and flags anything that no longer holds. It saves under `flow/<repo>/<id>/research` and returns:
 
 - What exists today that the task builds on (as `path:line` links).
 - An **impact map**: for each operation the task hooks into or changes (saving a record, assigning an item, sending an event, a function every caller must go through), every place in the code where that operation happens, found by searching the code for the operation itself, not taken from the issue's list. Each entry has its `path:line` and says whether the task covers it. A place the issue does not mention is an open question, never silently out of scope.
@@ -337,6 +338,30 @@ Then open the PR, if the user said yes in the closing round, with `open-pr`:
 - The `closing-reference` for this task in the body, plus a link to the parent task if there is one.
 
 Then create the summary record on the task, with the PR link, and move the task to "in review" if the user accepted it in the closing round (skip it when `move-status` is not used). The user reviews and merges the PR.
+
+**Close the state note.** Last, rewrite `flow/<repo>/<id>/state` in its closed form. The progress fields are of no use any more; what a later task in this area needs is what was built, where, and what to watch out for. This is a note for agents, so keep it exact and ordered, in this shape:
+
+```
+<ref> <title> · closed <YYYY-MM-DD>
+task: <task link> · PR: <PR link> · branch: <task branch>
+
+does: <what works now, in two or three lines; behaviour, not history>
+where:
+- <path:line>: <entry point | main logic | data | tests>
+decisions:
+- <decision>: <why> (<ADR-NNNN> if it has one)
+gotchas:
+- <what surprised us, or what a later change here must not break>
+open:
+- <review finding left unfixed | follow-up task | part left out, with its reason>
+verify: <the command that runs this task's tests, and any manual step>
+detail: <the keys of this task's other notes>
+```
+
+- **Write it from the final code**, not from the plan: check each `path:line` and each decision against what was merged into the branch. Drop anything that did not survive.
+- **About twenty lines.** No retelling of the phases. Omit a section that has nothing to say.
+- It needs no confirmation: tell the user in one line that the task's memory is saved, and where.
+- If the PR review later changes the code, update the same note when the user says the PR is merged.
 
 ## After the merge
 

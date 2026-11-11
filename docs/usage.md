@@ -39,7 +39,7 @@ What you will be asked to do, in order:
 8. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
 9. **Answer the closing questions, asked together** right after the report: ticking the met criteria, the ADRs (if the plan flagged architectural decisions), exporting Engram memory (if the repo uses Engram sync) and opening the PR.
 10. **Run, or authorise, the commits that follow from your answers**: `docs(#42)` for the ADRs and `chore(#42)` for the Engram export.
-11. **Review and merge the PR** on your code host.
+11. **Review and merge the PR** on your code host. The agent then saves the task's memory for later tasks (what was built, where, decisions and gotchas); it needs nothing from you.
 
 Every message between phases follows the same shape: where the task is, what is needed from you, what the task is about, what the phase found, the questions, and what happens once you answer. It is written in plain words, without the skill's internal vocabulary.
 
