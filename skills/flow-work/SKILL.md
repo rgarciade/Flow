@@ -71,6 +71,7 @@ Every subagent brief includes:
 
 ```
 phase: <last phase finished> · next: <phase>
+done: <one short line per finished phase, kept: what it produced or settled, e.g. "research: 3 places touched, fits one session">
 mode: <semi-autonomous | pair | autonomous>
 profile: <standard | deep>
 branch: <task branch>
@@ -80,7 +81,7 @@ decided: <one line per user decision not yet written to the task>
 pending commits: <commit commands given and not yet confirmed, or "none">
 ```
 
-- **Update it, never add another**: at the end of every phase, when the mode or the profile changes, and whenever you stop to wait for the user.
+- **Update it, never add another**: at the end of every phase (adding its line to `done`, never replacing the earlier ones), when the mode or the profile changes, and whenever you stop to wait for the user.
 - **Read it first** when you resume a task, and whenever you are not sure where the task stands (for example after your context was summarised). If it contradicts the branch or the task, trust those, fix the note and tell the user in one line.
 - **Close it** when the PR is opened: it stops being a progress note and becomes the task's memory for later work (see "Close the state note" in Phase 8).
 
@@ -360,7 +361,7 @@ Then open the PR, if the user said yes in the closing round, with `open-pr`:
 
 Then create the summary record on the task, with the PR link, and move the task to "in review" if the user accepted it in the closing round (skip it when `move-status` is not used). The user reviews and merges the PR.
 
-**Close the state note.** Last, rewrite `flow/<repo>/<id>/state` in its closed form. The progress fields are of no use any more; what a later task in this area needs is what was built, where, and what to watch out for. This is a note for agents, so keep it exact and ordered, in this shape:
+**Close the state note.** Last, rewrite `flow/<repo>/<id>/state` in its closed form. The progress fields, `done` included, are deleted: move into the closed form only what a later task needs from them: what was built, where, and what to watch out for. This is a note for agents, so keep it exact and ordered, in this shape:
 
 ```
 <ref> <title> · closed <YYYY-MM-DD>

@@ -71,7 +71,7 @@ Rule: "Phase 8" in flow-work.
 |---|---|
 | C1 | The closing decisions (ticking the criteria, ADRs, memory export, opening the PR) are asked together, right after the report. |
 | C2 | The report marks each criterion with the same text the description has. |
-| C3 | After the PR is opened, the state note is in its closed form: what the task does, where, decisions and what to watch out for, and no progress fields (`phase:`, `waiting on:`, `pending commits:`). Read it in Engram under `flow/<repo>/<id>/state`, or in `.scratch/flow/<id>/state.md`. |
+| C3 | After the PR is opened, the state note is in its closed form: what the task does, where, decisions and what to watch out for, and no progress fields (`phase:`, `done:`, `waiting on:`, `pending commits:`). Read it in Engram under `flow/<repo>/<id>/state`, or in `.scratch/flow/<id>/state.md`. |
 | C4 | One line tells you that the task's memory was saved, and where. |
 
 ## The state note and resuming
@@ -80,7 +80,7 @@ Rule: "The state note" in flow-work. Checked on Task B, at the restart.
 
 | | Check |
 |---|---|
-| S1 | Before the restart, the state note exists and names the right phase, mode and pending questions. |
+| S1 | Before the restart, the state note exists and names the right phase, mode and pending questions, and keeps one short line for each phase already finished. |
 | S2 | In the new session, the first message says where the task stands and what was waiting on you. |
 | S3 | Nothing you had already decided is asked again. |
 | S4 | If a note could not be saved to Engram, it went to `.scratch/flow/<id>/` and you were told in one line. |
