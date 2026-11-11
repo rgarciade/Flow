@@ -84,3 +84,7 @@ La documentación detallada está en inglés:
 
 - El método de trabajo se inspira en una charla que propone sustituir el desarrollo dirigido por especificaciones por backlog, historias de usuario, porciones verticales y programación en pareja con la IA.
 - Algunas skills incluidas y referencias se adaptan de [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
+
+## Licencia
+
+[MIT](LICENSE). Las skills incluidas de terceros conservan su propia licencia en `vendor/mattpocock-skills/LICENSE`.

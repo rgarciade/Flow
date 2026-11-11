@@ -82,3 +82,7 @@ Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex 
 
 - The working method is inspired by a talk on replacing spec-driven development with backlog + user stories + vertical slices + pair programming with AI.
 - Some vendored skills and references are adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
+
+## License
+
+[MIT](LICENSE). The vendored skills keep their own licence in `vendor/mattpocock-skills/LICENSE`.
