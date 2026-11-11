@@ -10,6 +10,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-11
+
+### Behaviour changes
+
+- **When one of your answers drops or changes something in the plan, the agent updates the plan itself.** In the plan round, if an answer takes something out (or changes it), the reply shows what changed (what now stays out and why, the criteria, scenarios or manual checks affected) and asks for the OK again, without being asked. The tests never start on a plan that differs from the last one you saw.
+- **The same holds after the plan is approved.** When a later answer (a test question, a review finding, a closing question) drops or changes something the plan record or the task description states, the agent proposes the edit in the same message, with its line under "Changes to the plan", instead of waiting for the end of the implementation. The edit still needs your OK.
+
 ## [0.4.2] - 2026-11-11
 
 ### Added
@@ -76,6 +83,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.5.0]: https://github.com/rgarciade/Flow/tree/v0.5.0
 [0.4.2]: https://github.com/rgarciade/Flow/tree/v0.4.2
 [0.4.1]: https://github.com/rgarciade/Flow/tree/v0.4.1
 [0.4.0]: https://github.com/rgarciade/Flow/tree/v0.4.0

@@ -58,7 +58,7 @@ Spec-driven workflows plan everything up front and end in huge pull requests nob
 
 ```sh
 # 1. Install the skills (see docs/setup.md)
-npx github:rgarciade/Flow --project ~/code/my-app   # no clone needed; also updates a repo (add #v0.4.2 to pin a version)
+npx github:rgarciade/Flow --project ~/code/my-app   # no clone needed; also updates a repo (add #v0.5.0 to pin a version)
 ./install.sh --project ~/code/my-app      # into one repo, for every harness (versioned copies)
 ./install.sh --user                       # or for your user: OpenCode, Codex, Cursor, Gemini CLI
 ./install.sh --claude ~/.claude-personal  # or into a Claude Code profile
