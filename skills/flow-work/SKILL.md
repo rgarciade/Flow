@@ -111,6 +111,8 @@ Task-driven work is visible while it happens, not only when the PR arrives. Anyo
 
 Write every message to the user for someone who has not read the code, the notes or this skill, and who may come back to it after doing something else. It must be understood on its own, at a first reading. **Clear comes before short**: cut what the user does not need, never the words that make a line understandable.
 
+Before your first message to the user, read `references/phase-messages.md`: it shows a cryptic and a clear version of the same message.
+
 **Shape.** Keep this order. Skip a part only when it has nothing to say.
 
 1. **Where we are.** One line with the task, the phase that just ended and the one that comes next, for example `#42 Export to CSV · research done (3 of 8) · next: plan`.
