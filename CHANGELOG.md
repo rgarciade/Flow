@@ -10,6 +10,12 @@ The skills are instructions for an agent, so a change here can change what the a
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-11
+
+### Behaviour changes
+
+- **The task's state note keeps a short line for each finished phase,** not only the last one: what the phase produced or settled (for example "research: 3 places touched, fits one session"). When the task is resumed, the agent reads how it got there, not just where it stands. When the PR is opened the progress lines are deleted, and only what a later task needs (what was built, where, what to watch out for) moves into the closed note.
+
 ## [0.5.0] - 2026-11-11
 
 ### Behaviour changes
@@ -83,6 +89,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.6.0]: https://github.com/rgarciade/Flow/tree/v0.6.0
 [0.5.0]: https://github.com/rgarciade/Flow/tree/v0.5.0
 [0.4.2]: https://github.com/rgarciade/Flow/tree/v0.4.2
 [0.4.1]: https://github.com/rgarciade/Flow/tree/v0.4.1
