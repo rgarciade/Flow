@@ -77,6 +77,8 @@ Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex 
 - [Setup](docs/setup.md): requirements, installation, configuring a repo.
 - [Usage guide](docs/usage.md): day-to-day recipes.
 - [Flows](docs/flows.md): how each phase, branch and subagent fits together.
+- [Evals](evals/README.md): sample tasks and a checklist to check how the skills behave after a change.
+- [Changelog](CHANGELOG.md): what changed in each version, behaviour changes first.
 
 ## Credits
 

@@ -79,6 +79,8 @@ La documentación detallada está en inglés:
 - [Instalación](docs/setup.md): requisitos, instalación y configuración de un repo.
 - [Guía de uso](docs/usage.md): recetas para el día a día.
 - [Flujos](docs/flows.md): cómo encajan las fases, las ramas y los subagentes.
+- [Evals](evals/README.md): tareas de ejemplo y una lista de comprobación para ver cómo se comportan las skills después de un cambio.
+- [Registro de cambios](CHANGELOG.md): qué cambió en cada versión, con los cambios de comportamiento primero.
 
 ## Créditos
 
