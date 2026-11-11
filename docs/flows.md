@@ -82,7 +82,7 @@ Anyone can understand a task from the tracker alone, without the agent's notes. 
 | Where | What | When it changes |
 |---|---|---|
 | Task description | The _what_: what to build, acceptance criteria, out of scope, a link to the plan record, and a `## Changes` log at the bottom (what changed and why) | Edited whenever the agreed requirements change, after you approve the edit |
-| Plan record (marker `flow:plan`) | The _how_, in 10 to 15 lines: seams under test, scenarios, steps, and a "Changes to the plan" log | Created after planning; **edited in place**, after you approve, if implementation or review changes the plan |
+| Plan record (marker `flow:plan`) | The _how_, in 10 to 15 lines: what is tested and where, scenarios, steps, and a "Changes to the plan" log | Created after planning; **edited in place**, after you approve, if implementation or review changes the plan |
 | Summary record (marker `flow:summary`) | What was built, criteria met, deviations, open findings, link to the PR | Posted when the PR is opened |
 
 - **At most two records per task** from `flow-work`. Changes edit what exists instead of adding more.

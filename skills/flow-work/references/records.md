@@ -2,7 +2,7 @@
 
 Templates for the two records `flow-work` keeps on a task, read from `SKILL.md` ("The task is the source of truth"). They are in GitHub Markdown: adapt them to the tracker's markup, note block and record marker, and write them in the task language.
 
-Plan record template (10 to 15 lines below the header):
+Plan record template (10 to 15 lines below the header). The task's readers are the team, not this skill: write it in plain words, without the skill's own vocabulary (see "Phase messages" in `SKILL.md`).
 
 ```markdown
 <!-- flow:plan -->
@@ -10,8 +10,8 @@ Plan record template (10 to 15 lines below the header):
 > **Implementation notes**: how this task is being built. The requirements are in the task description; flow-work updates these notes when the plan changes.
 > Last update: <YYYY-MM-DD> · branch `<task branch>`
 
-### Seams under test
-- `<public interface>`: what it catches
+### What is tested, and where
+- `<function, endpoint or screen the test calls>`: what it catches, in plain words
 
 ### Scenarios
 1. <one line per scenario>
