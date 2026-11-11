@@ -13,14 +13,15 @@ You are the **orchestrator**. You work **with the user, in the session**: you sh
 
 These override anything more permissive elsewhere, including the user's general git instructions:
 
-- **The user is in the loop at every phase.** End each phase by showing its result in a few lines and saying what comes next (see "Phase messages"). Don't chain phases silently. The test gate and autonomous mode follow "Working modes".
+- **The user is in the loop at every phase.** End each phase by showing its result in plain words and saying what comes next (see "Phase messages"). Don't chain phases silently. The test gate and autonomous mode follow "Working modes".
 - **Decisions belong to the user.** Anything the issue and the agreed plan don't settle (a design choice, a dependency, a trade-off, a scope question) goes to the user as a question with your recommendation. Never decide it for them.
 - **Never commit on your own.** At each commit point, give the user the exact command and wait. Run it only if the user explicitly tells you to.
 - **Never merge PRs.** The user reviews and merges every PR on the code host.
 - **Never modify approved tests on your own.** After the test gate, the test files are frozen. If a test looks wrong, follow "Changing an approved test": stop, explain why, and change it only after the user's OK.
 - **One writer at a time.** Subagents that edit files run one after another. Read-only subagents (research, review) may run in parallel.
 - **No worktrees, no child branches beyond the ones in `docs/agents/workflow.md`.**
-- **Batch independent questions.** Ask the questions that don't depend on each other together. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, your proposed answer first, and the free-text option left open. Otherwise, use a numbered list with your proposed answer for each, so the user can reply "OK" or correct only some by number. Ask a question alone first when its answer changes the next ones. After asking, stop and wait.
+- **Batch independent questions.** Before asking anything, gather every open question the phase has, then ask all the ones that don't depend on each other in a single round. Never drip-feed them (ask one, wait, ask the next) unless the answer to one changes the others; in that case ask that one alone first and say that more questions follow. If the agent has a question tool with selectable options (for example `AskUserQuestion` in Claude Code), use it: one selector per question, your proposed answer first, and the free-text option left open; if the tool takes fewer questions per call than you have, fill each call to its limit. Otherwise, use a numbered list with your proposed answer for each, so the user can reply "OK" or correct only some by number. After asking, stop and wait.
+- **Explain what is new or complex.** If a question touches something not yet discussed in this session, or a concept that is hard to follow (an architectural pattern, a library, a trade-off with non-obvious consequences), explain it in plain words, in two or three lines, right before the question. If a proper explanation would be longer than that, don't write it: add "explain it first" as an option of that question, so the user can ask for the explanation before deciding.
 
 ## Subagents
 
@@ -108,17 +109,46 @@ Task-driven work is visible while it happens, not only when the PR arrives. Anyo
 
 ## Phase messages
 
-Every message to the user between phases is short and built for scanning. The detail lives in the notes; the user can ask for it.
+Write every message to the user for someone who has not read the code, the notes or this skill, and who may come back to it after doing something else. It must be understood on its own, at a first reading. **Clear comes before short**: cut what the user does not need, never the words that make a line understandable.
 
-- **Action first.** The first line says what you need from the user (an OK, an answer, a choice) or, if nothing, what comes next.
-- **At most about eight lines** before the questions: only what the user must know to decide. One line per item, with `path:line` links instead of quoted code. Lists the user must approve item by item (seams and scenarios, test edge cases, review findings) may run longer, but still one line per item.
-- **The problem in one line.** Right after the action line, say in plain words what the task fixes or builds, so the user can read the rest without remembering the issue.
-- **Short is not cryptic.** The user has not read the code or the notes. Explain every internal term (a private field, a mock, a seam, an abbreviation such as `mic`/`sys`) in a few words the first time it appears. Write each scenario as what happens, what should happen and what happens today. Give everything left out of scope its reason.
-- **No preamble, no recap.** Don't repeat earlier phases, don't retell what a subagent did, don't list what went as expected. Say only what is new, surprising or needs a decision.
-- **Questions last**, batched as in "Batch independent questions". Each question stands on its own: one line on what it is about and why it matters, then the options and your recommendation. Never refer to something the user has not seen in this message.
-- When a phase finds nothing worth reporting, say so in one line and go on.
+**Shape.** Keep this order. Skip a part only when it has nothing to say.
 
-The final report (Phase 8) is the one exception: it follows its own shape.
+1. **Where we are.** One line with the task, the phase that just ended and the one that comes next, for example `#42 Export to CSV · research done (3 of 8) · next: plan`.
+2. **What you need from the user.** One line: an OK, some answers, a choice, or "nothing, I go on with the plan".
+3. **What the task is about.** One line in plain words on what it fixes or builds, so the user can read the rest without remembering the issue.
+4. **What this phase found or did.** Only what is new, surprising or needs a decision. One item per line, each a full sentence that says what it is and why it matters, with `path:line` links instead of quoted code.
+5. **The questions**, last (see below).
+6. **What happens next.** One line on what you will do once they answer, and what a plain "OK" accepts.
+
+**Plain language.**
+
+- **Full sentences**, not fragments, arrows or lists of labels. `session check: 3 callers, 1 uncovered` tells the user nothing. "Three places check the session. The issue mentions two; the third is the export job (`path:line`), so we must decide whether this task covers it" does.
+- **This skill's own words stay inside the skill.** The user does not know them. Say what the thing is, in the language of the conversation:
+
+  | Instead of | Say something like |
+  |---|---|
+  | seam | where the test calls the code: this function, this endpoint, this screen |
+  | impact map | the places in the code this change touches |
+  | size verdict | whether the task fits in one session |
+  | edge case (at the test gate) | a test where something had to be decided that we had not agreed |
+  | plan record, summary record | the plan comment and the summary comment on the task |
+  | standards axis, spec axis | "does it follow the project's rules" and "does it do what the task asks" |
+  | deep profile, strong tier | using a more capable model for the plan and the tests |
+  | note keys, operation names (`move-status`, `create-record`) | never shown: say what you will do ("move the task to in progress") |
+
+  A working mode (pair, semi-autonomous, autonomous) may be named, but always with what it changes for the user.
+- **Names from the code** (a private field, a mock, an abbreviation such as `mic`/`sys`) are explained in a few words the first time they appear.
+- **Scenarios** are written as what the user does, what should happen and what happens today.
+- **Everything left out of scope** comes with its reason.
+- **Rewrite, never forward.** A subagent's hand-back is shorthand written for you. Read its note when you need the detail to explain something, then write the message from scratch for the user.
+
+**Length.** There is no line budget. A message is as long as it needs to be understood at a first reading, and no longer; most fit on one screen. Lists the user approves item by item (where to test and the scenarios, tests with open decisions, review findings) run one line per item. Don't recap earlier phases, don't retell what a subagent did, and don't list what went as expected: the detail lives in the notes, and the user can ask for it.
+
+**Questions.** Batch them as in "Batch independent questions" and explain new or complex topics as in "Explain what is new or complex". Each question stands on its own: what is being decided and why it matters, the options with what each one means in practice, and your recommendation with its reason. Never refer to something the user has not seen in this message.
+
+**Don't go silent.** Before a step that takes a while (a subagent, the full test suite), say in one line what starts now and what the user will get back. When a phase finds nothing worth reporting, say so in one line and go on.
+
+The final report (Phase 8) keeps its own shape, and the plain-language rules apply to it too.
 
 ## Working modes
 
@@ -179,7 +209,7 @@ Brief a research subagent to read the issue, the parent issue's "Architecture no
 
 Before showing the research, **verify every scope-narrowing claim yourself** with one direct search. A wrong "this needs no change" spreads: it goes into the out-of-scope list, the plan writes no test for it, and the spec review checks the code against that list and approves the gap.
 
-Show the user the research in three to five lines: what the task builds on, the places in the impact map the issue did not mention, the open questions, and the size verdict. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message. If it shows loose ends or a very complex task, propose pair mode and, if needed, the deep profile in the same message (see "Working modes" and "Profiles").
+Show the user the research as a phase message: what the task builds on, the places the change touches that the issue did not mention, the open questions, and whether the task fits in one session. Go on to planning once they agree; their comments go into the plan brief. If the size verdict says the task is small and simple, you may suggest autonomous mode in the same message. If it shows loose ends or a very complex task, propose pair mode and, if needed, the deep profile in the same message (see "Working modes" and "Profiles").
 
 **If the task is too big**, stop and offer the user, as one question:
 
@@ -203,12 +233,14 @@ Brief a plan subagent with the issue and the research key. Point it to `referenc
 - **Docs to touch**: the project documents this task makes stale or genuinely needs (following "Just enough docs" below) (a module's guide, the README, a user guide), each with what changes, or "none". Use the folder and rules in the **Docs** section of `docs/agents/workflow.md`; rules in the project's `AGENTS.md` or `CLAUDE.md` take precedence.
 - **ADR candidates**: the architectural decisions this plan makes (a new dependency, a pattern, a boundary between modules, a data model change), each with one line on why. Only decisions that are hard to reverse, affect more than one module, or were chosen between real alternatives (see `references/adr-template.md`). Most tasks have none. It also flags any conflict with an existing ADR or with the parent's "Architecture notes", which goes to the user as a question.
 
-Ask the user the questions, assumed answer first (see "Batch independent questions"). Then show the seams, the scenarios and any manual verification steps, and get the user's OK. No test is written at a seam the user has not confirmed, and a part is only verified manually if the user agreed it can't be tested. Save the agreed result back to the same note.
+Bring the plan to the user in **one round**, not two. Show the plan as it stands with the assumed answers: the refined acceptance criteria, where each test calls the code and what it catches, the scenarios, and any manual verification steps. In the same message, ask the questions, assumed answer first (see "Batch independent questions"), and ask for the OK on the plan. Say that the OK also updates the task description with these criteria, when step 2 below applies, so that edit needs no separate stop. If an answer changes the plan, revise it and show only what changed, then ask again. Ask a question before showing the plan only when the plan cannot be drafted without its answer.
+
+No test is written at a seam the user has not confirmed, and a part is only verified manually if the user agreed it can't be tested. Save the agreed result back to the same note.
 
 Then update the task (see "The task is the source of truth"):
 
 1. Create the plan record (`create-record`) with the agreed seams, scenarios and steps.
-2. The description must hold the acceptance criteria as a checklist (`- [ ]`), because the summary record and the final report grade the task against it. If the description has no acceptance criteria section (for example a bug report written from a template), or the refined criteria or the out-of-scope list differ from it, propose the description edit (criteria as they now stand, the `## Changes` line, and the link to the plan record) and apply it once the user approves. Never report "n/n criteria" for criteria that are not written in the description.
+2. The description must hold the acceptance criteria as a checklist (`- [ ]`), because the summary record and the final report grade the task against it. If the description has no acceptance criteria section (for example a bug report written from a template), or the refined criteria or the out-of-scope list differ from it, edit the description (criteria as they now stand, the `## Changes` line, and the link to the plan record). The user's OK on the plan covers this edit when the plan message showed the criteria and said so; otherwise show the exact change and wait. Never report "n/n criteria" for criteria that are not written in the description.
 
 ## Phase 5: Tests (strong) and the test gate
 
@@ -226,7 +258,7 @@ Brief a tests subagent with the plan key. It writes only test files, matching th
 - With edge cases: present only those, in the format below, and wait for the OK on them.
 - Without: don't wait. Record the tests with the `.scratch/flow/<id>/approved-tests/` manifest (see below), then show in one message the number of tests, that each fails for the expected reason and the command to run them. Go on to Phase 6. The test commit comes together with the implementation commit (see Phase 6).
 
-**Pair mode.** Present every test to the user. This message may run longer than "Phase messages" allows, one line per test, so shape it for fast scanning: if the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise use the action first, numbered lines, no preamble, no recap.
+**Pair mode.** Present every test to the user. This message is a long list, one line per test, so shape it for fast scanning: if the `i-have-adhd` skill is installed, read its SKILL.md and apply its formatting rules to this message only; otherwise use the action first, numbered lines, no preamble, no recap.
 
 - First line: the action, "Review the tests and reply OK to continue."
 - One numbered line per scenario: what it checks, with a link to the test.
@@ -271,7 +303,7 @@ Read `references/code-review.md` and run its two axes as two parallel subagents:
 - **Standards sources**: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/rules/*`, `.cursor/rules/*`, `CONTRIBUTING.md`, `CODING_STANDARDS.md` and any other standards file, plus the smell baseline in `references/code-review.md`.
 - **Architecture sources**, for the standards axis: the ADRs and the glossary from `docs/agents/domain.md`, the parent's "Architecture notes" for a child task, and this task's ADR candidates. Any code that contradicts an ADR is a finding that cites it ("contradicts ADR-0007"); so is a domain term used differently from the glossary.
 
-Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show the findings as numbered tables, one per axis, and ask the user which to fix by number, as described in "Aggregate" in `references/code-review.md`.
+Each saves under `flow/<repo>/<id>/review-standards` or `flow/<repo>/<id>/review-spec`. Show the findings as numbered tables, one per axis, and ask the user which to fix by number, as described in "Aggregate" in `references/code-review.md`. Head each table with what it answers ("Does it follow the project's rules?", "Does it do what the task asks?"), and write each finding so the user can decide without opening the file: what is wrong, and what happens if it stays.
 
 If any, brief a fix subagent with those findings. It never touches test files. Re-run the checks from Phase 6, then give the commit command (`fix(<commit-ref>): …` or `refactor(<commit-ref>): …`, ending with `&& git push`). If a fix changes the plan, propose the plan record edit as in Phase 6.
 
@@ -290,6 +322,8 @@ Write the report in this shape:
    - propose ticking the met criteria in the description (`edit-description`, needs the user's OK).
 2. **Files to review, in vertical order**: tests → entry point → logic → data. One `path:line` link per file, with one line on what changed. The user reviews the code; do not ask them to skip it.
 3. **Short summary** at the end: three lines at most.
+
+**Close in one round.** The report is followed by several small decisions: ticking the met criteria, the ADR drafts, the Engram export and opening the PR (with the move to "in review"). Ask the ones that apply together, right after the report, as in "Batch independent questions", instead of one stop each. Then carry out what the user accepted in the order below, stopping only where a commit command has to be run.
 
 **Write the ADRs**, before the PR. For each ADR candidate from the plan that still holds after implementation and review, draft `docs/adr/<NNNN>-<title>.md` from `references/adr-template.md` (location and language as in `docs/agents/domain.md`). Show the drafts to the user and write them once they approve; if an ADR supersedes an older one, propose updating the old one's status too. Give the commit command `git add docs/adr && git commit -m "docs(<commit-ref>): add ADR-<NNNN> <title>" && git push`. Skip this step when there are no candidates.
 
