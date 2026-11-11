@@ -31,16 +31,17 @@ What you will be asked to do, in order:
 
 1. **Confirm the task** as the agent understood it, and the branch it will create. If the task is already assigned to someone else or in progress, it warns you first.
 2. **Read the research summary** (what exists, the places in the code the change must reach that the issue did not mention, open questions, size) and add anything it missed.
-3. **Answer a few questions** that remove ambiguity. Each comes with an assumed answer.
-4. **Confirm the plan**, including the docs it will touch, any **manual verification** steps for parts that can't reasonably be tested (configuration, styling, infrastructure…), and the **seams**: the public interfaces that will be tested, each with what it catches and what it misses.
-   The plan is then recorded on the task and, if the requirements changed, you approve the update to the task description.
+3. **Answer the plan's questions and confirm the plan, in one round.** The plan arrives already drafted with an assumed answer for each question, so you see everything together: the refined acceptance criteria, the docs it will touch, any **manual verification** steps for parts that can't reasonably be tested (configuration, styling, infrastructure…), and the **seams**: the public interfaces that will be tested, each with what it catches and what it misses. If an answer of yours changes the plan, you get only what changed.
+4. **Nothing else for the plan.** Your OK also records the plan on the task and, when the criteria changed, updates the task description with the ones you just saw.
 5. **Check the test edge cases**, if any (see [Working modes](#working-modes)): one line each, with a link to the test. Reply `OK`, or ask for changes. Without edge cases it just tells you how many tests it wrote and goes on. In pair mode you approve every test here, then run the `test(#42)` commit.
 6. **Run, or authorise, the `test(#42)` and `feat(#42)` commits**, in that order, once the implementation passes and the docs it listed are updated. The `test` commit is the record of the approved tests.
 7. **Choose which review findings to fix**, by number. They come as one short table per axis, must-fix first, and include stale or redundant docs and code that contradicts an ADR. Then the `fix(#42)` or `refactor(#42)` commit.
 8. **Read the final report** and review the code in the order it gives you (tests → entry point → logic → data).
-9. **Approve the ADRs**, if the plan flagged architectural decisions, then the `docs(#42)` commit.
-10. **Export Engram memory or not** (if the repo uses Engram sync), then the `chore(#42)` commit.
-11. **Say yes to the PR**, then review and merge it on your code host.
+9. **Answer the closing questions, asked together** right after the report: ticking the met criteria, the ADRs (if the plan flagged architectural decisions), exporting Engram memory (if the repo uses Engram sync) and opening the PR.
+10. **Run, or authorise, the commits that follow from your answers**: `docs(#42)` for the ADRs and `chore(#42)` for the Engram export.
+11. **Review and merge the PR** on your code host.
+
+Every message between phases follows the same shape: where the task is, what is needed from you, what the task is about, what the phase found, the questions, and what happens once you answer. It is written in plain words, without the skill's internal vocabulary.
 
 ## Talk about a task and start right away
 

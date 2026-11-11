@@ -21,11 +21,11 @@
 | 1. Task | orchestrator | The issue (read or created) and its position: parent, blockers, children | Approve the draft if it was created; confirm the task and branch; OK the move to in progress |
 | 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed) | |
 | 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, impact map (every place the change must reach), open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
-| 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer questions, confirm seams |
+| 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer the questions and confirm the plan, in one round |
 | 5. Tests | tests subagent | Failing tests, each for the expected reason | **Check the edge cases** (pair mode: approve every test and run the `test(<commit-ref>)` commit) |
 | 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `test(<commit-ref>)` and `feat(<commit-ref>)` commits |
 | 7. Review | 2 review subagents, then fix | Standards and spec reports | Choose findings, `fix`/`refactor` commit |
-| 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), PR and summary record | Review the code, OK the move to in review, merge the PR |
+| 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), PR and summary record | Review the code, answer the closing questions together (criteria, ADRs, Engram export, PR, move to in review), merge the PR |
 
 **You are in the loop.** Every phase ends by showing you its result and waiting for you before the next one. Anything the issue and the plan don't settle comes to you as a question with a recommendation; subagents return such questions instead of guessing.
 

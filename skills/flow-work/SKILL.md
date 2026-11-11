@@ -329,19 +329,19 @@ Write the report in this shape:
 
 **Sync Engram out**, before the PR. Follow **Engram sync** in `docs/agents/workflow.md`:
 
-- `ask` (default): ask, in one line, whether to export this project's Engram memory to the repo.
+- `ask` (default): ask whether to export this project's Engram memory to the repo, as part of the closing round.
 - `always`: export without asking.
 - `never`: skip.
 
 To export, run `engram sync` from the repo root. It writes this project's memory to `.engram/` as compressed chunks; prompts are excluded. Then give the commit command, for example `git add .engram && git commit -m "chore(<commit-ref>): sync engram memory" && git push`, and wait, as in the hard rules. The export holds every memory of this project, not only this task's notes: remind the user of that the first time.
 
-Then ask, in one line, whether to open the PR. If yes, create it with `open-pr`:
+Then open the PR, if the user said yes in the closing round, with `open-pr`:
 
 - `--base`: the group branch for a child task, or the base branch for a standalone task.
 - Title and body in the PR language from `docs/agents/workflow.md`.
 - The `closing-reference` for this task in the body, plus a link to the parent task if there is one.
 
-Then create the summary record on the task, with the PR link. Unless `move-status` is not used, ask whether to move the task to "in review". The user reviews and merges the PR.
+Then create the summary record on the task, with the PR link, and move the task to "in review" if the user accepted it in the closing round (skip it when `move-status` is not used). The user reviews and merges the PR.
 
 ## After the merge
 
