@@ -36,4 +36,4 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
-[0.1.0]: https://github.com/rgarciade/Flow/releases/tag/v0.1.0
+[0.1.0]: https://github.com/rgarciade/Flow/tree/v0.1.0
