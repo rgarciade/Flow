@@ -8,6 +8,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.8.1] - 2026-11-12
+
+### Changed
+
+- When the task is confirmed, the agent says in one line which roles will run in another harness (for example "implementation runs in OpenCode through Orca"), so your OK on the task covers those launches.
+- If your harness's permission system blocks the launch of another harness (for example Claude Code's auto mode), the agent never retries it with a reworded command. It tells you what blocked it, runs the role on the next harness or as a subagent, and says how you can allow it next time.
+
 ## [0.8.0] - 2026-11-12
 
 Evals were not run for these changes.
@@ -130,6 +137,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.8.1]: https://github.com/rgarciade/Flow/tree/v0.8.1
 [0.8.0]: https://github.com/rgarciade/Flow/tree/v0.8.0
 [0.7.1]: https://github.com/rgarciade/Flow/tree/v0.7.1
 [0.7.0]: https://github.com/rgarciade/Flow/tree/v0.7.0
