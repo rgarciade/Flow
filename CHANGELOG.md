@@ -8,6 +8,16 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.12.0] - 2026-11-12
+
+### Behaviour changes
+
+- **`/flow-work` with no task and nothing to make one from** (for example a fresh session after the terminals closed) shows the tasks in progress, as `flow-status` does, and asks which one to resume or whether to start a new one.
+
+### Changed
+
+- `flow-work`'s resume and `flow-status` read a task's state with the same steps, now written once in `skills/flow-work/references/task-state.md`, so a task looks the same from either one.
+
 ## [0.11.0] - 2026-11-12
 
 ### Behaviour changes
@@ -166,6 +176,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.12.0]: https://github.com/rgarciade/Flow/tree/v0.12.0
 [0.11.0]: https://github.com/rgarciade/Flow/tree/v0.11.0
 [0.10.0]: https://github.com/rgarciade/Flow/tree/v0.10.0
 [0.9.0]: https://github.com/rgarciade/Flow/tree/v0.9.0
