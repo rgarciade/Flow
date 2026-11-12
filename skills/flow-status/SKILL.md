@@ -22,29 +22,21 @@ Show the user, in one message, every `flow-work` task that is still open here, a
 
 ## 2. Find the tasks
 
-A task can live in any worktree of this repo, and its state note can be in either of two places. Look everywhere, always:
+Read `../flow-work/references/task-state.md` and follow it: it is the one description of how a task's state is read, shared with `flow-work`'s resume, so both show a task the same way.
 
-1. **Worktrees**: `git worktree list`. Each one is a place to look in the steps below, including the current one.
-2. **State notes in Engram** (if the Engram MCP server is available): `mem_search` for `flow/<repo>/` keys ending in `/state`, then `mem_get_observation` on each.
-3. **State notes as files**: `.scratch/flow/*/state.md` in every worktree. A note lands there when Engram is missing or a save to it failed, so check this even when Engram is available. If the same task has a note in both places, use the one updated last and say so.
-4. **Task branches**: local branches that match the patterns in `workflow.md` (`git branch --list`), and which worktree has each one checked out.
+The tasks are the union of:
+
+1. Every state note it finds (section 1 of that page, "to list every task"), in Engram and in `.scratch/` of every worktree.
+2. Local task branches that match the patterns in `workflow.md` (`git branch --list`). A branch with no state note: "no state note; `flow-work` will rebuild where it stands from the commits".
 
 Leave out:
 
-- Closed state notes (the closed form starts with `<ref> <title> · closed`) whose PR is merged or closed. Keep a closed one whose PR is still open (`pr-status`): show it as "PR open" and mention changes requested, if any.
+- Closed notes whose PR is merged or closed. Keep a closed one whose PR is still open (`pr-status`): show it as "PR open" and mention changes requested, if any.
 - Branches already merged into their base branch, unless a state note says the task is still open.
 
 ## 3. Check each task
 
-For each task, without changing anything:
-
-- **Where it stands**: `phase`, `next`, `waiting on` and `pending commits` from its state note. A branch with no state note: "no state note; `flow-work` will rebuild where it stands from the commits".
-- **Its title**: `view-task`, one call per task. With more than ten tasks, show the ten most recently updated and say how many more there are.
-- **Worktree**: match the note's `branch:` (or the task branch) to `git worktree list`. No match: "not checked out", or "worktree unknown" when the branch does not exist locally.
-- **Uncommitted changes**: `git --no-optional-locks -C <worktree> status --porcelain`, as a count of files.
-- **Commits not pushed**: `git -C <worktree> rev-list --count @{u}..HEAD`, when the branch has an upstream. It is as of the last fetch: say so.
-- **A role that did not finish**: a `running:` line other than `none` means a role was started and its result never came back (the session or terminal closed under it). Say which role and where it ran. If it ran in another harness through an agent manager, say it may still be running there and that `flow-work` checks that first.
-- **Contradictions**: a note whose `branch:` is not the branch it is on, or a `pending commits` command whose commit is already on the branch. Report them in one line each.
+Apply section 2 of `task-state.md` to each task, reading only. Get each title with `view-task`. With more than ten tasks, show the ten most recently updated and say how many more there are. For a role that did not finish in another harness, say it may still be running there and that `flow-work` checks that first. Say that unpushed counts are as of the last fetch.
 
 ## 4. Report
 
