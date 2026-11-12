@@ -8,6 +8,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.9.0] - 2026-11-12
+
+### Behaviour changes
+
+- **The agent waits for a role run in another harness, and closes it.** A harness launched through Orca or Herdr never exits or reports back on its own: it prints its answer and sits idle. The agent now launches it as a terminal, asks it to write its note and print `FLOW-<ROLE>-DONE`, waits in a loop until it goes idle, checks for that line, and closes only that terminal. Idle without the line means it is waiting for something, which goes to you. After about 45 minutes it asks you whether to keep waiting.
+- **`flow-setup` explains the permissions for launching other harnesses.** When a role goes to `<manager>:<harness>` and the flow runs in Claude Code, it shows the allow rule and the auto-mode exception to add to your own settings (or through `/permissions`), and says what allowing it means. It never writes them itself.
+
 ## [0.8.1] - 2026-11-12
 
 ### Changed
@@ -137,6 +144,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.9.0]: https://github.com/rgarciade/Flow/tree/v0.9.0
 [0.8.1]: https://github.com/rgarciade/Flow/tree/v0.8.1
 [0.8.0]: https://github.com/rgarciade/Flow/tree/v0.8.0
 [0.7.1]: https://github.com/rgarciade/Flow/tree/v0.7.1
