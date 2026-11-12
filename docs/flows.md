@@ -72,6 +72,7 @@ The base branch and the name patterns live in each repo's `docs/agents/workflow.
 - **Harness-neutral subagents.** The orchestrator uses whatever subagent mechanism the harness offers (`Agent` in Claude Code, `Task` in OpenCode and Cursor…). Without one, it runs each phase itself with the same discipline.
 - **One writer at a time.** Subagents that edit files run one after another; read-only ones may run in parallel.
 - **Visible models.** Every subagent's task name starts with its model, for example `sonnet: tests #42`.
+- **Workers in other harnesses.** How a role runs as a subagent in a plain terminal, as an Orca orchestration worker, or in an Orca terminal, and how the orchestrator learns it has finished: see [Orchestrating agents](orchestration.md).
 
 ## Review
 
