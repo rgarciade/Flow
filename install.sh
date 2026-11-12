@@ -6,6 +6,8 @@
 #   ./install.sh --user                 link into ~/.agents/skills (OpenCode, Codex, Cursor, Gemini CLI)
 #   ./install.sh --claude <config-dir>  link into a Claude Code profile, e.g. ~/.claude-personal
 #   ./install.sh --dir <skills-dir>     link into any other skills folder
+#   add --dry-run to any of them        show what would change, and any local edits that
+#                                       an update would overwrite; change nothing
 #
 # Links point at this repo, so a `git pull` here updates them.
 # Project mode uses copies so the project works on any machine and in CI; re-run it to update them.
@@ -23,8 +25,28 @@ repo_dir="$(cd "$(dirname "$script")" && pwd)"
 sources=("$repo_dir"/skills/* "$repo_dir"/vendor/mattpocock-skills/*/ "$repo_dir"/vendor/i-have-adhd/*/)
 
 usage() {
-  sed -n '2,12p' "$script" | sed 's/^# \{0,1\}//' >&2
+  sed -n '2,14p' "$script" | sed 's/^# \{0,1\}//' >&2
   exit 1
+}
+
+dry_run=0
+
+# Hash every file of an installed skill, except flow's own stamp files, one "hash  ./path" per line.
+hash_tree() {
+  local sum=(shasum -a 256)
+  command -v shasum >/dev/null 2>&1 || sum=(sha256sum)
+  (cd "$1" && find . -type f ! -name .flow-version ! -name .flow-manifest -print0 | LC_ALL=C sort -z | xargs -0 "${sum[@]}")
+}
+
+# Files changed, added or removed in an installed copy since flow installed it, one per line.
+# Returns 2 when the copy has no manifest (installed before 0.13.0), so edits can't be told apart.
+local_edits() {
+  [[ -f "$1/.flow-manifest" ]] || return 2
+  diff <(hash_tree "$1") "$1/.flow-manifest" | sed -n 's/^[<>] [0-9a-f]*  \.\///p' | LC_ALL=C sort -u
+}
+
+installed_version() {
+  sed -n 's/^flow \([^,]*\),.*/\1/p' "$1/.flow-version" 2>/dev/null | head -n 1
 }
 
 flow_version() {
@@ -60,7 +82,7 @@ each_source() {
 
 link_into() {
   local skills_dir="$1" src name dest
-  mkdir -p "$skills_dir"
+  ((dry_run)) || mkdir -p "$skills_dir"
   while read -r src; do
     name="$(basename "$src")"
     dest="$skills_dir/$name"
@@ -68,12 +90,16 @@ link_into() {
       echo "ok       $name"
     elif [[ -e "$dest" || -L "$dest" ]]; then
       echo "skipped  $name (already exists at $dest; remove it to link this repo's version)"
+    elif ((dry_run)); then
+      echo "would link  $name"
     else
       ln -s "$src" "$dest"
       echo "linked   $name"
     fi
   done < <(each_source)
   echo "Skills folder: $skills_dir"
+  ((dry_run)) && echo "Dry run: nothing was changed. Run again without --dry-run to apply."
+  return 0
 }
 
 install_project() {
@@ -92,9 +118,42 @@ install_project() {
 
   agents_dir="$project/.agents/skills"
   claude_dir="$project/.claude/skills"
-  mkdir -p "$agents_dir" "$claude_dir"
   version="$(flow_version)"
   stamp="$(date +%Y-%m-%d)"
+
+  if ((dry_run)); then
+    local old edits status
+    while read -r src; do
+      name="$(basename "$src")"
+      dest="$agents_dir/$name"
+      if [[ -e "$dest" && ! -f "$dest/.flow-version" ]]; then
+        echo "would skip    $name (exists in .agents/skills and was not installed by flow)"
+        continue
+      elif [[ ! -e "$dest" ]]; then
+        echo "would copy    $name (new)"
+        continue
+      fi
+      old="$(installed_version "$dest")"
+      status=0
+      edits="$(local_edits "$dest")" || status=$?
+      if [[ "$old" == "$version" && "$status" != 2 && -z "$edits" ]]; then
+        echo "up to date    $name ($version)"
+        continue
+      fi
+      echo "would update  $name (${old:-unknown} -> $version)"
+      if ((status == 2)); then
+        echo "              local edits: can't tell (installed before 0.13.0, with no manifest)"
+      elif [[ -n "$edits" ]]; then
+        echo "              local edits that would be lost:"
+        sed 's/^/                /' <<<"$edits"
+      fi
+    done < <(each_source)
+    echo
+    echo "Dry run: nothing was changed. Run again without --dry-run to apply."
+    return 0
+  fi
+
+  mkdir -p "$agents_dir" "$claude_dir"
 
   while read -r src; do
     name="$(basename "$src")"
@@ -110,6 +169,8 @@ install_project() {
     rm -rf "$dest"
     cp -R "$src" "$dest"
     printf 'flow %s, installed %s\nsource: flow/%s\n' "$version" "$stamp" "${src#"$repo_dir"/}" > "$dest/.flow-version"
+    # What was installed, so a later --dry-run can show local edits.
+    hash_tree "$dest" > "$dest/.flow-manifest" 2>/dev/null || rm -f "$dest/.flow-manifest"
 
     # A relative link for Claude Code, which only reads .claude/skills.
     link="$claude_dir/$name"
@@ -145,6 +206,12 @@ require_checkout() {
   fi
 }
 
+args=()
+for arg in "$@"; do
+  if [[ "$arg" == "--dry-run" ]]; then dry_run=1; else args+=("$arg"); fi
+done
+set -- "${args[@]+"${args[@]}"}"
+
 case "${1:-}" in
   --project)
     [[ -n "${2:-}" ]] || usage
@@ -165,8 +232,12 @@ case "${1:-}" in
   --dir)
     require_checkout --dir
     [[ -n "${2:-}" ]] || usage
-    mkdir -p "$2"
-    target="$(cd "$2" && pwd)"
+    if ((dry_run)) && [[ ! -d "$2" ]]; then
+      target="$2"
+    else
+      mkdir -p "$2"
+      target="$(cd "$2" && pwd)"
+    fi
     refuse_default_claude_profile "$target"
     link_into "$target"
     ;;
