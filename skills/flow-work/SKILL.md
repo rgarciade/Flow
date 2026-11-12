@@ -192,7 +192,7 @@ Then check its position:
 - **Open blockers**: `open-blockers`. If any blocker is still open, or `pr-status` shows its PR is not merged into the group branch, stop and tell the user which one.
 - **Children**: `list-children`. If the task itself has open children, it is a group. Ask which child to start, and suggest the first one with no open blockers.
 
-Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. Start once they confirm. In the same message, ask whether to assign the issue to them and, unless `move-status` is not used, move it to "in progress" (see "Team visibility").
+Show the user, in a few lines, the task as you understand it (title, what it asks for, parent and blockers) and the branch you will create. If `workflow.md` sets any role to another harness, say in one line which roles will run where (for example "implementation runs in OpenCode through Orca"), so the user's OK on the task also covers those launches. Start once they confirm. In the same message, ask whether to assign the issue to them and, unless `move-status` is not used, move it to "in progress" (see "Team visibility").
 
 ## Phase 2: Branch
 
