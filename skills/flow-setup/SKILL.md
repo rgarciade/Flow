@@ -80,8 +80,8 @@ Say, once, that the orchestrator is the session the user opens, so it is not set
 **Permissions for launching other harnesses.** When a role goes to `<manager>:<harness>` and the flow runs in Claude Code, say in a few lines that Claude Code's auto mode may block those launches: it treats starting another agent that runs without per-action approval as unsafe. Show the user what they can add to their own Claude Code settings (user settings, not the repo's), or tell them to add it through `/permissions`:
 
 ```json
-"permissions": { "allow": ["Bash(orca agent launch:*)"] },
-"autoMode": { "allow": ["$defaults", "Launching a flow role (research, plan, tests, implement, fix, review) with `orca agent launch` in the current worktree is allowed when the repo's docs/agents/workflow.md assigns that role to an orca:<harness> and the user confirmed the flow-work task. The launched agent must not commit, push or open a PR."] }
+"permissions": { "allow": ["Bash(orca orchestration worker-start:*)", "Bash(orca agent launch:*)"] },
+"autoMode": { "allow": ["$defaults", "Launching a flow role (research, plan, tests, implement, fix, review) with `orca orchestration worker-start` or `orca agent launch` in the current worktree is allowed when the repo's docs/agents/workflow.md assigns that role to an orca:<harness> and the user confirmed the flow-work task. The launched agent must not commit, push or open a PR."] }
 ```
 
 Adjust the command to the manager (for Herdr, the command its guide gives). Never write it yourself: it is the user's security decision, and Claude Code blocks an agent that changes its own permissions. Allowing it means the launched agent works in the worktree with no one approving each command; say so. Skip this for other harnesses running the flow, or when no role uses a manager.
