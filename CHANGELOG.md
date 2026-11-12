@@ -8,6 +8,25 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.8.0] - 2026-11-12
+
+Evals were not run for these changes.
+
+### Behaviour changes
+
+- **New Phase 9: answering the PR review.** When the PR gets review comments (or you resume a task whose PR is open with changes requested), the agent reads them with the new `pr-comments` operation and shows a numbered table with a proposal for each (fix, discuss, decline). It fixes what you pick, re-runs the checks and the re-review, and gives the commit command. Replies on the PR are drafted and posted only with your OK. The summary record is updated with an edit that asks.
+- **The target branch is checked before the PR.** The agent runs `git fetch origin` and, if the target has commits the task branch lacks, proposes `git merge origin/<target>` (never a rebase). It stops on conflicts and re-runs the checks after the merge.
+- **A baseline run after the branch is created.** The full suite and typecheck run once; tests that already fail go in the state note (`failing before`) and the research brief. "The suite passes" then means "no new failures", and the old failures are never fixed unless the plan covers them. The final report and the summary record mention them.
+- **Parking or abandoning a task.** Parking saves the work (WIP commit or stash, your choice) and sets `phase: parked` in the state note. Abandoning proposes, each with your OK, a comment, a status move, unassigning and deleting the branch, and saves the reason in the closed note.
+- Autonomous mode stops for the merge of the target branch, replies on a PR review, and parking or abandoning.
+- **No empty stops.** The agent stops only when you have something to decide, review or run. When the next step is already agreed and there is only one way forward (for example, implementation after you confirm the test commit), it says in one line what starts and goes on, instead of asking "shall I continue?". Semi-autonomous mode stops at every phase that brings you something to decide or review, not at every phase.
+
+### Changed
+
+- `pr-status` on GitHub also returns `reviewDecision`; the tracker template and the GitHub tracker file have the new `pr-comments` operation.
+- New references: `pr-review.md`, `base-drift.md`, `park-task.md`. The state note has a `failing before` line and a `parked` phase, and the summary record lists the tests that failed before the task.
+- `docs/flows.md`, `docs/usage.md` and `evals/checklist.md` describe the new flows.
+
 ## [0.7.1] - 2026-11-11
 
 ### Changed
@@ -111,6 +130,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.8.0]: https://github.com/rgarciade/Flow/tree/v0.8.0
 [0.7.1]: https://github.com/rgarciade/Flow/tree/v0.7.1
 [0.7.0]: https://github.com/rgarciade/Flow/tree/v0.7.0
 [0.6.0]: https://github.com/rgarciade/Flow/tree/v0.6.0
