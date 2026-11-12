@@ -30,6 +30,8 @@ Un pequeño conjunto de [Agent Skills](https://agentskills.io/specification) par
   Convierte ideas en tareas de tu gestor: tareas sueltas, o una tarea padre con hijas y sus bloqueos. Sin código.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Desarrollar una tarea_  
   Lleva una tarea de la rama al PR: investigar → planificar → tests (con tu OK) → implementar + documentar → revisar → ADR → PR.
+- **[`flow-status`](skills/flow-status/SKILL.md)** · _Dónde te quedaste_  
+  Solo lectura: lista las tareas en curso del repo y sus worktrees, qué espera cada una y el comando para seguirla. Útil después de cerrar la sesión o las terminales.
 
 `flow-backlog` y `flow-work` comprueban primero si existe `docs/agents/workflow.md` y, si falta, se ofrecen a ejecutar `flow-setup`.
 
@@ -66,7 +68,8 @@ npx github:rgarciade/Flow --project ~/code/mi-app   # sin clonar; también actua
 # 2. En el proyecto, abre tu agente y ejecuta:
 /flow-setup          # una vez por repo
 /flow-backlog        # crear tareas
-/flow-work #42       # desarrollar una
+/flow-work #42       # desarrollar una (vuelve a lanzarlo para retomarla)
+/flow-status         # dónde te quedaste
 ```
 
 Funciona con cualquier entorno compatible con Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor y Gemini CLI. Se desarrolla y se prueba en Claude Code; [setup.md](docs/setup.md) explica las diferencias.

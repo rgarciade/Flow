@@ -153,6 +153,10 @@ After creating the branch, `flow-work` runs the full suite once and tells you if
 
 Run `/flow-work #42` again. If the task branch exists, it checks it out (a parked task says why it was parked) and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.scratch/flow/42/state.md`): the phase it reached, a short line for each phase finished and what it settled, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
 
+It looks for the note in both places, Engram and `.scratch/`, since a note goes to `.scratch/` when saving it to Engram fails. The note also records which role is running. If the session or a terminal closed while a role was working, it finds that role unfinished. When the role ran in another harness, it first checks whether that agent is still working. Otherwise it shows you what the role left uncommitted and asks whether to relaunch the role on top of those changes or set them aside in a stash (you run the stash command).
+
+Don't remember which task, or which worktree it was in? Run `/flow-status`. It changes nothing, and lists every task in progress in the repo and its worktrees: the phase each one reached, what it waits on, uncommitted changes, unpushed commits, a role that did not finish, and the command to continue it.
+
 ## Commits
 
 `flow-work` never commits or merges on its own. At each commit point it prints the exact command, for example:

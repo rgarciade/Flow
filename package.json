@@ -1,7 +1,7 @@
 {
   "name": "flow-skills",
   "version": "0.10.0",
-  "description": "Agent skills for issue-driven development: flow-setup, flow-backlog and flow-work.",
+  "description": "Agent skills for issue-driven development: flow-setup, flow-backlog, flow-work and flow-status.",
   "license": "MIT",
   "private": true,
   "bin": {

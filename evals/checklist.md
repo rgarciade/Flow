@@ -99,3 +99,6 @@ Rule: "The state note" in flow-work. Checked on Task B, at the restart.
 | S2 | In the new session, the first message says where the task stands and what was waiting on you. |
 | S3 | Nothing you had already decided is asked again. |
 | S4 | If a note could not be saved to Engram, it went to `.scratch/flow/<id>/` and you were told in one line. |
+| S5 | On the restart, it went straight to where the task was in one message: no research again, no task-start or assignment questions. It looked for the state note in Engram and in `.scratch/flow/<id>/state.md`. |
+| S6 | While a role was running, the state note had a `running:` line for it, and `none` once its result was in. (To check a role that did not finish: close the session during implementation; on the restart it shows what was left and asks whether to relaunch the role on top or set it aside in a stash.) |
+| S7 | `/flow-status`, run before the restart, listed Task B with its phase, what it waits on and `/flow-work <ref>`, and changed nothing (`git status` and the notes are the same before and after). |

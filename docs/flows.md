@@ -1,6 +1,6 @@
 # Flows
 
-`flow` is **Issue-Driven Development**: every piece of work starts from a task in your tracker (GitHub Issues, Jira, Linear… see [setup](setup.md#task-trackers)) and stays tied to it, from the branch name to the pull request. This page shows how the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-backlog](../skills/flow-backlog/SKILL.md), [flow-work](../skills/flow-work/SKILL.md).
+`flow` is **Issue-Driven Development**: every piece of work starts from a task in your tracker (GitHub Issues, Jira, Linear… see [setup](setup.md#task-trackers)) and stays tied to it, from the branch name to the pull request. This page shows how the pieces fit together. The skills themselves are the source of truth: [flow-setup](../skills/flow-setup/SKILL.md), [flow-backlog](../skills/flow-backlog/SKILL.md), [flow-work](../skills/flow-work/SKILL.md), and the read-only [flow-status](../skills/flow-status/SKILL.md).
 
 ## Overview
 

@@ -30,6 +30,8 @@ A small set of [Agent Skills](https://agentskills.io/specification) for planning
   Turns ideas into tasks in your tracker: standalone tasks, or a parent task with children and blocking links. No code.
 - **[`flow-work`](skills/flow-work/SKILL.md)** · _Developing a task_  
   Takes one task from branch to PR: research → plan → tests (your OK) → implement + docs → review → ADRs → PR.
+- **[`flow-status`](skills/flow-status/SKILL.md)** · _Where you left off_  
+  Read-only: lists the tasks in progress in the repo and its worktrees, what each one waits on, and the command to continue it. Handy after closing the session or the terminals.
 
 `flow-backlog` and `flow-work` check for `docs/agents/workflow.md` first, and offer to run `flow-setup` if it is missing.
 
@@ -66,7 +68,8 @@ npx github:rgarciade/Flow --project ~/code/my-app   # no clone needed; also upda
 # 2. In the project, open your agent and run:
 /flow-setup          # once per repo
 /flow-backlog        # create tasks
-/flow-work #42       # develop one
+/flow-work #42       # develop one (run it again to resume it)
+/flow-status         # where you left off
 ```
 
 Works with any harness that supports Agent Skills: Claude Code, OpenCode, Codex CLI, Cursor, Gemini CLI. It is developed and tested on Claude Code; [setup.md](docs/setup.md) covers the differences.
