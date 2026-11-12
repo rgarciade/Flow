@@ -8,6 +8,13 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.10.0] - 2026-11-12
+
+### Behaviour changes
+
+- **Orca orchestration first for roles in another harness.** When Orca is the manager and its orchestration guide is available, the role starts as an Orca worker (`orchestration worker-start --worktree current`): the agent ends its turn, Orca wakes it with `worker_done`, and the worker closes itself. A question from the worker is answered only when the task or your answers settle it; otherwise it comes to you. Launching on a terminal and waiting for it (0.9.0) stays as the fallback, for an older Orca or for Herdr.
+- The permissions `flow-setup` shows for Claude Code also cover `orca orchestration worker-start`.
+
 ## [0.9.0] - 2026-11-12
 
 ### Behaviour changes
@@ -144,6 +151,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.10.0]: https://github.com/rgarciade/Flow/tree/v0.10.0
 [0.9.0]: https://github.com/rgarciade/Flow/tree/v0.9.0
 [0.8.1]: https://github.com/rgarciade/Flow/tree/v0.8.1
 [0.8.0]: https://github.com/rgarciade/Flow/tree/v0.8.0
