@@ -8,6 +8,21 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.11.0] - 2026-11-12
+
+### Behaviour changes
+
+- **Resuming goes straight to where the task was.** With a task branch or a state note, `flow-work` skips the task-start questions (confirmation, assignment, status) and never goes back to research: one message says where the task stands and it continues once you confirm. It always looks for the state note in both places, Engram and `.scratch/flow/<id>/state.md` (where it lands when a save to Engram failed), and uses the newer one. Uncommitted changes on the task branch are treated as part of the task.
+- **The state note records the running role** (`running:`), set before a role starts and cleared when its result is in. On resume, a role left running means its session or terminal closed under it. If it ran in another harness, `flow-work` first checks whether that agent is still working. Otherwise it shows you what the role left and asks whether to relaunch the role on top of those changes or set them aside in a stash; you run the stash command.
+- Parking a task waits for a running role first.
+
+Evals not run: the resume items (S5 to S7) need a real session in a project; to be checked on the next task resumed in AIRecorder.
+- `flow-work`'s description now covers resuming or continuing a task, so "where did we leave task 174?" loads the skill instead of being answered by hand.
+
+### Added
+
+- **`flow-status`**: a read-only overview of the tasks in progress in the repo and all its worktrees. It reads their state notes from Engram and `.scratch/`, plus the task branches, and lists each task with its phase, what it waits on, uncommitted changes, unpushed commits and a role that did not finish. It ends with the command to continue each one. It changes nothing.
+
 ## [0.10.0] - 2026-11-12
 
 ### Behaviour changes
@@ -151,6 +166,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.11.0]: https://github.com/rgarciade/Flow/tree/v0.11.0
 [0.10.0]: https://github.com/rgarciade/Flow/tree/v0.10.0
 [0.9.0]: https://github.com/rgarciade/Flow/tree/v0.9.0
 [0.8.1]: https://github.com/rgarciade/Flow/tree/v0.8.1
