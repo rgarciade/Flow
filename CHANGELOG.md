@@ -8,6 +8,15 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.13.0] - 2026-11-12
+
+### Added
+
+- **`install.sh --dry-run`** (also through `npx`). It shows what an install or update would copy, update or skip, with the version each skill goes from and to, and changes nothing. For a project install it also lists the files edited in the project's copies since they were installed, which an update would overwrite.
+- Project installs now write a `.flow-manifest` file in each skill (a hash per file), which is how the dry run spots local edits. Commit it with the skills. Copies installed before this version have no manifest, so the dry run says it can't tell whether they were edited.
+
+Skills unchanged: no behaviour changes. The dry run was tested on a scratch repo: new install, update with a changed, an added and a removed file, a copy with no manifest, and `--dir` creating nothing.
+
 ## [0.12.0] - 2026-11-12
 
 ### Behaviour changes
@@ -176,6 +185,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.13.0]: https://github.com/rgarciade/Flow/tree/v0.13.0
 [0.12.0]: https://github.com/rgarciade/Flow/tree/v0.12.0
 [0.11.0]: https://github.com/rgarciade/Flow/tree/v0.11.0
 [0.10.0]: https://github.com/rgarciade/Flow/tree/v0.10.0
