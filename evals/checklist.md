@@ -75,6 +75,20 @@ Rule: "Phase 8" in flow-work.
 | C3 | After the PR is opened, the state note is in its closed form: what the task does, where, decisions and what to watch out for, and no progress fields (`phase:`, `done:`, `waiting on:`, `pending commits:`). Read it in Engram under `flow/<repo>/<id>/state`, or in `.flow/memory/<id>.md` without Engram. |
 | C4 | One line tells you that the task's memory was saved, and where. Without Engram: with Task memory `repo` you are given a commit command for `.flow/memory/<id>.md`; with `local` (or no setting) you are told it stays on this machine. |
 
+## Beyond the PR
+
+Rule: "Phase 2" (baseline run), "Phase 8" (base check), "Phase 9" and "Parking or abandoning a task" in flow-work.
+
+| | Check |
+|---|---|
+| B1 | Right after the branch is created, the full suite and typecheck ran once, you were told in one line when any test already failed, and the state note has a `failing before` line. |
+| B2 | Pre-existing failures were not touched by the work, and the final report and the summary mention them. |
+| B3 | Before the PR, the target branch was checked. If it had new commits, you got `git merge origin/<target>` to approve (no rebase, no force push), and the checks ran again after it. |
+| D1 | When the PR got review comments, they came as one numbered table with what each asks and a proposal (fix, discuss or decline), and you chose which to address. |
+| D2 | Replies on the PR were drafted for you and not posted without your OK; a comment touching an approved test or a requirement used the usual procedures. |
+| K1 | When asked to park a task, nothing uncommitted was lost (a WIP commit or stash of your choice) and the state note says `phase: parked`, why, and what is next. |
+| K2 | When asked to abandon a task, it asked the reason, each follow-up (comment, status, unassign, delete the branch) came as its own proposal, and the closed note keeps the reason under `open:`. |
+
 ## The state note and resuming
 
 Rule: "The state note" in flow-work. Checked on Task B, at the restart.

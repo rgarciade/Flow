@@ -1,6 +1,6 @@
 from lib import *
-d=D(900,540,"flow-work-phases","flow-work phases 0 to 8","Flow of flow-work phases 0 to 8 with user gates, commit points and the task-too-big branch after research.")
-d.header("FLOW-WORK","Nine phases, you decide at every gate")
+d=D(900,670,"flow-work-phases","flow-work phases 0 to 9","Flow of flow-work phases 0 to 9 with user gates, commit points, the task-too-big branch after research, the PR review loop and parking.")
+d.header("FLOW-WORK","Ten phases, you decide at every gate")
 W,H=140,100
 def ph(x,y,n,t,sub,gate=None,commit=None,model=None):
     g=gate is not None
@@ -12,13 +12,16 @@ def ph(x,y,n,t,sub,gate=None,commit=None,model=None):
 A=60;B=190;C=330
 ph(30,A,"0","Preflight",["read workflow.md","git status"])
 ph(198,A,"1","Task",["task + blockers"],gate="confirm task")
-ph(366,A,"2","Branch",["create-branch","linked to the task"])
+ph(366,A,"2","Branch",["create-branch,","baseline test run"])
 ph(534,A,"3","Research",["fast, size verdict"],gate="read summary")
 ph(366,B,"4","Plan",["strong, docs + ADRs"],gate="confirm plan")
 ph(198,B,"5","Tests",["strong, tests only"],gate="edge cases only")
 ph(30,B,"6","Implement",["fast, code + docs"],commit="test + feat commits")
 ph(30,C,"7","Review",["checks docs + ADRs"],gate="choose findings",commit="fix / refactor commit")
-ph(198,C,"8","Report + PR",["ADRs written"],gate="open PR?")
+ph(198,C,"8","Report + PR",["base check, ADRs"],gate="open PR?")
+D4=470
+ph(198,D4,"9","PR review",["answer comments"],gate="choose comments",commit="fix commit")
+d.box(534,D4,W+170,H,"Park or abandon",["at any phase, on your OK:","state note parked or closed"],dash=True,tsize=12)
 d.box(366,C,W,H,"You merge the PR",["on the code host,","never the agent"],stroke=ACC,fill=ACT,sw=1.6,tsize=12)
 d.chip(374,C+72+4,W-16,"GATE",h=15)
 d.box(534,C,W,H,"After merge",["next sibling, or","arch review + group PR"],dash=True,tsize=12)
@@ -39,6 +42,8 @@ d.path([(674,cy),(710,cy)],ACC,mk="c");d.label(692,cy-9,"YES")
 d.path([(366,B+H/2),(338,B+H/2)]);d.path([(198,B+H/2),(170,B+H/2)])
 d.path([(100,B+H),(100,C)])
 d.path([(170,C+H/2),(198,C+H/2)]);d.path([(338,C+H/2),(366,C+H/2)]);d.path([(506,C+H/2),(534,C+H/2)],dash=True)
-d.legend(480,[("gate","user decides"),("commit","user runs commit + push; agent never commits"),("dash","after merge")])
-d.text(30,530,"Default mode: semi-autonomous. Pair or autonomous mode, the deep profile and status moves: always on your OK.",10,400,MUT,"start")
+d.path([(268,C+H),(268,D4)]);d.label(300,C+H+16,"COMMENTS")
+d.path([(338,D4+H/2),(436,D4+H/2),(436,C+H)])
+d.legend(610,[("gate","user decides"),("commit","user runs commit + push; agent never commits"),("dash","after merge, or only when you ask")])
+d.text(30,660,"Default mode: semi-autonomous. Pair or autonomous mode, the deep profile and status moves: always on your OK.",10,400,MUT,"start")
 d.save()

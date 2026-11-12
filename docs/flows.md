@@ -19,17 +19,22 @@
 |---|---|---|---|
 | 0. Preflight | orchestrator | Settings loaded, clean tree | Run `flow-setup` if asked |
 | 1. Task | orchestrator | The issue (read or created) and its position: parent, blockers, children | Approve the draft if it was created; confirm the task and branch; OK the move to in progress |
-| 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed) | |
+| 2. Branch | orchestrator | `task/<id>-<slug>`, linked to the task with `create-branch` (and the group branch if needed); a baseline run of the full suite and typecheck, so tests that already fail are known (`failing before`) | Nothing, unless tests already fail: you are told in one line |
 | 3. Research | research subagent | What exists, whether the issue's preliminary notes still hold, impact map (every place the change must reach), open questions, size verdict | Read the summary and add your comments; choose (a) or (b) if it is too big |
 | 4. Plan | plan subagent | **The task's detail**: refined criteria, seams, scenarios, outline | Answer the questions and confirm the plan, in one round |
 | 5. Tests | tests subagent | Failing tests, each for the expected reason | **Check the edge cases** (pair mode: approve every test and run the `test(<commit-ref>)` commit) |
 | 6. Implement | implement subagent(s) | Code that passes the frozen tests, and the docs it listed, updated | Answer any question not settled by the plan; `test(<commit-ref>)` and `feat(<commit-ref>)` commits |
 | 7. Review | 2 review subagents, then fix | Standards and spec reports | Choose findings, `fix`/`refactor` commit |
-| 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), PR and summary record | Review the code, answer the closing questions together (criteria, ADRs, Engram export, PR, move to in review), merge the PR |
+| 8. Report and PR | orchestrator | Report, ADRs (`docs` commit), Engram export (`chore` commit), a base branch drift check (`git merge origin/<target>` if the target moved, never a rebase), PR and summary record | Review the code, answer the closing questions together (criteria, ADRs, Engram export, PR, move to in review), OK the merge of the target if it moved, merge the PR |
+| 9. PR review | fix subagent | The review comments as a numbered table, the fixes, the checks and a re-review of the fix diff, drafted replies | Choose which comments to address, run the `fix` commit, OK each reply before it is posted |
 
 **You are in the loop.** Every phase ends by showing you its result and waiting for you before the next one. Anything the issue and the plan don't settle comes to you as a question with a recommendation; subagents return such questions instead of guessing.
 
 **Parts that can't be tested.** Configuration, visual styling, documentation-only changes or infrastructure scripts may have no reasonable seam for an automated test. The plan then proposes manual verification steps (what to do, what to observe); you approve them, they go into the plan record, and Phase 6 ends by running them: the agent runs what it can and gives you the rest as a checklist. Tests remain the default.
+
+**Tests that already fail.** Right after the branch is created, the full suite and the typecheck run once. Failing tests are recorded (`failing before`) and from then on "the suite passes" means "no new failures beyond that list". They are never fixed unless the plan covers them, and the final report and the summary mention them.
+
+**Parking or abandoning.** Say "park" or "abandon" at any time. Parking saves the work (a WIP commit or a stash that you choose) and sets the state note to `phase: parked`; resuming goes through the usual "branch already exists" path. Abandoning proposes a comment on the task, moving or closing it, unassigning and deleting the branch, each with your OK, and closes the state note with the reason. It always stops for you, also in autonomous mode.
 
 **Frozen tests.** After the approval, `git diff <test commit> -- <test globs>` must stay empty (until that commit exists, the tests are checked against a recorded copy in `.scratch/flow/<id>/approved-tests/`). If implementation shows that a test was wrong, the work stops and you decide. When you agree, only the tests subagent changes it, in its own `test(<commit-ref>): adjust …` commit that becomes the new reference, and the change is logged in the plan record (and in the description if a requirement changed). Loosening a test only to make the code pass is never accepted.
 

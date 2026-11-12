@@ -25,6 +25,8 @@ detail: <the keys of this task's other notes>
 - **About twenty lines.** No retelling of the phases. Omit a section that has nothing to say.
 - It needs no confirmation: tell the user in one line that the task's memory is saved, and where.
 - If the PR review later changes the code, update the same note when the user says the PR is merged.
+- The closed note keeps the PR link and the branch, so a later session knows the PR exists and can ask `pr-status` whether it is still open. If it is open with changes requested, the task goes on in Phase 9 (`references/pr-review.md`); the closed note stays as it is until the merge.
+- `open:` also lists the tests that failed before the task (`failing before`) and any reason the task was abandoned (`references/park-task.md`).
 
 ## Where it is saved
 

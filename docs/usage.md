@@ -106,7 +106,8 @@ For a small task, say so when you start (`/flow-work #42, work autonomously`), o
 - a decision the issue and the plan don't settle, where a wrong guess would cost rework;
 - a test that looks wrong, or a check it cannot make pass;
 - a task bigger than it looked;
-- anything that leaves your machine or changes shared state (commits, pushes, status moves, issue edits, the PR).
+- anything that leaves your machine or changes shared state (commits, pushes, status moves, issue edits, the PR, merging the target branch, replies on a PR review);
+- parking or abandoning a task.
 
 Tests are still frozen (recorded in `.scratch/flow/42/approved-tests/`), commit commands (each ending with `&& git push`) come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
 
@@ -136,9 +137,21 @@ Tell `flow-work` it is merged.
 - **A child task**: it lists the siblings that are now unblocked and suggests the next one.
 - **The last child**: it runs a group architecture review of the whole feature (coherence, duplication between children, missing ADRs) and shows it to you. Findings become new child issues or follow-ups. Then it offers to open the group PR, from `feature/<parent>-<slug>` to the base branch.
 
+## The PR got review comments
+
+Tell `flow-work` (or run `/flow-work #42` again while the PR is open with changes requested). It reads the comments from the code host and shows them as a numbered table: what each one asks and what it proposes (fix, discuss or decline, with the reason). You choose which to address. Then it fixes them, runs the checks, re-reviews the fix and gives you the `fix` commit command. Replies on the PR are drafted for you and posted only with your OK. A comment that changes a requirement or an approved test goes through the same steps as in the plan phase.
+
+## Park or abandon a task
+
+Say "park", "pause", "drop" or "abandon". To park, it shows `git status` and proposes a WIP commit or a stash, sets the state note to `phase: parked` and proposes moving the status back. Resume with `/flow-work #42`. To abandon, it asks why and proposes, each with your OK, a comment on the task, moving or closing it, unassigning, and deleting the branch with the exact commands. The reason is saved in the task's memory. It always stops for you, also in autonomous mode.
+
+## Tests that already fail, and a moved base branch
+
+After creating the branch, `flow-work` runs the full suite once and tells you if tests already fail; from then on only new failures count, and the final report lists the old ones. Before opening the PR (and before pushing review fixes) it checks whether the target branch has new commits. If so it proposes `git merge origin/<target>`, never a rebase, stops on conflicts, and re-runs the checks after the merge.
+
 ## Resume a task
 
-Run `/flow-work #42` again. If the task branch exists, it checks it out and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.scratch/flow/42/state.md`): the phase it reached, a short line for each phase finished and what it settled, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
+Run `/flow-work #42` again. If the task branch exists, it checks it out (a parked task says why it was parked) and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.scratch/flow/42/state.md`): the phase it reached, a short line for each phase finished and what it settled, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
 
 ## Commits
 
