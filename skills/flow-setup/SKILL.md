@@ -77,6 +77,15 @@ Ask in three short rounds, each depending on the one before:
 
 Say, once, that the orchestrator is the session the user opens, so it is not set here, and that the split is fixed by role: nothing balances usage across subscriptions on its own. When there is no agent manager, record the one harness running the flow and the same list for every role.
 
+**Permissions for launching other harnesses.** When a role goes to `<manager>:<harness>` and the flow runs in Claude Code, say in a few lines that Claude Code's auto mode may block those launches: it treats starting another agent that runs without per-action approval as unsafe. Show the user what they can add to their own Claude Code settings (user settings, not the repo's), or tell them to add it through `/permissions`:
+
+```json
+"permissions": { "allow": ["Bash(orca agent launch:*)"] },
+"autoMode": { "allow": ["$defaults", "Launching a flow role (research, plan, tests, implement, fix, review) with `orca agent launch` in the current worktree is allowed when the repo's docs/agents/workflow.md assigns that role to an orca:<harness> and the user confirmed the flow-work task. The launched agent must not commit, push or open a PR."] }
+```
+
+Adjust the command to the manager (for Herdr, the command its guide gives). Never write it yourself: it is the user's security decision, and Claude Code blocks an agent that changes its own permissions. Allowing it means the launched agent works in the worktree with no one approving each command; say so. Skip this for other harnesses running the flow, or when no role uses a manager.
+
 When the user ran `flow-setup` only to change the harnesses or models, their answers to the three rounds are the confirmation: write the section and show it before and after in the same message, with no further stop to ask for approval. Nothing is committed, so the diff is the review. Write only that section of `workflow.md` and leave `tracker.md`, `domain.md` and the docs `README.md` untouched. The one exception is the `## Agent skills` block (see step 5): if its text differs from the block in this skill's template (for example a repo set up with 0.1 that still says "model tiers" instead of "harnesses and models, working mode"), update it in place in the same step and show it too. Never create the other instructions file. Then give the commit command.
 
 ## 5. Draft, confirm, write
