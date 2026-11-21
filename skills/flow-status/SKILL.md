@@ -43,7 +43,7 @@ Apply section 2 of `task-state.md` to each task, reading only. Get each title wi
 One message, in the format of `../flow-work/references/phase-messages.md` (plain words, the action first). If the `i-have-adhd` skill is installed, apply its formatting rules too.
 
 1. First line: how many tasks are in progress, and which one needs the user first (something waiting on them, a role that did not finish, or uncommitted changes).
-2. A numbered table, the most recently updated task first: task (ref and title), where it stands, what it waits on, and warnings (uncommitted files, unpushed commits, unfinished role, contradiction).
+2. A numbered table, the most recently updated task first, with four short columns: `# | Task (ref and title) | Where it stands | Waiting on / warnings`. Warnings are uncommitted files, unpushed commits, an unfinished role, a contradiction. At most about 12 words per cell, so the table stays narrow in a terminal.
 3. For each task, the command to continue it: `/flow-work <ref>`, preceded by `cd <worktree>` when it is checked out in another worktree.
 4. If there are no open tasks, say so in one line and suggest `/flow-backlog` to create tasks or `/flow-work <id>` to start one.
 
