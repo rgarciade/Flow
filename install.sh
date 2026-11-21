@@ -145,7 +145,9 @@ install_project() {
         echo "              local edits: can't tell (installed before 0.13.0, with no manifest)"
       elif [[ -n "$edits" ]]; then
         echo "              local edits that would be lost:"
-        sed 's/^/                /' <<<"$edits"
+        while IFS= read -r line; do
+          echo "                $line"
+        done <<<"$edits"
       fi
     done < <(each_source)
     echo
