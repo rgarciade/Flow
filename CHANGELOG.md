@@ -8,6 +8,12 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.14.0] - 2026-11-21
+
+### Behaviour changes
+
+- **The review findings of `/flow-work` come in a narrower table.** Four columns (`#`, level, finding, proposed fix) instead of five, with the file and line at the start of the finding and short cells. Before, a wide table could make the terminal fall back to a vertical "key: value" layout that was hard to scan. Longer detail stays in the notes. Which findings you choose, and how, does not change.
+
 ## [0.13.0] - 2026-11-12
 
 ### Added
@@ -185,6 +191,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.14.0]: https://github.com/rgarciade/Flow/tree/v0.14.0
 [0.13.0]: https://github.com/rgarciade/Flow/tree/v0.13.0
 [0.12.0]: https://github.com/rgarciade/Flow/tree/v0.12.0
 [0.11.0]: https://github.com/rgarciade/Flow/tree/v0.11.0
