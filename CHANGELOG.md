@@ -14,6 +14,7 @@ The skills are instructions for an agent, so a change here can change what the a
 
 - **The review can run on two harnesses at once.** In the `review` row of `docs/agents/workflow.md`, `claude + codex` (a `+`, not a comma) launches both on the same two review questions, and the findings come back merged into the same two tables. The Level column says who saw each one (`must fix · both`, `optional · Codex`), and a finding both saw is shown as must fix. A comma still means fallback, and the two can be combined: `claude + codex, opencode`.
 - **If one of the two has no quota, cannot be launched or ends without its result, the review goes on without it.** You are told in one line which one did not take part. Nothing waits for it, retries it or stops the task. If neither is usable, the next harness of the row (or a subagent) takes the review.
+- **The review prefers a harness different from the one that implemented.** With several usable harnesses in the `review` row, `/flow-work` picks the first that did not write the change, even if it is not first in the row. If they are all the same one, it reviews anyway and tells you in one line that it was not independent.
 - The short re-review after the fixes still runs on one harness only.
 - `flow-setup` offers the option when it asks who takes the review role, and does not recommend it by default: it uses the quota of both.
 
