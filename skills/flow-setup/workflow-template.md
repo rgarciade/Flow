@@ -65,6 +65,7 @@ Several harnesses in the same row are alternatives, in order of preference: the 
 
 - The split is fixed by this table: nothing balances usage across subscriptions on its own.
 - When no harness of a role is usable on a machine, that role runs as a subagent and the user is told. Nobody needs an agent manager to work on this repo.
+- A `+` in the `review` row joins harnesses that run **together** (`claude + codex`); a comma still means fallback. `claude + codex, opencode` runs Claude and Codex at the same time, and OpenCode alone only when neither is usable. If one of them has no quota, the review goes on with the other and the user is told. It costs the usage of both.
 - `<manager>:other` in **Runs in** means any harness different from the one running the flow, for an independent second opinion (useful for review).
 
 ## Docs

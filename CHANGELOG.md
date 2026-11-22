@@ -8,6 +8,15 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.16.0] - 2026-11-22
+
+### Behaviour changes
+
+- **The review can run on two harnesses at once.** In the `review` row of `docs/agents/workflow.md`, `claude + codex` (a `+`, not a comma) launches both on the same two review questions, and the findings come back merged into the same two tables. The Level column says who saw each one (`must fix · both`, `optional · Codex`), and a finding both saw is shown as must fix. A comma still means fallback, and the two can be combined: `claude + codex, opencode`.
+- **If one of the two has no quota, cannot be launched or ends without its result, the review goes on without it.** You are told in one line which one did not take part. Nothing waits for it, retries it or stops the task. If neither is usable, the next harness of the row (or a subagent) takes the review.
+- The short re-review after the fixes still runs on one harness only.
+- `flow-setup` offers the option when it asks who takes the review role, and does not recommend it by default: it uses the quota of both.
+
 ## [0.15.0] - 2026-11-21
 
 ### Behaviour changes
@@ -198,6 +207,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.16.0]: https://github.com/rgarciade/Flow/tree/v0.16.0
 [0.15.0]: https://github.com/rgarciade/Flow/tree/v0.15.0
 [0.14.0]: https://github.com/rgarciade/Flow/tree/v0.14.0
 [0.13.0]: https://github.com/rgarciade/Flow/tree/v0.13.0

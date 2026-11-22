@@ -87,6 +87,7 @@ Write each finding for a user who has not opened the file: plain words, no revie
 
 Keep the table narrow so the terminal does not fall back to a vertical "key: value" layout, which is hard to scan: four columns, with the location at the start of the finding, and at most about 12 words each in `Finding` and `Proposed fix`. Longer detail stays in the notes.
 
+- **With two harnesses** (`+` in the `review` row), merge the reports of each axis into its one table: the same problem at the same place is one row, even if the two describe it differently. Say who saw it in the Level cell, `must fix · both` or `optional · Codex`, so the table keeps its four columns. A finding both saw is shown as **must fix**, because two independent reviewers agree. Where they disagree on a level, take the higher. Never list the same problem twice, and don't show a harness that was skipped as if it found nothing: say in the closing line that it did not take part.
 - Order each table by level, **must fix** first, then **optional**.
 - Number the findings once, across both tables: Standards first (1, 2, 3…), then Spec carrying on (4, 5…). The number is the finding's name from here on: in the selector, in the fix brief and in the commit summary.
 - Do **not** merge or rerank findings across axes, because the two axes are deliberately separate (see _Why two axes_).
