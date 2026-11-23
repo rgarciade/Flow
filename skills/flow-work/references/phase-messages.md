@@ -137,6 +137,33 @@ Once you answer, I write the tests. Nothing is committed yet.
 
 The files, parameters and channels stay in the plan record, one link away.
 
+## A role launched in another harness
+
+The user must see at once that the work is somewhere else and that they wait. **Don't write this** (the status is buried in the middle of a list of details):
+
+```
+- Commit done: 35a6e2f test(#18): cover race invite link join flow.
+- Implementation: runs in opencode (glm-5.3-flash) through Orca, in this same
+  directory. Orca tells me when it ends, so you don't need to do anything.
+- What it will do: create the route and the screen, and map the 404...
+- Afterwards: I check the approved tests are intact and the suite passes...
+```
+
+**Write this:**
+
+```
+⏳ Waiting: the implementation is running in OpenCode (glm-5.3-flash), not here.
+
+You don't need to do anything. Orca tells me when it finishes and I continue on my own.
+Don't send me anything until then.
+
+What it does: creates the route and the screen, and maps the 404 on the race screen.
+It cannot change tests or commit.
+Then I will: check the approved tests are intact, run the suite, and give you the commit.
+```
+
+The commit that was just made is a separate line above the block, or goes in the next message.
+
 ## A review finding
 
 One line per finding, written so the user can decide without opening the file. Four columns and short cells, so the table does not collapse into a vertical layout in a narrow terminal.

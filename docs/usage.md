@@ -68,7 +68,7 @@ Without an issue number, it drafts the issue from the conversation, creates it o
 - an expected value or behaviour the plan didn't settle, which the agent had to choose;
 - a test that fails for a reason other than the expected one.
 
-The tests are frozen in every mode: at the test gate they are recorded in `.scratch/flow/<id>/approved-tests/` (in semi-autonomous mode, also after you approve edge cases), and that copy is the reference until the `test` commit exists. Once you confirm that commit, its hash becomes the reference.
+The tests are frozen in every mode: at the test gate they are recorded in `.flow/work/<id>/approved-tests/` (in semi-autonomous mode, also after you approve edge cases), and that copy is the reference until the `test` commit exists. Once you confirm that commit, its hash becomes the reference.
 
 Ask for a mode when you start (`/flow-work #42, pair mode`) or at any time ("show me every test", "back to semi-autonomous").
 
@@ -109,7 +109,7 @@ For a small task, say so when you start (`/flow-work #42, work autonomously`), o
 - anything that leaves your machine or changes shared state (commits, pushes, status moves, issue edits, the PR, merging the target branch, replies on a PR review);
 - parking or abandoning a task.
 
-Tests are still frozen (recorded in `.scratch/flow/42/approved-tests/`), commit commands (each ending with `&& git push`) come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
+Tests are still frozen (recorded in `.flow/work/42/approved-tests/`), commit commands (each ending with `&& git push`) come together with the final report, and the report lists every assumption it made for you. Say "back to pair mode" at any time.
 
 ## When a test turns out to be wrong
 
@@ -151,9 +151,9 @@ After creating the branch, `flow-work` runs the full suite once and tells you if
 
 ## Resume a task
 
-Run `/flow-work #42` again. If the task branch exists, it checks it out (a parked task says why it was parked) and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.scratch/flow/42/state.md`): the phase it reached, a short line for each phase finished and what it settled, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
+Run `/flow-work #42` again. If the task branch exists, it checks it out (a parked task says why it was parked) and reads the task's **state note** (`flow/<repo>/42/state`, in Engram or `.flow/work/42/state.md`): the phase it reached, a short line for each phase finished and what it settled, the working mode and model profile you chose, the questions that were waiting on you and the commits still pending. It checks that against the branch and the task, tells you where things stand and continues once you confirm. The same note keeps a long session on track when the agent's context is summarised.
 
-It looks for the note in both places, Engram and `.scratch/`, since a note goes to `.scratch/` when saving it to Engram fails. The note also records which role is running. If the session or a terminal closed while a role was working, it finds that role unfinished. When the role ran in another harness, it first checks whether that agent is still working. Otherwise it shows you what the role left uncommitted and asks whether to relaunch the role on top of those changes or set them aside in a stash (you run the stash command).
+It looks for the note in both places, Engram and `.flow/work/`, since a note goes to `.flow/work/` when saving it to Engram fails. The note also records which role is running. If the session or a terminal closed while a role was working, it finds that role unfinished. When the role ran in another harness, it first checks whether that agent is still working. Otherwise it shows you what the role left uncommitted and asks whether to relaunch the role on top of those changes or set them aside in a stash (you run the stash command).
 
 Don't remember which task, or which worktree it was in? Run `/flow-status`. It changes nothing, and lists every task in progress in the repo and its worktrees: the phase each one reached, what it waits on, uncommitted changes, unpushed commits, a role that did not finish, and the command to continue it. `/flow-work` with no task and nothing in the conversation to make one from shows the same list and asks which one to resume, or whether to start a new task.
 
@@ -165,4 +165,4 @@ Don't remember which task, or which worktree it was in? Run `/flow-status`. It c
 git add tests/profile.test.ts && git commit -m "test(#42): profile endpoint returns the current user" && git push
 ```
 
-Run it yourself, or tell it to run it. If you would rather not commit the tests, it keeps a copy under `.scratch/flow/<issue>/approved-tests/` with a checksum manifest instead.
+Run it yourself, or tell it to run it. If you would rather not commit the tests, it keeps a copy under `.flow/work/<issue>/approved-tests/` with a checksum manifest instead.

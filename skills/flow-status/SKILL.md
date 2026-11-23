@@ -11,7 +11,7 @@ Show the user, in one message, every `flow-work` task that is still open here, a
 
 ## Hard rules
 
-- **Change nothing.** No file writes, no note saves or updates (Engram or `.scratch/`), no tracker changes, and no git command that changes state: no `fetch`, `pull`, `checkout`, `stash` or `worktree` changes. Use what the local clone already knows, and say so when remote information matters (for example "the PR status comes from the tracker; branches are as of the last fetch").
+- **Change nothing.** No file writes, no note saves or updates (Engram or `.flow/work/`), no tracker changes, and no git command that changes state: no `fetch`, `pull`, `checkout`, `stash` or `worktree` changes. Use what the local clone already knows, and say so when remote information matters (for example "the PR status comes from the tracker; branches are as of the last fetch").
 - **Never fix a note.** If a state note contradicts its branch, report it; `flow-work` fixes it when the task is resumed.
 - **Never touch a running worker.** If a role may still be running in another harness, report it and leave it alone.
 
@@ -26,7 +26,7 @@ Read `../flow-work/references/task-state.md` and follow it: it is the one descri
 
 The tasks are the union of:
 
-1. Every state note it finds (section 1 of that page, "to list every task"), in Engram and in `.scratch/` of every worktree.
+1. Every state note it finds (section 1 of that page, "to list every task"), in Engram and in `.flow/work/` of every worktree.
 2. Local task branches that match the patterns in `workflow.md` (`git branch --list`). A branch with no state note: "no state note; `flow-work` will rebuild where it stands from the commits".
 
 Leave out:

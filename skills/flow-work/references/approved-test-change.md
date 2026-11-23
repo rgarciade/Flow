@@ -8,7 +8,7 @@ Sometimes implementation shows that an approved test was wrong: the requirement 
 2. **The user decides.** Show it in a few lines with your recommendation, and say which case it is: the test was wrong, or the requirement changed. If the honest answer is "the test is right and the code is hard", say so and recommend keeping the test.
 3. **Change.** After the user's OK, brief the tests subagent (strong tier) to change **only** those tests. Each must again fail for the expected reason, or pass if the implementation already covers it. Never loosen an assertion only to make it pass.
 4. **Record.**
-   - Give the commit command `git add <test files> && git commit -m "test(<commit-ref>): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.scratch` record instead, refresh the manifest.
+   - Give the commit command `git add <test files> && git commit -m "test(<commit-ref>): adjust <what> (<why>)" && git push`. Once the user confirms it, that commit becomes the new approved-tests reference for the checks; save its hash in the tests note. With the `.flow/work` record instead, refresh the manifest.
    - Propose a line under "Changes to the plan" in the plan record (an edit, so it needs the user's OK).
    - If a requirement changed, also propose the `## Changes` line in the issue description.
 5. **Continue** implementing against the new tests.

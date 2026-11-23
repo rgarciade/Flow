@@ -9,10 +9,10 @@ This page only reads. Nothing here writes a note, changes git state or touches a
 
 ## 1. Find the state note
 
-Look in both places, every time. A note lands in `.scratch/` when Engram is missing or a save to it failed, so finding nothing in Engram proves nothing.
+Look in both places, every time. A note lands in `.flow/work/` when Engram is missing or a save to it failed, so finding nothing in Engram proves nothing.
 
 1. **Engram** (if the Engram MCP server is available): the key `flow/<repo>/<id>/state`. To list every task, `mem_search` for `flow/<repo>/` keys ending in `/state`, then `mem_get_observation` on each.
-2. **File**: `.scratch/flow/<id>/state.md` in the worktree where the task branch is checked out. To list every task, `.scratch/flow/*/state.md` in every worktree (`git worktree list`).
+2. **File**: `.flow/work/<id>/state.md` in the worktree where the task branch is checked out. To list every task, `.flow/work/*/state.md` in every worktree (`git worktree list`). Projects started before 0.17.0 kept these files in `.scratch/flow/<id>/`: look there too, and when you write a note for a task that already has its folder there, keep using it.
 
 If both exist, use the one updated last and say so in one line. If neither exists, the task has no state note: where it stands is rebuilt from its branch, commits and other notes.
 

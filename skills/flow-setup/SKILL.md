@@ -114,6 +114,8 @@ Show the user a draft of every file you will write or edit, including the `## Ag
 Branches, base branch, languages, harnesses and models, working mode, test commands, Engram sync, task memory and docs for the flow skills. See `docs/agents/workflow.md`.
 ```
 
+Make sure `.flow/work/` (the agent's working notes and approved-test copies) is git-ignored, and nothing else under `.flow/` is ignored unless the rules below say so.
+
 If the user chose the task folder alternative, make sure `.flow/` is **not** git-ignored: those records are part of the repo. For **Task memory**, `repo` needs `.flow/memory/` not git-ignored, and `local` needs it git-ignored.
 
 ## 6. Done

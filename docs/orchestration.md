@@ -20,7 +20,7 @@ What changes between a plain terminal and Orca is **where the worker runs, and h
 | How the orchestrator knows it is done | The tool returns the hand-back | Orca wakes the orchestrator with `worker_done` | The orchestrator waits for the terminal to go idle and looks for `FLOW-<ROLE>-DONE` |
 | Questions from the worker | In its hand-back | An Orca `question` message | The worker sits idle without the done line |
 | Who closes it | Nobody: it ends with the call | The worker closes itself | The orchestrator closes that terminal |
-| Notes | Engram, or `.scratch/` | Exported to `.scratch/` if the worker has no Engram | Same as orchestration |
+| Notes | Engram, or `.flow/work/` | Exported to `.flow/work/` if the worker has no Engram | Same as orchestration |
 | Permissions | Your session's | The worker runs with no per-action approval: Claude Code's auto mode may block the launch | Same as orchestration |
 
 ## In a plain terminal
@@ -101,7 +101,7 @@ sequenceDiagram
 
 ## Things that apply everywhere
 
-- **Notes.** Subagents of your harness read and write Engram. An agent launched through Orca may not have Engram, so the orchestrator exports the notes it needs to `.scratch/flow/<id>/` before starting it, and saves its result back to Engram afterwards.
+- **Notes.** Subagents of your harness read and write Engram. An agent launched through Orca may not have Engram, so the orchestrator exports the notes it needs to `.flow/work/<id>/` before starting it, and saves its result back to Engram afterwards.
 - **Fallbacks.** Each role has an ordered list of harnesses. If one has no quota left, is not installed or fails to start, the next one takes over, and the last resort is a subagent. You are told in one line; the task never stops for it.
 - **Authorization.** When you confirm the task, the orchestrator says which roles will run where. Your OK covers those launches.
 - **Permissions in Claude Code.** Auto mode treats starting another agent that runs with no per-action approval as unsafe, and may block it. The orchestrator never rewords or retries a blocked launch: it tells you and falls back. To allow it, add the rule and the auto-mode exception that `flow-setup` shows to your own Claude Code settings, or approve them through `/permissions`. Allowing it means that agent works in your checkout with no one approving each command.

@@ -6,7 +6,7 @@ For a role set to another harness:
 
 - Read the manager's own skill or guide before using it, and run the harness in the current worktree, with the model and effort from the table. Never create a worktree or a branch for it.
 - Give it the same brief and the same hand-back contract as a subagent, written to stand on its own: it starts with none of this session's context. Add that it must not commit, push or open a PR.
-- **Notes it cannot read.** That harness may not have the Engram MCP server, so it cannot read notes passed as keys. Before launching it, when notes live in Engram, export the notes this role needs to `.scratch/flow/<id>/<phase>.md` and pass those paths in the brief. Tell it to write its own result to `.scratch/flow/<id>/<role>.md`. When it finishes, you save that result to Engram under the usual key.
+- **Notes it cannot read.** That harness may not have the Engram MCP server, so it cannot read notes passed as keys. Before launching it, when notes live in Engram, export the notes this role needs to `.flow/work/<id>/<phase>.md` and pass those paths in the brief. Tell it to write its own result to `.flow/work/<id>/<role>.md`. When it finishes, you save that result to Engram under the usual key.
 - **You launched it, so you collect its result and close it.** Never leave it running for the user to clean up. Use the first way below that is available.
 
 ## 1. Orca orchestration (preferred)
@@ -22,7 +22,7 @@ When the manager is Orca and `orca skills get orchestration` returns its guide, 
   ```
 
   Pass `--effort` only when the table gives one. Don't pass `--keep-open`.
-- Tell the user in one line that the role is running and that Orca will report when it is done. Then **end your turn**. Orca wakes you; never poll it or run a watch script.
+- Tell the user it is running elsewhere and that they must wait, with the message described in "The launch message" below. Then **end your turn**. Orca wakes you; never poll it or run a watch script.
 - When Orca wakes you:
   - `worker_done`: read the note file, check it is complete, set the state note's `running:` to `none`, and go on. The worker closes on its own; follow any `next` the receipt or `worker-list` gives.
   - A `question` from the worker: answer it with `orchestration reply` only when the task, the plan or the user's answers settle it. Otherwise ask the user first.
@@ -41,10 +41,29 @@ When Orca orchestration is not available (an older Orca, or another manager such
 - When it is done, read its note, set the state note's `running:` to `none`, then close only its own terminal (for Orca, `terminal close --terminal <handle> --json`; never `--all`) and tell the user in one line.
 - Herdr: use the wait, read and close commands its guide gives. If it has no way to wait for idle, check every minute whether the note file exists and ends with the done line.
 
+## The launch message
+
+Launching a role elsewhere is the moment the user is most likely to be lost: the work is now happening in another window, and nothing here moves. The message must say so before anything else, and say what the user has to do (almost always: wait). Use this shape, in the language of the conversation:
+
+```
+⏳ Waiting: <role> is running in <harness> (<model>), not here.
+
+You don't need to do anything. <When it finishes, I continue on my own | When it finishes, tell me "done" here>.
+It can take a few minutes. Don't send me anything until then.
+
+What it does: <one sentence>. It cannot change tests or commit.
+Then I will: <one sentence: the checks, and the next step>.
+```
+
+- **The first line is the status** (`⏳ Waiting`), with the role, the harness and the model. The word *waiting* and the place *not here* are what the user must read first.
+- **Say who wakes whom.** With Orca orchestration, it reports back and you continue on your own. With the fallback (you wait on the terminal), say you are waiting and will not answer until it finishes. If your harness cannot be re-invoked, say instead that the user has to tell you when it is done.
+- What was already done in the same turn (a commit, a push, a warning that has nothing to do with this task) goes **before** this block or in a later message, never mixed into it.
+- When it ends, say in one line that it finished, then show the result as usual.
+
 ## In both cases
 
 - "One writer at a time" still holds: no other role that edits files starts until it is done.
-- Tell the user in one line which harness and model run the role, and which of the two ways is used.
+- Tell the user with "The launch message" below: which harness and model run the role, and that they must wait.
 - If the launch fails, the harness reports that it has no quota left, or the manager is not available, go on to the role's next harness and say so in one line. When none is usable, run the role as a subagent and say so. Never stop the task for this.
 - **A launch the permission system denies is not a failure to work around.** Your own harness may block the launch (for example, Claude Code's auto mode can deny starting another agent with a prompt). Never retry it with a reworded or split command, and never launch it some other way. Tell the user in one line that the launch was blocked and by what, run the role on its next harness or as a subagent, and say how they can allow it next time: approving the command themselves, or the allow rule or mode their harness offers. Don't try again for the rest of the task unless the user says it is now allowed.
 - **Two reviewers (`+`).** Each harness of a `claude + codex` group is launched and collected on its own, as above. One that fails, has no quota or finishes without its note is skipped, never retried and never waited for: go on with the rest and say in one line which one is missing. Only when none of the group is usable does the role fall to the row's next harness, or to a subagent.

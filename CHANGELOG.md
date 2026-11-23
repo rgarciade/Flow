@@ -8,6 +8,15 @@ The skills are instructions for an agent, so a change here can change what the a
 
 **Version numbers.** While the version is 0.x, a minor version (0.2.0) may change behaviour and a patch version (0.1.1) never does.
 
+## [0.17.0] - 2026-11-23
+
+### Behaviour changes
+
+- **The agent's working files move from `.scratch/flow/<id>/` to `.flow/work/<id>/`.** Notes saved without Engram, briefs and the approved-tests copy now live there. Git-ignore only `.flow/work/`, never all of `.flow/` (`.flow/tasks/` and `.flow/memory/` are meant to be committed): `flow-setup` checks it. A task started before this version keeps working: resuming it also looks in `.scratch/flow/<id>/`, and `flow-status` reads both.
+- **When a role runs in another harness, the message says first that you have to wait.** A `⏳ Waiting` line names the role, the harness and the model and says it is not running here, then who wakes whom (it reports back and the flow continues on its own, or you have to say it is done), then what it does and what comes next. Before, the status was buried in a list of details.
+- **Notes are short and in a fixed shape.** Each role's note follows `references/note-shapes.md`: about 20 lines, with no log of commands run, no rejected options and no retelling of the diff. The state note is rewritten whole each time and stays near 12 lines. Before, it was appended to and a finished task could leave over 300 lines of notes.
+- **Closing a task leaves only the closed note.** It is written as a replacement of the progress note (also when Engram is blocked or missing), and without Engram the task's `.flow/work/<id>/` folder is deleted afterwards. A task whose notes were never closed can be closed by running `/flow-work <id>` again.
+
 ## [0.16.0] - 2026-11-22
 
 ### Behaviour changes
@@ -208,6 +217,7 @@ The first tagged version. It gathers everything up to this point; the list below
 - The rules for the task's records and for team visibility moved from `flow-work`'s `SKILL.md` to its `references/` folder. Their content is the same.
 - `install.sh --project` writes the version tag to `.flow-version` instead of a bare commit hash.
 
+[0.17.0]: https://github.com/rgarciade/Flow/tree/v0.17.0
 [0.16.0]: https://github.com/rgarciade/Flow/tree/v0.16.0
 [0.15.0]: https://github.com/rgarciade/Flow/tree/v0.15.0
 [0.14.0]: https://github.com/rgarciade/Flow/tree/v0.14.0

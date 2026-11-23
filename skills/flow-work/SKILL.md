@@ -53,13 +53,13 @@ Every subagent brief includes:
 - Pointers, not pasted content: the task (read it with `view-task`), `docs/agents/*.md` including the tracker file, and the notes from earlier phases.
 - The rule: read only what the role needs; do not spawn agents; artifacts (code, comments, test names) in English unless the repo already uses another language.
 - The rule: subagents cannot talk to the user. When something is not settled by the issue, the plan or the brief, stop and return it as a question, with options and a recommendation. Do not guess.
-- The hand-back contract: **save the full result as a note under the key given, then return at most 15 lines**: outcome, files touched (as `path:line` links), the note key, and any blocker or question for the user. No pasted logs or file contents.
+- The hand-back contract: **save the full result as a note under the key given, then return at most 15 lines**: outcome, files touched (as `path:line` links), the note key, and any blocker or question for the user. No pasted logs or file contents. The note follows `references/note-shapes.md`: short, in a fixed shape, with no log of commands run and no retelling of the diff. Tell the subagent to read it.
 
 **Notes.** Keys follow `flow/<repo>/<id>/<phase>`, for example `flow/my-app/42/research`.
 
 - With the Engram MCP server available: save with `mem_save` (topic key = the note key), read with `mem_search` and `mem_get_observation`, update with `mem_update`.
-- Without it: write the note to `.scratch/flow/<id>/<phase>.md` in the repo and pass that path instead. Make sure `.scratch/` is git-ignored. The closed state note is the exception: it goes to `.flow/memory/<id>.md`, as the **Task memory** setting says (see `references/state-note.md`).
-- **If saving to Engram fails** (the call errors, is blocked, or the note cannot be read back): write that note to `.scratch/flow/<id>/<phase>.md` instead, pass that path in the briefs, and tell the user in one line that the note went to the repo's scratch folder and why. Never go on as if a note had been saved. A subagent that cannot save its note says so in its hand-back and returns the full result in a file under `.scratch/flow/<id>/`.
+- Without it: write the note to `.flow/work/<id>/<phase>.md` in the repo and pass that path instead. Make sure `.flow/work/` (only that folder, not all of `.flow/`) is git-ignored. The closed state note is the exception: it goes to `.flow/memory/<id>.md`, as the **Task memory** setting says (see `references/state-note.md`).
+- **If saving to Engram fails** (the call errors, is blocked, or the note cannot be read back): write that note to `.flow/work/<id>/<phase>.md` instead, pass that path in the briefs, and tell the user in one line that the note went to the repo's `.flow/work/` folder and why. Never go on as if a note had been saved. A subagent that cannot save its note says so in its hand-back and returns the full result in a file under `.flow/work/<id>/`.
 
 **The state note.** You, the orchestrator, keep one extra note under `flow/<repo>/<id>/state`: where the task stands, in a few fixed lines. It is what lets the work continue after a break, a new session or a summarised context, without guessing.
 
@@ -77,9 +77,9 @@ decided: <one line per user decision not yet written to the task>
 pending commits: <commit commands given and not yet confirmed, or "none">
 ```
 
-- **Update it, never add another**: at the end of every phase (adding its line to `done`, never replacing the earlier ones), when the mode or the profile changes, and whenever you stop to wait for the user.
+- **Rewrite it whole, never add another or append to it**: the note is the current state, not a history, and stays under about 12 lines (`references/note-shapes.md`). Rewrite it at the end of every phase (adding its short line to `done`, keeping the earlier ones), when the mode or the profile changes, and whenever you stop to wait for the user.
 - **Set `running:` right before launching a role**, and set it back to `none` as soon as its hand-back (or `worker_done`) is in. A `running:` line other than `none` found later means that role's session or terminal closed before it finished.
-- **Read it first** when you resume a task, and whenever you are not sure where the task stands (for example after your context was summarised). Find it and check it as `references/task-state.md` says: always in both places, Engram and `.scratch/flow/<id>/state.md`. If the note contradicts the branch or the task, trust those, fix the note and tell the user in one line.
+- **Read it first** when you resume a task, and whenever you are not sure where the task stands (for example after your context was summarised). Find it and check it as `references/task-state.md` says: always in both places, Engram and `.flow/work/<id>/state.md`. If the note contradicts the branch or the task, trust those, fix the note and tell the user in one line.
 - **Parked** tasks use `phase: parked` (see "Parking or abandoning a task").
 - **Close it** when the PR is opened: it stops being a progress note and becomes the task's memory for later work (see "Close the state note" in Phase 8).
 
@@ -210,7 +210,7 @@ Create branches with `create-branch`, so each one is linked to its task:
 - Creating these branches is part of the flow and needs no extra confirmation once the user has confirmed the task.
 - If the task branch already exists, check it out and continue from where it was: read the task's state with `references/task-state.md` (the same steps `flow-status` uses), then check it against this task's plan record, its other notes and its commits. Fix any contradiction it found in the note, as "The state note" says. Tell the user in one message where the task stands, what was waiting on them, and what you will do next; continue once they confirm. `phase: parked` means the task was paused on purpose: say why and what was waiting. Uncommitted changes on the task branch belong to the task: list them in that message.
   - If the state note is closed and its PR is still open with changes requested (`pr-status`), go to Phase 9. A closed note has no `running:` line.
-  - **A role that did not finish** (`running:` is not `none`): if it ran in another harness through an agent manager, first check with that manager's guide whether the worker is still running; if it is, wait for it as `references/other-harnesses.md` says and never launch a second writer. Otherwise, look for the role's result note (Engram under `flow/<repo>/<id>/<phase>`, or `.scratch/flow/<id>/<phase>.md`): if it is complete, use it and go on. If not, show the user what the role left (`git status` and a short summary of the diff) and propose, as one question: relaunch the role on top of those changes (recommended when they fit the plan), or set them aside and relaunch it from the last commit. Setting them aside is a command the user runs, given with its exact text: `git stash push -u -m "flow-<id>-<role>-leftover"`. Set `running:` back to `none` once it is settled.
+  - **A role that did not finish** (`running:` is not `none`): if it ran in another harness through an agent manager, first check with that manager's guide whether the worker is still running; if it is, wait for it as `references/other-harnesses.md` says and never launch a second writer. Otherwise, look for the role's result note (Engram under `flow/<repo>/<id>/<phase>`, or `.flow/work/<id>/<phase>.md`): if it is complete, use it and go on. If not, show the user what the role left (`git status` and a short summary of the diff) and propose, as one question: relaunch the role on top of those changes (recommended when they fit the plan), or set them aside and relaunch it from the last commit. Setting them aside is a command the user runs, given with its exact text: `git stash push -u -m "flow-<id>-<role>-leftover"`. Set `running:` back to `none` once it is settled.
 
 **Sync Engram in.** If the Engram CLI is available and the repo has a `.engram/` folder, run `engram sync --status`. If it reports chunks that are not imported yet, run `engram sync --import`, then tell the user in one line what was imported. Skip this when **Engram sync** in `docs/agents/workflow.md` is `never`.
 
@@ -278,7 +278,7 @@ Brief a tests subagent with the plan key. It writes only test files, matching th
 
 - With edge cases: present only those, in the format below, and wait for the OK on them.
 - Without: don't wait. Show in one message the number of tests, that each fails for the expected reason and the command to run them, and go on to Phase 6.
-- In both cases, record the tests with the `.scratch/flow/<id>/approved-tests/` manifest (see below) at the gate; the user's OK on the edge cases does not commit anything. The `test(...)` commit comes in Phase 6, before the `feat` one. Once the user confirms that commit, its hash becomes the approved-tests reference: save it in the tests note and in the state note's `approved tests` line, and use it for the checks in Phases 6 and 7.
+- In both cases, record the tests with the `.flow/work/<id>/approved-tests/` manifest (see below) at the gate; the user's OK on the edge cases does not commit anything. The `test(...)` commit comes in Phase 6, before the `feat` one. Once the user confirms that commit, its hash becomes the approved-tests reference: save it in the tests note and in the state note's `approved tests` line, and use it for the checks in Phases 6 and 7.
 
 **Pair mode.** Present every test to the user. This message is a long list, one line per test, so shape it for fast scanning, with the action first, numbered lines, no preamble and no recap (see "Scannable format" in "Phase messages").
 
@@ -294,7 +294,7 @@ After the OK, give the commit command, for example:
 git add <test files> && git commit -m "test(<commit-ref>): <summary>" && git push
 ```
 
-This commit is the record of the approved tests. Once the user confirms it is done, its hash is the approved-tests reference: save it under `flow/<repo>/<id>/tests` and in the state note's `approved tests` line. If the user does not want this commit, copy the test files to `.scratch/flow/<id>/approved-tests/` with a `sha256sum` manifest, and use that as the record instead.
+This commit is the record of the approved tests. Once the user confirms it is done, its hash is the approved-tests reference: save it under `flow/<repo>/<id>/tests` and in the state note's `approved tests` line. If the user does not want this commit, copy the test files to `.flow/work/<id>/approved-tests/` with a `sha256sum` manifest, and use that as the record instead.
 
 ## Phase 6: Implement (fast)
 
@@ -309,7 +309,7 @@ The work can be split into several implement subagents, one after another, when 
 Then check it yourself:
 
 - **Manual verification**, if the plan has any: run the steps you can run yourself (a command, a build, a config check) and report what you observed; give the user the rest as a short checklist and wait until they confirm each one. A failed step is handled like a failing test.
-- `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.scratch` manifest). If not, stop and tell the user.
+- `git diff <approved-tests-commit> -- <test globs>` is empty, using the latest approved-tests reference (or the files match the `.flow/work` manifest). If not, stop and tell the user.
 - The full suite and typecheck pass, with no new failures beyond `failing before`.
 
 If the implementation departed from the plan (a step changed, was added or was dropped), propose an edit of the plan record: the affected section updated, plus a line under "Changes to the plan". Apply it once the user approves. If the requirements changed too, propose the description edit as well.
@@ -378,7 +378,7 @@ Then open the PR, if the user said yes in the closing round, with `open-pr`:
 
 Then create the summary record on the task, with the PR link, and move the task to "in review" if the user accepted it in the closing round (skip it when `move-status` is not used). The user reviews and merges the PR.
 
-**Close the state note.** Last, rewrite `flow/<repo>/<id>/state` in its closed form and, when Engram is not available, save it to the repo as the **Task memory** setting says. Read `references/state-note.md` for the closed form and the rules. It needs no confirmation, except the commit command when Task memory is `repo`: tell the user in one line that the task's memory is saved, and where.
+**Close the state note.** Last, rewrite `flow/<repo>/<id>/state` in its closed form and, when Engram is not available, save it to the repo as the **Task memory** setting says. Read `references/state-note.md` for the closed form and the rules: the note is replaced whole (never appended to), and the task's working folder `.flow/work/<id>/` is deleted afterwards. It needs no confirmation, except the commit command when Task memory is `repo`: tell the user in one line that the task's memory is saved, and where.
 
 ## Phase 9: Answering the PR review
 

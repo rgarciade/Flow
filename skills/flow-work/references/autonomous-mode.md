@@ -16,7 +16,7 @@ In autonomous mode, chain the phases without stopping for routine confirmations:
   - The task branch is the exception to the shared-state stop: the user already confirmed it in Phase 1, so creating it with `create-branch` needs no new stop, even when that also creates it on the remote.
 - **The baseline run still happens** (Phase 2), and its failing tests are in the report.
 - **The state note is still kept.** Update it at the end of every phase, as in pair work: it is what lets the task continue if the session is interrupted.
-- **Tests stay frozen.** With no test gate, record the tests with the `.scratch/flow/<id>/approved-tests/` manifest right after writing them, and check them against it as usual.
+- **Tests stay frozen.** With no test gate, record the tests with the `.flow/work/<id>/approved-tests/` manifest right after writing them, and check them against it as usual.
 - **Commits come at the end.** Instead of a commit command per phase, give the user the `test`, `feat` and `fix`/`refactor` commands (and `chore` for an Engram export) together with the final report, each ending with `&& git push`.
 - **The final report is never skipped.** It also lists every assumption you made on the user's behalf, so they can check them.
 
